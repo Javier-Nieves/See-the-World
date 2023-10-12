@@ -28,10 +28,7 @@ const tripScheema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  coverImage: {
-    type: String,
-    required: [true, 'A tour must have a cover image'],
-  },
+  coverImage: String,
   locations: [
     {
       type: mongoose.Schema.Types.ObjectId,
