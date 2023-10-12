@@ -1,4 +1,12 @@
 extends base
 
 block content
-  h1 Hello World
+  .flex-container.main-container
+    .flex-column.main-left
+      h1 Hello World
+    .flex-column.main-right
+      h1 Right
+      each trip in trips
+        article(class='trip-card' data-tripId=`${trip.id}`)
+          h2= trip.name
+          span= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
