@@ -5,6 +5,7 @@ const { xss } = require('express-xss-sanitizer');
 // todo - add HPP later
 
 const tripRouter = require('./routes/tripRoutes');
+const locationRouter = require('./routes/locationRoutes');
 const userRouter = require('./routes/userRoutes');
 
 const app = express();
@@ -20,5 +21,6 @@ app.use(xss());
 // ROUTES:
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/trips', tripRouter);
+app.use('/api/v1/locations', locationRouter);
 
 module.exports = app;
