@@ -36,13 +36,13 @@ h1 {
 }
 
 /* Overview page */
-.trip-card {
+.tripCard {
     background-color: rgba(255, 200, 0, 0.546);
     border: 1px solid grey;
     border-radius: 8px;
     padding: 8px;
 }
-.trip-card:hover {
+.tripCard:hover {
     background-color: rgba(255, 200, 0, 0.72);
     cursor: pointer;
 }

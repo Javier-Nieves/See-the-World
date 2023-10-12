@@ -7,6 +7,7 @@ block content
     .flex-column.main-right
       h1 Right
       each trip in trips
-        article(class='trip-card' data-tripId=`${trip.id}`)
+        article(class='tripCard' data-tripId=`${trip.id}`)
           h2= trip.name
-          span= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+          .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+          .tripCard__highlight= trip.highlight

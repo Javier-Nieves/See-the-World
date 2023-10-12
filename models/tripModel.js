@@ -14,6 +14,7 @@ const tripScheema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  highlight: String,
   date: {
     type: Date,
     required: [true, 'A trip must have a date'],
