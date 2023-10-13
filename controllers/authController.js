@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { promisify } = require('util');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -28,8 +29,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-
-  res.status(201).json({ status: 'success', data: { newUser } });
+  // login new user
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -43,4 +44,24 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // login user
   createSendToken(user, 200, res);
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  )
+    token = req.headers.authorization.split(' ')[1];
+  else if (req.cookies.jwt) token = req.cookies.jwt;
+  if (!token) return next(new AppError('You are not logged in.', 401));
+  // check if token is valid -> returns userId and dates
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  // check if user still exists
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) return new AppError('User no longer exist', 401);
+  // todo - password changed since
+  // GRANT ACCESS TO PROTECTED ROUTE
+  req.user = currentUser;
+  next();
 });

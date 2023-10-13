@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
-const tripScheema = new mongoose.Schema({
+const tripSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'A trip must have a name'],
@@ -9,6 +10,12 @@ const tripScheema = new mongoose.Schema({
     maxlength: [40, 'A trip name must have less or equal then 40 characters'],
     minlength: [8, 'A trip name must have more or equal then 8 characters'],
   },
+  travelers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   slug: String,
   description: {
     type: String,
@@ -38,6 +45,19 @@ const tripScheema = new mongoose.Schema({
   ],
 });
 
-const Trip = mongoose.model('Trip', tripScheema);
+tripSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+tripSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'travelers',
+    select: 'name',
+  });
+  next();
+});
+
+const Trip = mongoose.model('Trip', tripSchema);
 
 module.exports = Trip;

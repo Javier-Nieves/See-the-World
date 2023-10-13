@@ -6,8 +6,10 @@ block content
       h1 Hello World
     .flex-column.main-right
       h1 Right
-      each trip in trips
-        article(class='tripCard' data-tripId=`${trip.id}`)
-          h2= trip.name
-          .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
-          .tripCard__highlight= trip.highlight
+      .cardContainer
+        each trip in trips
+          a(class='cardLink' href=`/trips/${trip.slug}`)
+            article(class='tripCard' data-tripId=`${trip.id}`)
+              h2= trip.name
+              .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+              .tripCard__highlight= trip.highlight

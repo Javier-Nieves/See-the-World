@@ -7,6 +7,8 @@ exports.getAllTrips = catchAsync(async (req, res, next) => {
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
+  req.body.travelers = [];
+  req.body.travelers.push(req.user.id);
   const newTrip = await Trip.create(req.body);
   res.status(201).json({ status: 'success', data: { newTrip } });
 });
