@@ -1,7 +1,13 @@
 body {
     padding: 0;
     margin: 0;
-}    
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
 h1 {
     color: rgb(0, 46, 79);
 }
@@ -48,6 +54,22 @@ h1 {
 .tripCard:hover {
     background-color: rgba(255, 200, 0, 0.72);
     cursor: pointer;
+}
+
+/* Header */
+.header {
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgba(153, 153, 153, 0.799);
+}
+
+.nav--left, .nav--user {
+    gap: 1vw;
+}
+
+.nav__search-btn {
+    width: 100px;
+    height: 20px;
 }
 
 /* Footer */

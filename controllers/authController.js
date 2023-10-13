@@ -65,3 +65,24 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+exports.isLoggedIn = async (req, res, next) => {
+  // no jwt cookie === not logged in
+  if (!req.cookie.jwt) return next();
+  try {
+    // verify token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET,
+    );
+    // check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) return next();
+    // There is a logged in user
+    // locals - is a place, to which all templates have access
+    res.locals.user = currentUser;
+    next();
+  } catch {
+    return next();
+  }
+};

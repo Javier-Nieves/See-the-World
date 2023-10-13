@@ -3,7 +3,9 @@ const Trip = require('../models/tripModel');
 
 exports.getAllTrips = catchAsync(async (req, res, next) => {
   const trips = await Trip.find();
-  res.status(200).json({ status: 'success', data: { trips } });
+  res
+    .status(200)
+    .json({ status: 'success', results: trips.length, data: { trips } });
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
