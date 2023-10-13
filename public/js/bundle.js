@@ -5960,14 +5960,20 @@ function () {
             data: {
               email: email,
               password: password
-            } // todo  alert if res.status === 'success'
-
+            }
           });
 
         case 2:
           res = _context.sent;
 
-        case 3:
+          if (res.data.status === 'success') {
+            // showAlert('success', 'Logged in ok');
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 1500);
+          }
+
+        case 4:
         case "end":
           return _context.stop();
       }
@@ -5991,7 +5997,6 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.querySelector('#login-email').value;
   var password = document.querySelector('#login-password').value;
-  console.log(email, password);
   (0, _login.login)(email, password);
 });
 },{"./login.js":"login.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {

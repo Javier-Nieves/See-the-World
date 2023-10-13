@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import { login } from './login.js';
 
 // DOM elements
@@ -11,6 +10,5 @@ if (loginForm)
     e.preventDefault();
     const email = document.querySelector('#login-email').value;
     const password = document.querySelector('#login-password').value;
-    console.log(email, password);
     login(email, password);
   });

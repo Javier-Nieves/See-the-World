@@ -9,6 +9,12 @@ export const login = async (email, password) => {
       email,
       password,
     },
-    // todo  alert if res.status === 'success'
   });
+
+  if (res.data.status === 'success') {
+    // showAlert('success', 'Logged in ok');
+    window.setTimeout(() => {
+      location.assign('/');
+    }, 1500);
+  }
 };
