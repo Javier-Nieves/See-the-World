@@ -9,3 +9,9 @@ exports.index = catchAsync(async (req, res) => {
     trips,
   });
 });
+
+exports.login = (req, res) => {
+  res.status(200).render('login', {
+    title: 'Login/Register',
+  });
+};
