@@ -8,8 +8,8 @@ block content
       h1 Right
       .cardContainer
         each trip in trips
-          a(class='cardLink' href=`/trips/${trip.slug}`)
+          a(class='cardLink' href=`/${trip.travelers[0].name}/trips/${trip.id}`)
             article(class='tripCard' data-tripId=`${trip.id}`)
               h2= trip.name
-              .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-us', {day: 'numeric', month: 'long', year: 'numeric'})}`
+              .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}`
               .tripCard__highlight= trip.highlight

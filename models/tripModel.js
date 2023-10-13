@@ -53,7 +53,7 @@ tripSchema.pre('save', function (next) {
 tripSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'travelers',
-    select: 'name',
+    select: 'name photo',
   });
   next();
 });

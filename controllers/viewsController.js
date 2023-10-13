@@ -15,3 +15,12 @@ exports.login = (req, res) => {
     title: 'Login/Register',
   });
 };
+
+exports.getTrip = catchAsync(async (req, res) => {
+  const { tripId } = req.params;
+  const trip = await Trip.findById(tripId);
+  res.status(200).render('trip', {
+    title: `Name`,
+    trip,
+  });
+});

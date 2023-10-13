@@ -1,0 +1,11 @@
+extends base
+
+block content
+  .flex-column
+    h1= trip.name
+    h2= trip.highlight
+    p= trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})
+    each traveler in trip.travelers
+      p= traveler.name
+      img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+    p= trip.description
