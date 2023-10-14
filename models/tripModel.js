@@ -58,6 +58,14 @@ tripSchema.pre(/^find/, function (next) {
   next();
 });
 
+tripSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'locations',
+    select: '-trip -__v -type',
+  });
+  next();
+});
+
 const Trip = mongoose.model('Trip', tripSchema);
 
 module.exports = Trip;

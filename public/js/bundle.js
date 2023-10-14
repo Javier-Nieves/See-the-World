@@ -6023,15 +6023,74 @@ function () {
     return _ref2.apply(this, arguments);
   };
 }();
-},{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js"}],"mapbox.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.displayMap = void 0;
+
+/* eslint-disable */
+var displayMap = exports.displayMap = function displayMap(locations) {
+  console.log('displaying map', locations);
+  mapboxgl.accessToken = 'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    scrollZoom: false,
+    center: [-118, 34],
+    zoom: 8
+  }); // const bounds = new mapboxgl.LngLatBounds();
+  // locations.forEach(loc => {
+  //   // create marker
+  //   const el = document.createElement('div');
+  //   el.className = 'marker';
+  //   // add marker to map
+  //   new mapboxgl.Marker({
+  //     element: el,
+  //     anchor: 'bottom'
+  //   })
+  //     .setLngLat(loc.coordinates)
+  //     .addTo(map);
+  //   // add popup
+  //   new mapboxgl.Popup({
+  //     offset: 30
+  //   })
+  //     .setLngLat(loc.coordinates)
+  //     .setHTML(`<p>${loc.day} : ${loc.description}</p>`)
+  //     .addTo(map);
+  //   // extend map to fit current location
+  //   bounds.extend(loc.coordinates);
+  // });
+  // map.fitBounds(bounds, {
+  //   padding: {
+  //     top: 200,
+  //     bottom: 150,
+  //     left: 100,
+  //     right: 100
+  //   }
+  // });
+};
+},{}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _login = require("./login.js");
 
+var _mapbox = require("./mapbox.js");
+
 /* eslint-disable */
 // DOM elements
+var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn'); // handlers
+
+if (mapBox) {
+  console.log(mapBox);
+  console.log('mapBox.dataset.locations', mapBox.dataset.locations);
+  var locations = JSON.parse(mapBox.dataset.locations);
+  (0, _mapbox.displayMap)(locations);
+}
 
 if (loginForm) loginForm.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -6040,7 +6099,7 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   (0, _login.login)(email, password);
 });
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
-},{"./login.js":"login.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./login.js":"login.js","./mapbox.js":"mapbox.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
