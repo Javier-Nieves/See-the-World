@@ -6,13 +6,15 @@ block append head
     //- script(src='/js/mapbox.js')
 
 block content
-  .flex-column
-    h1= trip.name
-    h2= trip.highlight
-    p= trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})
-    each traveler in trip.travelers
-      p= traveler.name
-      img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
-    p= trip.description
+  h1= trip.name
+  .flex-container
+    .flex-column.trip-column_left
+      .map(id='map' data-locations=`${JSON.stringify(trip.locations)}`)
 
-    .map(id='map' data-locations=`${JSON.stringify(trip.locations)}`)
+    .flex-column.trip-column_right
+      h2= trip.highlight
+      p= trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})
+      each traveler in trip.travelers
+        p= traveler.name
+        img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+        p= trip.description

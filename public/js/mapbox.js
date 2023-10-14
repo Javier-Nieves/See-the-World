@@ -7,8 +7,8 @@ export const displayMap = (locations) => {
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     scrollZoom: false,
-    center: [-118, 34],
-    zoom: 8,
+    center: [-74.07, 4.64],
+    zoom: 11,
   });
 
   // const bounds = new mapboxgl.LngLatBounds();
