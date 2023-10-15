@@ -101,6 +101,14 @@ h1 {
     height: 400px;
 }
 
+.marker {
+    background-image: url('../img/pin.png');
+    background-size: cover;
+    width: 32px;
+    height: 40px;
+    cursor: pointer;
+}
+
 /* Header */
 .header {
     justify-content: space-between;
