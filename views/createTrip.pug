@@ -1,0 +1,22 @@
+extends base
+
+block content
+  h1 Creating trip
+  form.flex-column.newTrip__form
+    .newTrip__container
+      .flex-container
+        .newTrip__text Name of the trip:
+        input(type='text' class='newTrip__input-name' placeholder='Ex: Awesome summer Europe trip' required)
+      .flex-container
+        .newTrip__text Starting date:
+        input(type='date' class='newTrip__input-date' placeholder='Ex: 01-01-2020' required)
+      .flex-container
+        .newTrip__text Trip highlight:
+        input(type='text' class='newTrip__input-highlight' placeholder='Ex: 8 countries, 4 people, 100 delisious baguetes!')
+      .flex-container
+        .newTrip__text Description:
+        textarea(class='newTrip__input-description' placeholder='Trip details, your impressions')
+      .flex-container
+        .newTrip__text Show only to your friends:
+        input(type='checkbox' class='newTrip__checkbox')
+    input(type='submit' value='Create new trip')

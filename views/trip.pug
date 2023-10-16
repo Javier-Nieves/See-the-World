@@ -3,18 +3,22 @@ extends base
 block append head
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
-    //- script(src='/js/mapbox.js')
 
 block content
-  h1= trip.name
-  .flex-container
+  .flex-column.trip-info__top-info
+    h1.trip-info__name= trip.name
+    .trip-date__date= trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})
+  .flex-container.trip-info__container
     .flex-column.trip-column_left
       .map(id='map' data-locations=`${JSON.stringify(trip.locations)}`)
+      button.trip-info__enlarge-btn Enlarge
 
     .flex-column.trip-column_right
       h2= trip.highlight
-      p= trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})
-      each traveler in trip.travelers
-        p= traveler.name
-        img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
-        p= trip.description
+      .flex-container.trip-info__travelers-container
+        p With:
+        each traveler in trip.travelers
+          //- p= traveler.name
+          //- todo - add name as the popup on hover on the image
+          img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+      .trip-info__description= trip.description

@@ -24,3 +24,9 @@ exports.getTrip = catchAsync(async (req, res) => {
     trip,
   });
 });
+
+exports.newTripPage = catchAsync(async (req, res) => {
+  res.status(200).render('createTrip', {
+    title: `Create new trip`,
+  });
+});

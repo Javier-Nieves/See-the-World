@@ -36,38 +36,28 @@ export const displayMap = async (locations) => {
       .setPopup(popup)
       .addTo(map);
 
-    // add popup
-    // new mapboxgl.Popup({
-    //   offset: 30,
-    // })
-    //   .setLngLat(loc.coordinates)
-    //   .setHTML(`<p>${loc.description}</p>`)
-    //   .addTo(map);
-
     // extend map to fit current location
     bounds.extend(loc.coordinates);
   });
-  console.log(waypoints);
 
   // adding padding to the map
   map.fitBounds(bounds, {
     padding: {
-      top: 30,
-      bottom: 15,
-      left: 10,
-      right: 10,
+      top: 20,
+      bottom: 20,
+      left: 20,
+      right: 20,
     },
   });
 
   let wayPointsString = '';
-  // let wayPointsString = 'lonlat:-74,4|lonlat:-73.76,4.53|lonlat:-74.06,4.6';
   waypoints.forEach((place) => {
     wayPointsString += `lonlat:${place.join(',')}|`;
-  }); // ${fromWaypoint.join(",")}|lonlat:${toWaypoint.join(",")}|lonlat:${thirdPoint.join(",")}
+  });
   wayPointsString = wayPointsString.slice(0, -1);
-  console.log(wayPointsString);
+
   // prettier-ignore
-  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&details=route_details,elevation&apiKey=${myAPIKey}`);
+  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${myAPIKey}`);
   const result = await res.json();
 
   const routeData = result;
@@ -76,14 +66,14 @@ export const displayMap = async (locations) => {
     data: routeData,
   });
 
-  drawRoute(map, waypoints);
+  drawRoute(map, routeData);
 };
 
-const drawRoute = (map, waypoints) => {
-  if (!waypoints) return;
+const drawRoute = (map, routeData) => {
+  if (!routeData) return;
   if (map.getLayer('route-layer')) map.removeLayer('route-layer');
 
-  map.getSource('route').setData(waypoints);
+  map.getSource('route').setData(routeData);
   map.addLayer({
     id: 'route-layer',
     type: 'line',
@@ -94,7 +84,7 @@ const drawRoute = (map, waypoints) => {
     },
     paint: {
       'line-color': '#6084eb',
-      'line-width': 8,
+      'line-width': 6,
     },
     filter: ['==', '$type', 'LineString'],
   });

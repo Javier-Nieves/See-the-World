@@ -6,7 +6,7 @@ const locationScheema = new mongoose.Schema({
     required: [true, 'A location must have a name'],
     trim: true,
     maxlength: [40, 'Name is too long'],
-    minlength: [8, 'A location name must have more or equal then 8 characters'],
+    // minlength: [8, 'A location name must have more or equal then 8 characters'],
   },
   description: {
     type: String,

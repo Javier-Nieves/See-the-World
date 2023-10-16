@@ -92,21 +92,48 @@ h1 {
 }
 
 /* Trip page */
+.trip-info__container {
+    padding: 15px;
+    gap: 2vw;
+}
+.trip-info__top-info {
+    gap: 0;
+}
+.trip-info__name {
+    margin: 5px 0 5px 0;
+
+}
+.trip-info__description {
+    background-color: rgba(255, 200, 0, 0.2);;
+}
+.trip-info__travelers-container, .trip-info__description {
+    padding: 8px;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+.trip-date__date {
+    margin: 5px 0 5px 0;
+}
 .trip-desc__user-photo {
     width: 7vw;
 }
-
 #map {
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+.trip-info__enlarge-btn {
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(255, 200, 0, 0.72);
 }
 
-.marker {
-    background-image: url('../img/pin.png');
-    background-size: cover;
-    width: 32px;
-    height: 40px;
-    cursor: pointer;
+/* New Trip page */
+.newTrip__container {
+    border: 2px solid grey;
+    border-radius: 10px;
 }
 
 /* Header */

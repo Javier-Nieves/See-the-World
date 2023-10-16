@@ -6,11 +6,10 @@ import { displayMap } from './mapbox.js';
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
+// const addBtn = document.querySelector('.newTrip__add-btn');
 
 // handlers
 if (mapBox) {
-  console.log(mapBox);
-  console.log('mapBox.dataset.locations', mapBox.dataset.locations);
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
 }

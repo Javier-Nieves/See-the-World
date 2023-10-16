@@ -6079,54 +6079,43 @@ function () {
             new mapboxgl.Marker({
               color: '#57fa7d',
               scale: 0.6
-            }).setLngLat(loc.coordinates).setPopup(popup).addTo(map); // add popup
-            // new mapboxgl.Popup({
-            //   offset: 30,
-            // })
-            //   .setLngLat(loc.coordinates)
-            //   .setHTML(`<p>${loc.description}</p>`)
-            //   .addTo(map);
-            // extend map to fit current location
+            }).setLngLat(loc.coordinates).setPopup(popup).addTo(map); // extend map to fit current location
 
             bounds.extend(loc.coordinates);
-          });
-          console.log(waypoints); // adding padding to the map
+          }); // adding padding to the map
 
           map.fitBounds(bounds, {
             padding: {
-              top: 30,
-              bottom: 15,
-              left: 10,
-              right: 10
+              top: 20,
+              bottom: 20,
+              left: 20,
+              right: 20
             }
           });
-          wayPointsString = ''; // let wayPointsString = 'lonlat:-74,4|lonlat:-73.76,4.53|lonlat:-74.06,4.6';
-
+          wayPointsString = '';
           waypoints.forEach(function (place) {
             wayPointsString += "lonlat:".concat(place.join(','), "|");
-          }); // ${fromWaypoint.join(",")}|lonlat:${toWaypoint.join(",")}|lonlat:${thirdPoint.join(",")}
+          });
+          wayPointsString = wayPointsString.slice(0, -1); // prettier-ignore
 
-          wayPointsString = wayPointsString.slice(0, -1);
-          console.log(wayPointsString); // prettier-ignore
+          _context.next = 12;
+          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(myAPIKey));
 
-          _context.next = 14;
-          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&details=route_details,elevation&apiKey=").concat(myAPIKey));
-
-        case 14:
+        case 12:
           res = _context.sent;
-          _context.next = 17;
+          _context.next = 15;
           return res.json();
 
-        case 17:
+        case 15:
           result = _context.sent;
           routeData = result;
           map.addSource('route', {
             type: 'geojson',
             data: routeData
           });
-          drawRoute(map, waypoints);
+          drawRoute(map, routeData);
 
-        case 21:
+        case 19:
         case "end":
           return _context.stop();
       }
@@ -6138,10 +6127,10 @@ function () {
   };
 }();
 
-var drawRoute = function drawRoute(map, waypoints) {
-  if (!waypoints) return;
+var drawRoute = function drawRoute(map, routeData) {
+  if (!routeData) return;
   if (map.getLayer('route-layer')) map.removeLayer('route-layer');
-  map.getSource('route').setData(waypoints);
+  map.getSource('route').setData(routeData);
   map.addLayer({
     id: 'route-layer',
     type: 'line',
@@ -6152,7 +6141,7 @@ var drawRoute = function drawRoute(map, waypoints) {
     },
     paint: {
       'line-color': '#6084eb',
-      'line-width': 8
+      'line-width': 6
     },
     filter: ['==', '$type', 'LineString']
   });
@@ -6168,11 +6157,10 @@ var _mapbox = require("./mapbox.js");
 // DOM elements
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
-var logoutBtn = document.querySelector('.nav__logout-btn'); // handlers
+var logoutBtn = document.querySelector('.nav__logout-btn'); // const addBtn = document.querySelector('.newTrip__add-btn');
+// handlers
 
 if (mapBox) {
-  console.log(mapBox);
-  console.log('mapBox.dataset.locations', mapBox.dataset.locations);
   var locations = JSON.parse(mapBox.dataset.locations);
   (0, _mapbox.displayMap)(locations);
 }
