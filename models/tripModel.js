@@ -21,7 +21,10 @@ const tripSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  highlight: String,
+  highlight: {
+    type: String,
+    maxlength: [50, 'Highlight should not exceed 50 symbols'],
+  },
   date: {
     type: Date,
     required: [true, 'A trip must have a date'],

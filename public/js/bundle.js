@@ -6043,21 +6043,57 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var myAPIKey = 'db5135ba42fa433eb6156159518a20ba'; // main map configuration
+var map, TOKEN, API_KEY;
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
-var map;
-
-var displayMap = exports.displayMap =
+var getKeys =
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee(locations) {
-    var bounds, waypoints, wayPointsString, res, result, routeData;
+  _regeneratorRuntime().mark(function _callee() {
+    var res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
+          _context.next = 2;
+          return (0, _axios.default)({
+            method: 'GET',
+            url: 'http://127.0.0.1:3000/getKeys'
+          });
+
+        case 2:
+          res = _context.sent;
+          console.log(res);
+          TOKEN = res.data.data.TOKEN;
+          API_KEY = res.data.data.API_KEY;
+
+        case 6:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+
+  return function getKeys() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var displayMap = exports.displayMap =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2(locations) {
+    var bounds, waypoints, wayPointsString, res, result, routeData;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return getKeys();
+
+        case 2:
+          mapboxgl.accessToken = TOKEN;
           map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -6071,13 +6107,13 @@ function () {
           bounds = new mapboxgl.LngLatBounds();
 
           if (locations) {
-            _context.next = 6;
+            _context2.next = 9;
             break;
           }
 
-          return _context.abrupt("return");
+          return _context2.abrupt("return");
 
-        case 6:
+        case 9:
           waypoints = []; // adding markers and popups for each location
 
           locations.forEach(function (loc) {
@@ -6112,16 +6148,16 @@ function () {
           });
           wayPointsString = wayPointsString.slice(0, -1); // prettier-ignore
 
-          _context.next = 14;
-          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(myAPIKey));
-
-        case 14:
-          res = _context.sent;
-          _context.next = 17;
-          return res.json();
+          _context2.next = 17;
+          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(API_KEY));
 
         case 17:
-          result = _context.sent;
+          res = _context2.sent;
+          _context2.next = 20;
+          return res.json();
+
+        case 20:
+          result = _context2.sent;
           routeData = result;
           map.addSource('route', {
             type: 'geojson',
@@ -6129,15 +6165,15 @@ function () {
           });
           drawRoute(map, routeData);
 
-        case 21:
+        case 24:
         case "end":
-          return _context.stop();
+          return _context2.stop();
       }
-    }, _callee);
+    }, _callee2);
   }));
 
   return function displayMap(_x) {
-    return _ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
 }();
 
@@ -6190,12 +6226,12 @@ var popupHandler = function popupHandler(coordinates) {
 var persistLocation = exports.persistLocation =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref3 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(coordinates, name, address, description) {
+  _regeneratorRuntime().mark(function _callee3(coordinates, name, address, description) {
     var coordArray, link, url, res;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
           console.log(coordinates);
           coordArray = [];
@@ -6203,7 +6239,7 @@ function () {
           link = window.location.href; // prettier-ignore
 
           url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-          _context2.next = 7;
+          _context3.next = 7;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
@@ -6216,7 +6252,7 @@ function () {
           });
 
         case 7:
-          res = _context2.sent;
+          res = _context3.sent;
 
           if (res.data.status === 'success') {
             console.log('location added'); // showAlert('success', 'Logged in ok');
@@ -6227,13 +6263,13 @@ function () {
 
         case 9:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }));
 
   return function persistLocation(_x2, _x3, _x4, _x5) {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {

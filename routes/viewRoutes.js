@@ -13,5 +13,6 @@ router.get('/login', viewsController.login);
 router.get('/trips/:tripId', viewsController.getTrip);
 router.get('/trips/:tripId/locations', viewsController.newLocations);
 router.get('/createTrip', authController.protect, viewsController.newTripPage);
+router.get('/getKeys', authController.getKeys);
 
 module.exports = router;

@@ -1,13 +1,22 @@
 /* eslint-disable */
 import axios from 'axios';
-const myAPIKey = 'db5135ba42fa433eb6156159518a20ba';
 
-// main map configuration
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
-let map;
+let map, TOKEN, API_KEY;
+
+const getKeys = async () => {
+  const res = await axios({
+    method: 'GET',
+    url: 'http://127.0.0.1:3000/getKeys',
+  });
+  console.log(res);
+  TOKEN = res.data.data.TOKEN;
+  API_KEY = res.data.data.API_KEY;
+};
 
 export const displayMap = async (locations) => {
+  // main map configuration
+  await getKeys();
+  mapboxgl.accessToken = TOKEN;
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
@@ -63,7 +72,7 @@ export const displayMap = async (locations) => {
   wayPointsString = wayPointsString.slice(0, -1);
 
   // prettier-ignore
-  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${myAPIKey}`);
+  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${API_KEY}`);
   const result = await res.json();
 
   const routeData = result;

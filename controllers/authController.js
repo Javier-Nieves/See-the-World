@@ -94,3 +94,15 @@ exports.isLoggedIn = async (req, res, next) => {
     return next();
   }
 };
+
+exports.getKeys = async (req, res, next) => {
+  const token = process.env.MAPBOX_TOKEN;
+  console.log('token', token);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      TOKEN: process.env.MAPBOX_TOKEN,
+      API_KEY: process.env.MAP_API_KEY,
+    },
+  });
+};
