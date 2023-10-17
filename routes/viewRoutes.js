@@ -10,7 +10,8 @@ router.use(authController.isLoggedIn);
 
 router.get('/', viewsController.index);
 router.get('/login', viewsController.login);
-router.get('/:name/trips/:tripId', viewsController.getTrip);
+router.get('/trips/:tripId', viewsController.getTrip);
+router.get('/trips/:tripId/locations', viewsController.newLocations);
 router.get('/createTrip', authController.protect, viewsController.newTripPage);
 
 module.exports = router;

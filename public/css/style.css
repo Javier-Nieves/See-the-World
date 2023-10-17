@@ -117,21 +117,59 @@ h1 {
 .trip-desc__user-photo {
     width: 7vw;
 }
-#map {
+.map {
     width: 600px;
     height: 600px;
     border: 2px solid grey;
     border-radius: 10px;
 }
-.trip-info__enlarge-btn {
+.trip-info__enlarge-btn, .newTrip__nextBtn {
     border: 1px solid grey;
     border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     background-color: rgba(255, 200, 0, 0.72);
+    font-size: 18px;
+}
+.trip-info__enlarge-btn:hover, .newTrip__nextBtn:hover {
+    cursor: pointer;
+    background-color: rgba(255, 200, 0, 0.9);
 }
 
 /* New Trip page */
 .newTrip__container {
+    padding: 8px;
+    background-color: rgba(255, 200, 0, 0.32);
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+.newTrip__textLine {
+    padding: 8px;
+}
+.newTrip__text {
+    font-size: 20px;
+}
+.newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, .newTrip__input-description {
+    background-color: rgba(153, 153, 153, 0.255);
+    border: 1px solid grey;
+    border-radius: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin-left: 2vw;
+    width: 30vw;
+    height: 6vh;
+}
+.newTrip__input-description {
+    height: 20vh;
+    width: 50vw;
+}
+.newTrip__nextBtn {
+
+}
+
+/* new locations page */
+.bigMap {
+    width: 90vw;
+    height: 80vh;
     border: 2px solid grey;
     border-radius: 10px;
 }

@@ -1,11 +1,13 @@
 /* eslint-disable */
 const myAPIKey = 'db5135ba42fa433eb6156159518a20ba';
 
+// main map configuration
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
+let map;
+
 export const displayMap = async (locations) => {
-  // main map configuration
-  mapboxgl.accessToken =
-    'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
-  const map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     // scrollZoom: false,
@@ -14,8 +16,11 @@ export const displayMap = async (locations) => {
   });
   // adding zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
+  map.on('click', add_marker);
 
   const bounds = new mapboxgl.LngLatBounds();
+
+  if (!locations) return;
 
   const waypoints = [];
   // adding markers and popups for each location
@@ -88,4 +93,28 @@ const drawRoute = (map, routeData) => {
     },
     filter: ['==', '$type', 'LineString'],
   });
+};
+
+const add_marker = (event) => {
+  var coordinates = event.lngLat;
+  console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
+
+  new mapboxgl.Popup({ closeOnClick: false, offset: 25 })
+    .setLngLat(coordinates)
+    .setHTML(
+      `<form class='newLocation__popup-form'>
+        <input type='text' placeholder='Name'>
+        <input type='text' placeholder='Address'>
+        <input type='text' placeholder='Description'>
+        <input type='submit' value='Add location'>
+      </form>`,
+    )
+    .addTo(map);
+
+  new mapboxgl.Marker({
+    color: '#e60000',
+    scale: 0.6,
+  })
+    .setLngLat(coordinates)
+    .addTo(map);
 };
