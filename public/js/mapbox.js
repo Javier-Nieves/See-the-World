@@ -1,4 +1,5 @@
 /* eslint-disable */
+import axios from 'axios';
 const myAPIKey = 'db5135ba42fa433eb6156159518a20ba';
 
 // main map configuration
@@ -103,9 +104,9 @@ const add_marker = (event) => {
     .setLngLat(coordinates)
     .setHTML(
       `<form class='newLocation__popup-form'>
-        <input type='text' placeholder='Name'>
-        <input type='text' placeholder='Address'>
-        <input type='text' placeholder='Description'>
+        <input type='text' class='newLocation__popup-name' placeholder='Name'>
+        <input type='text' class='newLocation__popup-address' placeholder='Address'>
+        <input type='text' class='newLocation__popup-desc' placeholder='Description'>
         <input type='submit' value='Add location'>
       </form>`,
     )
@@ -117,4 +118,51 @@ const add_marker = (event) => {
   })
     .setLngLat(coordinates)
     .addTo(map);
+
+  popupHandler(coordinates);
+};
+
+const popupHandler = (coordinates) => {
+  document
+    .querySelector('.newLocation__popup-form')
+    .addEventListener('submit', (e) => {
+      e.preventDefault();
+      console.log('popup submitted');
+      const name = document.querySelector('.newLocation__popup-name').value;
+      const address = document.querySelector(
+        '.newLocation__popup-address',
+      ).value;
+      const description = document.querySelector(
+        '.newLocation__popup-desc',
+      ).value;
+      persistLocation(coordinates, name, address, description);
+    });
+};
+
+// prettier-ignore
+export const persistLocation = async (coordinates, name, address, description) => {
+  console.log(coordinates);
+  const coordArray = [];
+  coordArray.push(coordinates.lng, coordinates.lat);
+  const link = window.location.href;
+  // prettier-ignore
+  const url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
+  const res = await axios({
+    method: 'POST',
+    url,
+    data: {
+      coordinates: coordArray,
+      name,
+      address,
+      description,
+    },
+  });
+
+  if (res.data.status === 'success') {
+    console.log('location added');
+    // showAlert('success', 'Logged in ok');
+    // window.setTimeout(() => {
+    //   location.assign('/');
+    // }, 1500);
+  }
 };

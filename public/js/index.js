@@ -40,3 +40,9 @@ if (newTripForm)
     ).value;
     createTrip({ name, date, highlight, description });
   });
+
+// if (newLocationForm)
+//   newLocationForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     console.log('popup submitted');
+//   });

@@ -6029,7 +6029,11 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayMap = void 0;
+exports.persistLocation = exports.displayMap = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
@@ -6039,7 +6043,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-/* eslint-disable */
 var myAPIKey = 'db5135ba42fa433eb6156159518a20ba'; // main map configuration
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamF2aWVyLW5pZXZlcyIsImEiOiJjbG5heWppeDUwN2FyMmxwZ2VqZjBxZGdqIn0.jaVtxVlnW5rlkf2jlNVFlg';
@@ -6164,13 +6167,76 @@ var add_marker = function add_marker(event) {
   new mapboxgl.Popup({
     closeOnClick: false,
     offset: 25
-  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' placeholder='Name'>\n        <input type='text' placeholder='Address'>\n        <input type='text' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
+  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
   new mapboxgl.Marker({
     color: '#e60000',
     scale: 0.6
   }).setLngLat(coordinates).addTo(map);
+  popupHandler(coordinates);
 };
-},{}],"trips.js":[function(require,module,exports) {
+
+var popupHandler = function popupHandler(coordinates) {
+  document.querySelector('.newLocation__popup-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    console.log('popup submitted');
+    var name = document.querySelector('.newLocation__popup-name').value;
+    var address = document.querySelector('.newLocation__popup-address').value;
+    var description = document.querySelector('.newLocation__popup-desc').value;
+    persistLocation(coordinates, name, address, description);
+  });
+}; // prettier-ignore
+
+
+var persistLocation = exports.persistLocation =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2(coordinates, name, address, description) {
+    var coordArray, link, url, res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          console.log(coordinates);
+          coordArray = [];
+          coordArray.push(coordinates.lng, coordinates.lat);
+          link = window.location.href; // prettier-ignore
+
+          url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
+          _context2.next = 7;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: url,
+            data: {
+              coordinates: coordArray,
+              name: name,
+              address: address,
+              description: description
+            }
+          });
+
+        case 7:
+          res = _context2.sent;
+
+          if (res.data.status === 'success') {
+            console.log('location added'); // showAlert('success', 'Logged in ok');
+            // window.setTimeout(() => {
+            //   location.assign('/');
+            // }, 1500);
+          }
+
+        case 9:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+
+  return function persistLocation(_x2, _x3, _x4, _x5) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+},{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6274,7 +6340,11 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
     highlight: highlight,
     description: description
   });
-});
+}); // if (newLocationForm)
+//   newLocationForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     console.log('popup submitted');
+//   });
 },{"./login.js":"login.js","./mapbox.js":"mapbox.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
