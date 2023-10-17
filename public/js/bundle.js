@@ -6044,52 +6044,19 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var map, TOKEN, API_KEY;
-
-var getKeys =
-/*#__PURE__*/
-function () {
-  var _ref = _asyncToGenerator(
-  /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee() {
-    var res;
-    return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return (0, _axios.default)({
-            method: 'GET',
-            url: 'http://127.0.0.1:3000/getKeys'
-          });
-
-        case 2:
-          res = _context.sent;
-          console.log(res);
-          TOKEN = res.data.data.TOKEN;
-          API_KEY = res.data.data.API_KEY;
-
-        case 6:
-        case "end":
-          return _context.stop();
-      }
-    }, _callee);
-  }));
-
-  return function getKeys() {
-    return _ref.apply(this, arguments);
-  };
-}();
+var linePainter = [];
 
 var displayMap = exports.displayMap =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(locations) {
-    var bounds, waypoints, wayPointsString, res, result, routeData;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+  _regeneratorRuntime().mark(function _callee(locations) {
+    var bounds, waypoints, routeData;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context2.next = 2;
+          _context.next = 2;
           return getKeys();
 
         case 2:
@@ -6107,11 +6074,11 @@ function () {
           bounds = new mapboxgl.LngLatBounds();
 
           if (locations) {
-            _context2.next = 9;
+            _context.next = 9;
             break;
           }
 
-          return _context2.abrupt("return");
+          return _context.abrupt("return");
 
         case 9:
           waypoints = []; // adding markers and popups for each location
@@ -6141,43 +6108,28 @@ function () {
               left: 20,
               right: 20
             }
-          });
-          wayPointsString = '';
-          waypoints.forEach(function (place) {
-            wayPointsString += "lonlat:".concat(place.join(','), "|");
-          });
-          wayPointsString = wayPointsString.slice(0, -1); // prettier-ignore
+          }); // getting GeoJSON data for location points
 
-          _context2.next = 17;
-          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(API_KEY));
+          _context.next = 14;
+          return createGeoJSON(waypoints);
 
-        case 17:
-          res = _context2.sent;
-          _context2.next = 20;
-          return res.json();
+        case 14:
+          routeData = _context.sent;
+          drawRoute(routeData);
 
-        case 20:
-          result = _context2.sent;
-          routeData = result;
-          map.addSource('route', {
-            type: 'geojson',
-            data: routeData
-          });
-          drawRoute(map, routeData);
-
-        case 24:
+        case 16:
         case "end":
-          return _context2.stop();
+          return _context.stop();
       }
-    }, _callee2);
+    }, _callee);
   }));
 
   return function displayMap(_x) {
-    return _ref2.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
 
-var drawRoute = function drawRoute(map, routeData) {
+var drawRoute = function drawRoute(routeData) {
   if (!routeData) return;
   if (map.getLayer('route-layer')) map.removeLayer('route-layer');
   map.getSource('route').setData(routeData);
@@ -6199,8 +6151,7 @@ var drawRoute = function drawRoute(map, routeData) {
 
 var add_marker = function add_marker(event) {
   var coordinates = event.lngLat;
-  console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
-  new mapboxgl.Popup({
+  var popup = new mapboxgl.Popup({
     closeOnClick: false,
     offset: 25
   }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
@@ -6208,17 +6159,55 @@ var add_marker = function add_marker(event) {
     color: '#e60000',
     scale: 0.6
   }).setLngLat(coordinates).addTo(map);
-  popupHandler(coordinates);
+  popupHandler(popup, coordinates);
 };
 
-var popupHandler = function popupHandler(coordinates) {
-  document.querySelector('.newLocation__popup-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    console.log('popup submitted');
-    var name = document.querySelector('.newLocation__popup-name').value;
-    var address = document.querySelector('.newLocation__popup-address').value;
-    var description = document.querySelector('.newLocation__popup-desc').value;
-    persistLocation(coordinates, name, address, description);
+var popupHandler = function popupHandler(popup, coordinates) {
+  document.querySelector('.newLocation__popup-form').addEventListener('submit',
+  /*#__PURE__*/
+  function () {
+    var _ref2 = _asyncToGenerator(
+    /*#__PURE__*/
+    _regeneratorRuntime().mark(function _callee2(e) {
+      var name, address, description, geoData;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            e.preventDefault();
+            name = document.querySelector('.newLocation__popup-name').value; // prettier-ignore
+
+            address = document.querySelector('.newLocation__popup-address').value; // prettier-ignore
+
+            description = document.querySelector('.newLocation__popup-desc').value;
+            persistLocation(coordinates, name, address, description);
+            popup.remove(); // linePainter.push(coordinates);
+
+            linePainter.push([coordinates.lng, coordinates.lat]);
+
+            if (!(linePainter.length > 1)) {
+              _context2.next = 12;
+              break;
+            }
+
+            _context2.next = 10;
+            return createGeoJSON(linePainter);
+
+          case 10:
+            geoData = _context2.sent;
+            drawRoute(geoData);
+
+          case 12:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }));
+
+    return function (_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }(), {
+    once: true
   });
 }; // prettier-ignore
 
@@ -6233,13 +6222,12 @@ function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          console.log(coordinates);
           coordArray = [];
           coordArray.push(coordinates.lng, coordinates.lat);
           link = window.location.href; // prettier-ignore
 
           url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-          _context3.next = 7;
+          _context3.next = 6;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
@@ -6251,7 +6239,7 @@ function () {
             }
           });
 
-        case 7:
+        case 6:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
@@ -6261,15 +6249,92 @@ function () {
             // }, 1500);
           }
 
-        case 9:
+        case 8:
         case "end":
           return _context3.stop();
       }
     }, _callee3);
   }));
 
-  return function persistLocation(_x2, _x3, _x4, _x5) {
+  return function persistLocation(_x3, _x4, _x5, _x6) {
     return _ref3.apply(this, arguments);
+  };
+}();
+
+var getKeys =
+/*#__PURE__*/
+function () {
+  var _ref4 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee4() {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.next = 2;
+          return (0, _axios.default)({
+            method: 'GET',
+            url: 'http://127.0.0.1:3000/getKeys'
+          });
+
+        case 2:
+          res = _context4.sent;
+          TOKEN = res.data.data.TOKEN;
+          API_KEY = res.data.data.API_KEY;
+
+        case 5:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4);
+  }));
+
+  return function getKeys() {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+var createGeoJSON =
+/*#__PURE__*/
+function () {
+  var _ref5 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee5(waypoints) {
+    var wayPointsString, res, routeData;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          wayPointsString = '';
+          waypoints.forEach(function (place) {
+            wayPointsString += "lonlat:".concat(place.join(','), "|");
+          });
+          wayPointsString = wayPointsString.slice(0, -1); // prettier-ignore
+
+          _context5.next = 5;
+          return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(API_KEY));
+
+        case 5:
+          res = _context5.sent;
+          _context5.next = 8;
+          return res.json();
+
+        case 8:
+          routeData = _context5.sent;
+          if (!map.getSource('route')) map.addSource('route', {
+            type: 'geojson',
+            data: routeData
+          });else map.getSource('route').setData(routeData);
+          return _context5.abrupt("return", routeData);
+
+        case 11:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+
+  return function createGeoJSON(_x7) {
+    return _ref5.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {

@@ -2,16 +2,7 @@
 import axios from 'axios';
 
 let map, TOKEN, API_KEY;
-
-const getKeys = async () => {
-  const res = await axios({
-    method: 'GET',
-    url: 'http://127.0.0.1:3000/getKeys',
-  });
-  console.log(res);
-  TOKEN = res.data.data.TOKEN;
-  API_KEY = res.data.data.API_KEY;
-};
+let linePainter = [];
 
 export const displayMap = async (locations) => {
   // main map configuration
@@ -65,26 +56,12 @@ export const displayMap = async (locations) => {
     },
   });
 
-  let wayPointsString = '';
-  waypoints.forEach((place) => {
-    wayPointsString += `lonlat:${place.join(',')}|`;
-  });
-  wayPointsString = wayPointsString.slice(0, -1);
-
-  // prettier-ignore
-  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${API_KEY}`);
-  const result = await res.json();
-
-  const routeData = result;
-  map.addSource('route', {
-    type: 'geojson',
-    data: routeData,
-  });
-
-  drawRoute(map, routeData);
+  // getting GeoJSON data for location points
+  const routeData = await createGeoJSON(waypoints);
+  drawRoute(routeData);
 };
 
-const drawRoute = (map, routeData) => {
+const drawRoute = (routeData) => {
   if (!routeData) return;
   if (map.getLayer('route-layer')) map.removeLayer('route-layer');
 
@@ -107,9 +84,8 @@ const drawRoute = (map, routeData) => {
 
 const add_marker = (event) => {
   var coordinates = event.lngLat;
-  console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
 
-  new mapboxgl.Popup({ closeOnClick: false, offset: 25 })
+  const popup = new mapboxgl.Popup({ closeOnClick: false, offset: 25 })
     .setLngLat(coordinates)
     .setHTML(
       `<form class='newLocation__popup-form'>
@@ -128,29 +104,35 @@ const add_marker = (event) => {
     .setLngLat(coordinates)
     .addTo(map);
 
-  popupHandler(coordinates);
+  popupHandler(popup, coordinates);
 };
 
-const popupHandler = (coordinates) => {
-  document
-    .querySelector('.newLocation__popup-form')
-    .addEventListener('submit', (e) => {
+const popupHandler = (popup, coordinates) => {
+  document.querySelector('.newLocation__popup-form').addEventListener(
+    'submit',
+    async (e) => {
       e.preventDefault();
-      console.log('popup submitted');
       const name = document.querySelector('.newLocation__popup-name').value;
-      const address = document.querySelector(
-        '.newLocation__popup-address',
-      ).value;
-      const description = document.querySelector(
-        '.newLocation__popup-desc',
-      ).value;
+      // prettier-ignore
+      const address = document.querySelector('.newLocation__popup-address',).value;
+      // prettier-ignore
+      const description = document.querySelector('.newLocation__popup-desc',).value;
       persistLocation(coordinates, name, address, description);
-    });
+
+      popup.remove();
+      // linePainter.push(coordinates);
+      linePainter.push([coordinates.lng, coordinates.lat]);
+      if (linePainter.length > 1) {
+        const geoData = await createGeoJSON(linePainter);
+        drawRoute(geoData);
+      }
+    },
+    { once: true },
+  );
 };
 
 // prettier-ignore
 export const persistLocation = async (coordinates, name, address, description) => {
-  console.log(coordinates);
   const coordArray = [];
   coordArray.push(coordinates.lng, coordinates.lat);
   const link = window.location.href;
@@ -174,4 +156,34 @@ export const persistLocation = async (coordinates, name, address, description) =
     //   location.assign('/');
     // }, 1500);
   }
+};
+
+const getKeys = async () => {
+  const res = await axios({
+    method: 'GET',
+    url: 'http://127.0.0.1:3000/getKeys',
+  });
+  TOKEN = res.data.data.TOKEN;
+  API_KEY = res.data.data.API_KEY;
+};
+
+const createGeoJSON = async (waypoints) => {
+  let wayPointsString = '';
+  waypoints.forEach((place) => {
+    wayPointsString += `lonlat:${place.join(',')}|`;
+  });
+  wayPointsString = wayPointsString.slice(0, -1);
+
+  // prettier-ignore
+  const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${API_KEY}`);
+  const routeData = await res.json();
+
+  if (!map.getSource('route'))
+    map.addSource('route', {
+      type: 'geojson',
+      data: routeData,
+    });
+  else map.getSource('route').setData(routeData);
+
+  return routeData;
 };
