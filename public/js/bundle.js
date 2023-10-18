@@ -6419,7 +6419,6 @@ function () {
 
         case 3:
           res = _context2.sent;
-          console.log(res);
 
           if (res.status === 204) {
             // todo - message
@@ -6428,7 +6427,7 @@ function () {
             }, 1500);
           }
 
-        case 6:
+        case 5:
         case "end":
           return _context2.stop();
       }

@@ -21,6 +21,10 @@ const tripSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  coverImage: {
+    type: String,
+    default: 'default-trip.jpeg',
+  },
   highlight: {
     type: String,
     maxlength: [50, 'Highlight should not exceed 50 symbols'],
@@ -39,7 +43,6 @@ const tripSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  coverImage: String,
   locations: [
     {
       type: mongoose.Schema.Types.ObjectId,

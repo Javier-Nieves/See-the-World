@@ -3,7 +3,7 @@ extends base
 block content
   .flex-container.main-container
     .flex-column.main-left
-      h1 Hello World
+      include _nav
       a(href='/createTrip' class='index__add-btn') Add new trip
     .flex-column.main-right
       h1 Right
@@ -11,6 +11,7 @@ block content
         each trip in trips
           a(class='cardLink' href=`/trips/${trip.id}`)
             article(class='tripCard' data-tripId=`${trip.id}`)
+              img.tripCard__picture(src=`/img/trips/${trip.coverImage}`, alt=`${trip.name}`)
               h2= trip.name
               .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}`
               .tripCard__highlight= trip.highlight

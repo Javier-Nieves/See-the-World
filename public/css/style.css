@@ -32,6 +32,14 @@ h1 {
     gap: 2vh;
 }
 /* Main */
+.index-logo {
+    width: 5vw;
+    height: 5vw;
+}
+.index-brand {
+    font-size: 18px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
 .main-container {
     width: 100vw;
     padding: 0;
@@ -39,13 +47,18 @@ h1 {
 }
 
 .main-left {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
     width: 20vw;
-    height: 80vh;
+    height: 100vh;
     background-color: rgba(255, 200, 0, 0.546);
 }
-
-.main-right {
-    flex: 1;
+.nav__search {
+    padding: 15px;
+    border: 1px solid black;
+    border-radius: 8px;
 }
 
 /* Overview page */
@@ -53,15 +66,27 @@ h1 {
     display: grid;
 }
 .tripCard {
-    background-color: rgba(255, 200, 0, 0.546);
-    border: 1px solid grey;
-    border-radius: 8px;
+    /* background-color: rgba(255, 200, 0, 0.546); */
+    /* border: 1px solid grey; */
+    /* border-radius: 8px; */
     padding: 8px;
+    width: 30vw;
+    height: 20vh;
 }
 .tripCard:hover {
     background-color: rgba(255, 200, 0, 0.72);
     cursor: pointer;
 }
+.tripCard__picture {
+    /* -o-object-fit: cover; */
+    position: absolute;
+    object-fit: cover;
+    width: 30vw;
+    height: 20vh;
+    opacity: 0.7;
+    z-index: -10;
+    border-radius: 10px;
+  }
 
 /* login */
 .login-form {
@@ -123,7 +148,7 @@ h1 {
     border: 2px solid grey;
     border-radius: 10px;
 }
-.trip-info__enlarge-btn, .newTrip__nextBtn {
+.trip-info__enlarge-btn, .newTrip__nextBtn, .index__add-btn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
@@ -148,7 +173,7 @@ h1 {
 .newTrip__text {
     font-size: 20px;
 }
-.newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, .newTrip__input-description {
+.newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, .newTrip__input-description, .nav__search-input {
     background-color: rgba(153, 153, 153, 0.255);
     border: 1px solid grey;
     border-radius: 5px;
@@ -162,8 +187,9 @@ h1 {
     height: 20vh;
     width: 50vw;
 }
-.newTrip__nextBtn {
-
+.nav__search-input {
+    margin: 0;
+    width: 15vw;
 }
 
 /* new locations page */
@@ -172,29 +198,6 @@ h1 {
     height: 80vh;
     border: 2px solid grey;
     border-radius: 10px;
-}
-
-/* Header */
-.header {
-    justify-content: space-between;
-    padding: 15px;
-    background-color: rgba(153, 153, 153, 0.799);
-}
-
-.nav--left, .nav--user {
-    gap: 1vw;
-}
-
-.nav__search-btn {
-    width: 100px;
-    height: 20px;
-}
-.nav__user-img {
-    width: 3vw;
-}
-.header__logo {
-    height: 5vw;
-    width: 5vw;
 }
 
 /* Footer */
