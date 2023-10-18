@@ -17,7 +17,8 @@ export const displayMap = async (locations) => {
   });
   // adding zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
-  map.on('click', add_marker);
+  console.log(window.location.href);
+  if (window.location.href.includes('locations')) map.on('click', add_marker);
 
   const bounds = new mapboxgl.LngLatBounds();
 

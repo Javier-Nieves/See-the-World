@@ -6070,17 +6070,18 @@ function () {
           }); // adding zoom buttons
 
           map.addControl(new mapboxgl.NavigationControl());
-          map.on('click', add_marker);
+          console.log(window.location.href);
+          if (window.location.href.includes('locations')) map.on('click', add_marker);
           bounds = new mapboxgl.LngLatBounds();
 
           if (locations) {
-            _context.next = 9;
+            _context.next = 10;
             break;
           }
 
           return _context.abrupt("return");
 
-        case 9:
+        case 10:
           waypoints = []; // adding markers and popups for each location
 
           locations.forEach(function (loc) {
@@ -6110,14 +6111,14 @@ function () {
             }
           }); // getting GeoJSON data for location points
 
-          _context.next = 14;
+          _context.next = 15;
           return createGeoJSON(waypoints);
 
-        case 14:
+        case 15:
           routeData = _context.sent;
           drawRoute(routeData);
 
-        case 16:
+        case 17:
         case "end":
           return _context.stop();
       }
@@ -6343,7 +6344,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createTrip = void 0;
+exports.deleteTrip = exports.createTrip = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6398,6 +6399,46 @@ function () {
     return _ref.apply(this, arguments);
   };
 }();
+
+var deleteTrip = exports.deleteTrip =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2() {
+    var tripId, res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          tripId = window.location.href.slice(window.location.href.lastIndexOf('trips/') + 6);
+          _context2.next = 3;
+          return (0, _axios.default)({
+            method: 'DELETE',
+            url: "http://127.0.0.1:3000/api/v1/trips/".concat(tripId)
+          });
+
+        case 3:
+          res = _context2.sent;
+          console.log(res);
+
+          if (res.status === 204) {
+            // todo - message
+            setTimeout(function () {
+              location.assign("/");
+            }, 1500);
+          }
+
+        case 6:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+
+  return function deleteTrip() {
+    return _ref2.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -6412,7 +6453,8 @@ var _trips = require("./trips.js");
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
-var newTripForm = document.querySelector('.newTrip__form'); // handlers
+var newTripForm = document.querySelector('.newTrip__form');
+var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
   var locations;
@@ -6441,11 +6483,8 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
     highlight: highlight,
     description: description
   });
-}); // if (newLocationForm)
-//   newLocationForm.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     console.log('popup submitted');
-//   });
+});
+if (deleteBtn) deleteBtn.addEventListener('click', _trips.deleteTrip);
 },{"./login.js":"login.js","./mapbox.js":"mapbox.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

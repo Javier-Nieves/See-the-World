@@ -1,13 +1,14 @@
 /* eslint-disable */
 import { login, logout } from './login.js';
 import { displayMap } from './mapbox.js';
-import { createTrip } from './trips.js';
+import { createTrip, deleteTrip } from './trips.js';
 
 // DOM elements
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('.newTrip__form');
+const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
 // handlers
 if (mapBox) {
@@ -41,8 +42,4 @@ if (newTripForm)
     createTrip({ name, date, highlight, description });
   });
 
-// if (newLocationForm)
-//   newLocationForm.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     console.log('popup submitted');
-//   });
+if (deleteBtn) deleteBtn.addEventListener('click', deleteTrip);

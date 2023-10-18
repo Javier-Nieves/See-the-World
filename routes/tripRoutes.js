@@ -14,4 +14,20 @@ router
   .get(tripController.getAllTrips)
   .post(authController.protect, tripController.createTrip);
 
+router
+  .route('/:tripId')
+  .get(tripController.getTrip)
+  .patch(
+    authController.protect,
+    // authController.restrictTo('admin', 'lead-guide'),
+    // tripController.uploadTripImages,
+    // tripController.resizeTripImages,
+    tripController.updateTrip,
+  )
+  .delete(
+    authController.protect,
+    // authController.restrictTo('admin', 'lead-guide'),
+    tripController.deleteTrip,
+  );
+
 module.exports = router;

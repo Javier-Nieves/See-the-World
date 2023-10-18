@@ -34,5 +34,6 @@ exports.newTripPage = catchAsync(async (req, res) => {
 exports.newLocations = catchAsync(async (req, res) => {
   res.status(200).render('locationsMap', {
     title: `Add locations`,
+    tripId: req.params.tripId,
   });
 });
