@@ -6069,8 +6069,9 @@ function () {
             zoom: 11
           }); // adding zoom buttons
 
-          map.addControl(new mapboxgl.NavigationControl());
-          console.log(window.location.href);
+          map.addControl(new mapboxgl.NavigationControl()); // adding scale
+
+          map.addControl(new mapboxgl.ScaleControl());
           if (window.location.href.includes('locations')) map.on('click', add_marker);
           bounds = new mapboxgl.LngLatBounds();
 
@@ -6336,6 +6337,55 @@ function () {
 
   return function createGeoJSON(_x7) {
     return _ref5.apply(this, arguments);
+  };
+}();
+
+var findLocation =
+/*#__PURE__*/
+function () {
+  var _ref6 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee6(query) {
+    var mapboxClient, response, feature;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          mapboxClient = mapboxSdk({
+            accessToken: mapboxgl.accessToken
+          });
+          _context6.next = 3;
+          return mapboxClient.geocoding.forwardGeocode({
+            query: query,
+            autocomplete: false,
+            limit: 1
+          }).send();
+
+        case 3:
+          response = _context6.sent;
+
+          if (response.body.features.length) {
+            _context6.next = 7;
+            break;
+          }
+
+          console.error('Invalid response', response);
+          return _context6.abrupt("return");
+
+        case 7:
+          feature = response.body.features[0];
+          map.flyTo({
+            center: feature.center
+          });
+
+        case 9:
+        case "end":
+          return _context6.stop();
+      }
+    }, _callee6);
+  }));
+
+  return function findLocation(_x8) {
+    return _ref6.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {

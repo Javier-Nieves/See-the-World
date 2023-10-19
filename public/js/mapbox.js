@@ -17,7 +17,9 @@ export const displayMap = async (locations) => {
   });
   // adding zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
-  console.log(window.location.href);
+  // adding scale
+  map.addControl(new mapboxgl.ScaleControl());
+
   if (window.location.href.includes('locations')) map.on('click', add_marker);
 
   const bounds = new mapboxgl.LngLatBounds();
@@ -187,4 +189,26 @@ const createGeoJSON = async (waypoints) => {
   else map.getSource('route').setData(routeData);
 
   return routeData;
+};
+
+const findLocation = async (query) => {
+  const mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
+  const response = await mapboxClient.geocoding
+    .forwardGeocode({
+      query,
+      autocomplete: false,
+      limit: 1,
+    })
+    .send();
+
+  if (!response.body.features.length) {
+    console.error('Invalid response', response);
+    return;
+  }
+
+  const feature = response.body.features[0];
+
+  map.flyTo({
+    center: feature.center,
+  });
 };
