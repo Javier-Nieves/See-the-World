@@ -36,7 +36,11 @@ h1 {
     width: 5vw;
     height: 5vw;
 }
+.index-brand-container {
+    margin-top: 3vh;
+}
 .index-brand {
+    /* margin-top: 3vh; */
     font-size: 18px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
@@ -51,11 +55,15 @@ h1 {
     top: 0;
     bottom: 0;
     left: 0;
-    width: 20vw;
-    height: 100vh;
-    background-color: rgba(255, 200, 0, 0.546);
+    width: 16vw;
+    height: 16vw;
+    background-image: url('/img/stamp.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1000;
 }
 .nav__search {
+    margin-top: 2vh;
     padding: 15px;
     border: 1px solid black;
     border-radius: 8px;
@@ -118,8 +126,8 @@ h1 {
 
 /* Trip page */
 .main-right-column {
-    width: 78vw;
-    margin-left: 20vw;
+    /* width: 78vw; */
+    /* margin-left: 20vw; */
 }
 .trip-info__container {
     padding: 15px;
@@ -128,9 +136,14 @@ h1 {
 .trip-info__top-info {
     gap: 0;
 }
+.trip-info__lower-info {
+    margin-top: 80vh;
+}
 .trip-info__name {
+    position: absolute;
+    left: 17vw;
+    z-index: 500;
     margin: 5px 0 5px 0;
-
 }
 .trip-info__description {
     background-color: rgba(255, 200, 0, 0.2);;
@@ -140,9 +153,6 @@ h1 {
     border: 1px solid grey;
     border-radius: 10px;
 }
-.trip-date__date {
-    margin: 5px 0 5px 0;
-}
 .trip-desc__user-photo {
     width: 7vw;
 }
@@ -150,10 +160,14 @@ h1 {
     width: 50vw;
 }
 .map {
-    width: 600px;
-    height: 600px;
-    border: 2px solid grey;
-    border-radius: 10px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 80vh;
+    /* z-index: -5; */
+    /* border: 2px solid grey;
+    border-radius: 10px; */
 }
 .trip-info__enlarge-btn, .newTrip__nextBtn, .index__add-btn, .locations__center-btn {
     border: 1px solid grey;
@@ -196,7 +210,7 @@ h1 {
 }
 .nav__search-input {
     margin: 0;
-    width: 15vw;
+    width: 10vw;
 }
 
 /* new locations page */

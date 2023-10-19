@@ -11,7 +11,7 @@ export const displayMap = async (locations) => {
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    // scrollZoom: false,
+    scrollZoom: false,
     center: [-74.07, 4.64],
     zoom: 11,
   });
@@ -38,7 +38,7 @@ export const displayMap = async (locations) => {
     const popup = new mapboxgl.Popup({ offset: 25 }).setText('test text');
     // add marker to map
     new mapboxgl.Marker({
-      color: '#57fa7d',
+      color: '#3fa802',
       scale: 0.6,
     })
       .setLngLat(loc.coordinates)
@@ -78,8 +78,8 @@ const drawRoute = (routeData) => {
       'line-join': 'round',
     },
     paint: {
-      'line-color': '#6084eb',
-      'line-width': 6,
+      'line-color': '#a80202',
+      'line-width': 3,
     },
     filter: ['==', '$type', 'LineString'],
   });

@@ -14,7 +14,7 @@ const deleteBtn = document.querySelector('.trip-info__delete-btn');
 // handlers
 if (mapBox) {
   let locations;
-  if (mapBox.className === 'map')
+  if (mapBox.dataset.hasOwnProperty('locations'))
     locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
 }

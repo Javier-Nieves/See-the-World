@@ -6064,7 +6064,7 @@ function () {
           map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            // scrollZoom: false,
+            scrollZoom: false,
             center: [-74.07, 4.64],
             zoom: 11
           }); // adding zoom buttons
@@ -6096,7 +6096,7 @@ function () {
             }).setText('test text'); // add marker to map
 
             new mapboxgl.Marker({
-              color: '#57fa7d',
+              color: '#3fa802',
               scale: 0.6
             }).setLngLat(loc.coordinates).setPopup(popup).addTo(map); // extend map to fit current location
 
@@ -6144,8 +6144,8 @@ var drawRoute = function drawRoute(routeData) {
       'line-join': 'round'
     },
     paint: {
-      'line-color': '#6084eb',
-      'line-width': 6
+      'line-color': '#a80202',
+      'line-width': 3
     },
     filter: ['==', '$type', 'LineString']
   });
@@ -6509,7 +6509,7 @@ var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
   var locations;
-  if (mapBox.className === 'map') locations = JSON.parse(mapBox.dataset.locations);
+  if (mapBox.dataset.hasOwnProperty('locations')) locations = JSON.parse(mapBox.dataset.locations);
   (0, _mapbox.displayMap)(locations);
 }
 

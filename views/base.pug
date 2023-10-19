@@ -14,10 +14,13 @@ html
 
   body
     .flex-container.main-container
-      include _nav
-      .flex-column.main-right
-        // CONTENT
-        block content
+      .flex-column.main-left
+        .flex-column
+        include _brand
+        block nav
+    .flex-column.main-right
+      // CONTENT
+      block content
 
     // FOOTER
     include _footer

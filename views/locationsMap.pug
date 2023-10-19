@@ -11,6 +11,6 @@ block content
       form.locations__center-form
         input(type='text' class='locations_center-input' placeholder='Center to:')
         input(type='submit' class='locations__center-btn' value='Center')
-    .bigMap(id='map')
+    .bigMap(id='map' data-locations=`${JSON.stringify(trip.locations)}`)
     .flex-container
-      a(class='newTrip__nextBtn' href=`/trips/${tripId}`) View your trip's page
+      a(class='newTrip__nextBtn' href=`/trips/${trip.id}`) View your trip's page
