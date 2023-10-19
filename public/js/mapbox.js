@@ -191,7 +191,7 @@ const createGeoJSON = async (waypoints) => {
   return routeData;
 };
 
-const findLocation = async (query) => {
+export const findLocation = async (query) => {
   const mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
   const response = await mapboxClient.geocoding
     .forwardGeocode({
@@ -208,6 +208,7 @@ const findLocation = async (query) => {
 
   const feature = response.body.features[0];
 
+  // new center for the existing map
   map.flyTo({
     center: feature.center,
   });

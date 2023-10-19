@@ -6029,7 +6029,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.persistLocation = exports.displayMap = void 0;
+exports.persistLocation = exports.findLocation = exports.displayMap = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6340,7 +6340,7 @@ function () {
   };
 }();
 
-var findLocation =
+var findLocation = exports.findLocation =
 /*#__PURE__*/
 function () {
   var _ref6 = _asyncToGenerator(
@@ -6372,7 +6372,8 @@ function () {
           return _context6.abrupt("return");
 
         case 7:
-          feature = response.body.features[0];
+          feature = response.body.features[0]; // new center for the existing map
+
           map.flyTo({
             center: feature.center
           });
@@ -6503,6 +6504,7 @@ var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('.newTrip__form');
+var locationsCenterForm = document.querySelector('.locations__center-form');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
@@ -6534,6 +6536,15 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
     description: description
   });
 });
+
+if (locationsCenterForm) {
+  locationsCenterForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var query = document.querySelector('.locations_center-input').value;
+    (0, _mapbox.findLocation)(query);
+  });
+}
+
 if (deleteBtn) deleteBtn.addEventListener('click', _trips.deleteTrip);
 },{"./login.js":"login.js","./mapbox.js":"mapbox.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

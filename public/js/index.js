@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { login, logout } from './login.js';
-import { displayMap } from './mapbox.js';
+import { displayMap, findLocation } from './mapbox.js';
 import { createTrip, deleteTrip } from './trips.js';
 
 // DOM elements
@@ -8,6 +8,7 @@ const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('.newTrip__form');
+const locationsCenterForm = document.querySelector('.locations__center-form');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
 // handlers
@@ -41,4 +42,11 @@ if (newTripForm)
     createTrip({ name, date, highlight, description });
   });
 
+if (locationsCenterForm) {
+  locationsCenterForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = document.querySelector('.locations_center-input').value;
+    findLocation(query);
+  });
+}
 if (deleteBtn) deleteBtn.addEventListener('click', deleteTrip);

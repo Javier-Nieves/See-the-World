@@ -6,7 +6,11 @@ block append head
 
 block content
   .flex-column.main-right-column
-    h1 Add locations
+    .flex-container(style='gap: 15vw;')
+      h1 Add locations
+      form.locations__center-form
+        input(type='text' class='locations_center-input' placeholder='Center to:')
+        input(type='submit' class='locations__center-btn' value='Center')
     .bigMap(id='map')
     .flex-container
       a(class='newTrip__nextBtn' href=`/trips/${tripId}`) View your trip's page

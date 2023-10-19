@@ -155,7 +155,7 @@ h1 {
     border: 2px solid grey;
     border-radius: 10px;
 }
-.trip-info__enlarge-btn, .newTrip__nextBtn, .index__add-btn {
+.trip-info__enlarge-btn, .newTrip__nextBtn, .index__add-btn, .locations__center-btn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
@@ -205,6 +205,10 @@ h1 {
     height: 80vh;
     border: 2px solid grey;
     border-radius: 10px;
+}
+.locations__center-form > * {
+    margin: 5px;
+    padding: 8px;
 }
 
 /* Footer */
