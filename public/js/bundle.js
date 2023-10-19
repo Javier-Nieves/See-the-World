@@ -6474,6 +6474,7 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
   var date = document.querySelector('.newTrip__input-date').value;
   var highlight = document.querySelector('.newTrip__input-highlight').value; // const private = document.querySelector('.newTrip__checkbox').value;
   // todo - add "With" field
+  // prettier-ignore
 
   var description = document.querySelector('.newTrip__input-description').value;
   (0, _trips.createTrip)({

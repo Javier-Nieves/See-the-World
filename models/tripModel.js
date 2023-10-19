@@ -34,6 +34,7 @@ const tripSchema = new mongoose.Schema({
     required: [true, 'A trip must have a date'],
   },
   duration: Number,
+  createdBy: String,
   createdAt: {
     type: Date,
     default: Date.now(),

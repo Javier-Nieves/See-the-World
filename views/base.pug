@@ -11,11 +11,11 @@ html
       title See the World | #{title}
 
   body
-    //- // HEADER
-    //- include _header
-
-    // CONTENT
-    block content
+    .flex-container.main-container
+      include _nav
+      .flex-column.main-right
+        // CONTENT
+        block content
 
     // FOOTER
     include _footer

@@ -1,22 +1,23 @@
 extends base
 
 block content
-  h1 Creating trip
-  form.flex-column.newTrip__form
-    .newTrip__container
-      .flex-container.newTrip__textLine
-        .newTrip__text Name of the trip:
-        input(type='text' class='newTrip__input-name' placeholder='Awesome summer Europe trip' required)
-      .flex-container.newTrip__textLine
-        .newTrip__text Starting date:
-        input(type='date' class='newTrip__input-date' required)
-      .flex-container.newTrip__textLine
-        .newTrip__text Trip highlight:
-        input(type='text' class='newTrip__input-highlight' placeholder='8 countries, 4 people, 100 delicious baguetes!')
-      .flex-container.newTrip__textLine
-        .newTrip__text Description:
-        textarea(class='newTrip__input-description' placeholder='Trip details, your impressions')
-      .flex-container.newTrip__textLine
-        .newTrip__text Show only to your friends:
-        input(type='checkbox' class='newTrip__checkbox')
-    input(type='submit' value='Next')
+  .main-right-column.flex-column
+    h1 Creating trip
+    form.flex-column.newTrip__form
+      .newTrip__container
+        .flex-container.newTrip__textLine
+          .newTrip__text Name of the trip:
+          input(type='text' class='newTrip__input-name' placeholder='Awesome summer Europe trip' required)
+        .flex-container.newTrip__textLine
+          .newTrip__text Starting date:
+          input(type='date' class='newTrip__input-date' required)
+        .flex-container.newTrip__textLine
+          .newTrip__text Trip highlight:
+          input(type='text' class='newTrip__input-highlight' placeholder='8 countries, 4 people, 100 delicious baguetes!')
+        .flex-container.newTrip__textLine
+          .newTrip__text Description:
+          textarea(class='newTrip__input-description' placeholder='Trip details, your impressions')
+        .flex-container.newTrip__textLine
+          .newTrip__text Show only to your friends:
+          input(type='checkbox' class='newTrip__checkbox')
+      input(type='submit' value='Next')

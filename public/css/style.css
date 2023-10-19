@@ -117,6 +117,10 @@ h1 {
 }
 
 /* Trip page */
+.main-right-column {
+    width: 78vw;
+    margin-left: 20vw;
+}
 .trip-info__container {
     padding: 15px;
     gap: 2vw;
@@ -141,6 +145,9 @@ h1 {
 }
 .trip-desc__user-photo {
     width: 7vw;
+}
+.trip-info__description {
+    width: 50vw;
 }
 .map {
     width: 600px;
@@ -194,7 +201,7 @@ h1 {
 
 /* new locations page */
 .bigMap {
-    width: 90vw;
+    width: 75vw;
     height: 80vh;
     border: 2px solid grey;
     border-radius: 10px;

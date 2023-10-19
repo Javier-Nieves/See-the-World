@@ -36,9 +36,8 @@ if (newTripForm)
     const highlight = document.querySelector('.newTrip__input-highlight').value;
     // const private = document.querySelector('.newTrip__checkbox').value;
     // todo - add "With" field
-    const description = document.querySelector(
-      '.newTrip__input-description',
-    ).value;
+    // prettier-ignore
+    const description = document.querySelector('.newTrip__input-description',).value;
     createTrip({ name, date, highlight, description });
   });
 
