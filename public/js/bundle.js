@@ -6045,6 +6045,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var map, TOKEN, API_KEY;
 var waypoints = [];
+var features = [];
 
 var displayMap = exports.displayMap =
 /*#__PURE__*/
@@ -6064,43 +6065,28 @@ function () {
           map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            scrollZoom: "".concat(window.location.href.includes('locations')) // center: [-74.07, 4.64],
+            scrollZoom: window.location.href.includes('locations') // center: [-74.07, 4.64],
             // zoom: 11,
 
           }); // adding zoom buttons
 
           map.addControl(new mapboxgl.NavigationControl()); // adding scale
 
-          map.addControl(new mapboxgl.ScaleControl());
+          map.addControl(new mapboxgl.ScaleControl()); // Trip page or Locations edit page?
+
           if (window.location.href.includes('locations')) map.on('click', add_marker);
-          bounds = new mapboxgl.LngLatBounds();
 
           if (!(locations.length === 0)) {
-            _context.next = 10;
+            _context.next = 9;
             break;
           }
 
           return _context.abrupt("return");
 
-        case 10:
-          // adding markers and popups for each location
-          locations.forEach(function (loc) {
-            waypoints.push(loc.coordinates); // create marker
-            // const el = document.createElement('div');
-            // el.className = 'marker';
-            //create popup
-
-            var popup = new mapboxgl.Popup({
-              offset: 25
-            }).setText('test text'); // add marker to map
-
-            new mapboxgl.Marker({
-              color: '#3fa802',
-              scale: 0.6
-            }).setLngLat(loc.coordinates).setPopup(popup).addTo(map); // extend map to fit current location
-
-            bounds.extend(loc.coordinates);
-          }); // adding padding to the map
+        case 9:
+          bounds = new mapboxgl.LngLatBounds();
+          fillFeaturesArray(locations, bounds);
+          createLocationsLayer(); // adding padding to the map
 
           map.fitBounds(bounds, {
             padding: {
@@ -6109,16 +6095,17 @@ function () {
               left: 50,
               right: 50
             }
-          }); // getting GeoJSON data for location points
+          });
+          populatePopups(); // getting GeoJSON data for location points
 
-          _context.next = 14;
+          _context.next = 16;
           return createGeoJSON(waypoints);
 
-        case 14:
+        case 16:
           routeData = _context.sent;
           drawRoute(routeData);
 
-        case 16:
+        case 18:
         case "end":
           return _context.stop();
       }
@@ -6147,7 +6134,9 @@ var drawRoute = function drawRoute(routeData) {
       'line-width': 3
     },
     filter: ['==', '$type', 'LineString']
-  });
+  }); // for Routes layer to be lower than Locations
+
+  map.moveLayer('route-layer', 'locations');
 };
 
 var add_marker = function add_marker(event) {
@@ -6182,26 +6171,43 @@ var popupHandler = function popupHandler(popup) {
             description = document.querySelector('.newLocation__popup-desc').value;
             persistLocation(popup._lngLat, name, address, description);
             popup.remove();
-            new mapboxgl.Marker({
-              color: '#e60000',
-              scale: 0.6
-            }).setLngLat(popup._lngLat).addTo(map); // waypoints - array, used to create GeoJson => routes
+            features.push({
+              type: 'Feature',
+              properties: {
+                description: "<h1>".concat(description, "</h1>")
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: popup._lngLat
+              }
+            });
+            console.log(features);
+            map.getSource('locations').setData({
+              type: 'FeatureCollection',
+              features: features
+            }); // new mapboxgl.Marker({
+            //   color: '#e60000',
+            //   scale: 0.6,
+            // })
+            //   .setLngLat(popup._lngLat)
+            //   .addTo(map);
+            // waypoints - array, used to create GeoJson => routes
 
             waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
 
             if (!(waypoints.length > 1)) {
-              _context2.next = 13;
+              _context2.next = 15;
               break;
             }
 
-            _context2.next = 11;
+            _context2.next = 13;
             return createGeoJSON(waypoints);
 
-          case 11:
+          case 13:
             geoData = _context2.sent;
             drawRoute(geoData);
 
-          case 13:
+          case 15:
           case "end":
             return _context2.stop();
         }
@@ -6392,6 +6398,68 @@ function () {
     return _ref6.apply(this, arguments);
   };
 }();
+
+var createLocationsLayer = function createLocationsLayer() {
+  map.on('load', function () {
+    map.addSource('locations', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features
+      }
+    });
+    map.addLayer({
+      id: 'locations',
+      type: 'circle',
+      source: 'locations',
+      paint: {
+        'circle-color': '#4264fb',
+        'circle-radius': 6,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff'
+      }
+    });
+  });
+};
+
+var fillFeaturesArray = function fillFeaturesArray(locations, bounds) {
+  // create an array for future map.addSource method
+  // and waypoints array for Routes drawing
+  locations.forEach(function (loc) {
+    waypoints.push(loc.coordinates);
+    features.push({
+      type: 'Feature',
+      properties: {
+        description: "<h1>".concat(loc.description, "</h1>")
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: loc.coordinates
+      }
+    }); // extend map to fit current location
+
+    bounds.extend(loc.coordinates);
+  });
+};
+
+var populatePopups = function populatePopups() {
+  var popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+  });
+  map.on('mouseenter', 'locations', function (e) {
+    map.getCanvas().style.cursor = 'pointer';
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var description = e.features[0].properties.description; // Populate the popup and set its coordinates
+
+    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+  }); // hide popup when cursor leaves
+
+  map.on('mouseleave', 'locations', function () {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+  });
+};
 },{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {
 "use strict";
 

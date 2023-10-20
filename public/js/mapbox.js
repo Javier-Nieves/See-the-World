@@ -3,6 +3,7 @@ import axios from 'axios';
 
 let map, TOKEN, API_KEY;
 let waypoints = [];
+let features = [];
 
 export const displayMap = async (locations) => {
   // main map configuration
@@ -11,7 +12,7 @@ export const displayMap = async (locations) => {
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    scrollZoom: `${window.location.href.includes('locations')}`,
+    scrollZoom: window.location.href.includes('locations'),
     // center: [-74.07, 4.64],
     // zoom: 11,
   });
@@ -20,33 +21,15 @@ export const displayMap = async (locations) => {
   // adding scale
   map.addControl(new mapboxgl.ScaleControl());
 
+  // Trip page or Locations edit page?
   if (window.location.href.includes('locations')) map.on('click', add_marker);
-
-  const bounds = new mapboxgl.LngLatBounds();
 
   if (locations.length === 0) return;
 
-  // adding markers and popups for each location
-  locations.forEach((loc) => {
-    waypoints.push(loc.coordinates);
-    // create marker
-    // const el = document.createElement('div');
-    // el.className = 'marker';
+  const bounds = new mapboxgl.LngLatBounds();
 
-    //create popup
-    const popup = new mapboxgl.Popup({ offset: 25 }).setText('test text');
-    // add marker to map
-    new mapboxgl.Marker({
-      color: '#3fa802',
-      scale: 0.6,
-    })
-      .setLngLat(loc.coordinates)
-      .setPopup(popup)
-      .addTo(map);
-
-    // extend map to fit current location
-    bounds.extend(loc.coordinates);
-  });
+  fillFeaturesArray(locations, bounds);
+  createLocationsLayer();
 
   // adding padding to the map
   map.fitBounds(bounds, {
@@ -57,6 +40,8 @@ export const displayMap = async (locations) => {
       right: 50,
     },
   });
+
+  populatePopups();
 
   // getting GeoJSON data for location points
   const routeData = await createGeoJSON(waypoints);
@@ -82,6 +67,8 @@ const drawRoute = (routeData) => {
     },
     filter: ['==', '$type', 'LineString'],
   });
+  // for Routes layer to be lower than Locations
+  map.moveLayer('route-layer', 'locations');
 };
 
 const add_marker = (event) => {
@@ -113,18 +100,35 @@ const popupHandler = (popup) => {
       e.preventDefault();
       const name = document.querySelector('.newLocation__popup-name').value;
       // prettier-ignore
-      const address = document.querySelector('.newLocation__popup-address',).value;
+      const address = document.querySelector('.newLocation__popup-address').value;
       // prettier-ignore
-      const description = document.querySelector('.newLocation__popup-desc',).value;
+      const description = document.querySelector('.newLocation__popup-desc').value;
       persistLocation(popup._lngLat, name, address, description);
 
       popup.remove();
-      new mapboxgl.Marker({
-        color: '#e60000',
-        scale: 0.6,
-      })
-        .setLngLat(popup._lngLat)
-        .addTo(map);
+
+      features.push({
+        type: 'Feature',
+        properties: {
+          description: `<h1>${description}</h1>`,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: popup._lngLat,
+        },
+      });
+      console.log(features);
+      map.getSource('locations').setData({
+        type: 'FeatureCollection',
+        features: features,
+      });
+
+      // new mapboxgl.Marker({
+      //   color: '#e60000',
+      //   scale: 0.6,
+      // })
+      //   .setLngLat(popup._lngLat)
+      //   .addTo(map);
 
       // waypoints - array, used to create GeoJson => routes
       waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
@@ -214,5 +218,67 @@ export const findLocation = async (query) => {
   // new center for the existing map
   map.flyTo({
     center: feature.center,
+  });
+};
+
+const createLocationsLayer = () => {
+  map.on('load', function () {
+    map.addSource('locations', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features,
+      },
+    });
+    map.addLayer({
+      id: 'locations',
+      type: 'circle',
+      source: 'locations',
+      paint: {
+        'circle-color': '#4264fb',
+        'circle-radius': 6,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff',
+      },
+    });
+  });
+};
+
+const fillFeaturesArray = (locations, bounds) => {
+  // create an array for future map.addSource method
+  // and waypoints array for Routes drawing
+  locations.forEach((loc) => {
+    waypoints.push(loc.coordinates);
+    features.push({
+      type: 'Feature',
+      properties: {
+        description: `<h1>${loc.description}</h1>`,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: loc.coordinates,
+      },
+    });
+    // extend map to fit current location
+    bounds.extend(loc.coordinates);
+  });
+};
+
+const populatePopups = () => {
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+  });
+  map.on('mouseenter', 'locations', (e) => {
+    map.getCanvas().style.cursor = 'pointer';
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const description = e.features[0].properties.description;
+    // Populate the popup and set its coordinates
+    popup.setLngLat(coordinates).setHTML(description).addTo(map);
+  });
+  // hide popup when cursor leaves
+  map.on('mouseleave', 'locations', () => {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
   });
 };
