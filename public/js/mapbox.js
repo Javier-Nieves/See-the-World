@@ -85,9 +85,13 @@ const drawRoute = (routeData) => {
 };
 
 const add_marker = (event) => {
-  var coordinates = event.lngLat;
+  // clear all popups opened earlier
+  const oldPopups = document.querySelectorAll('.mapboxgl-popup');
+  oldPopups.forEach((popup) => popup.remove());
 
-  const popup = new mapboxgl.Popup({ closeOnClick: false, offset: 25 })
+  const coordinates = event.lngLat;
+
+  const popup = new mapboxgl.Popup({ closeOnClick: false })
     .setLngLat(coordinates)
     .setHTML(
       `<form class='newLocation__popup-form'>
@@ -99,17 +103,10 @@ const add_marker = (event) => {
     )
     .addTo(map);
 
-  const marker = new mapboxgl.Marker({
-    color: '#e60000',
-    scale: 0.6,
-  })
-    .setLngLat(coordinates)
-    .addTo(map);
-
-  popupHandler(popup, marker);
+  popupHandler(popup);
 };
 
-const popupHandler = (popup, marker) => {
+const popupHandler = (popup) => {
   document.querySelector('.newLocation__popup-form').addEventListener(
     'submit',
     async (e) => {
@@ -119,22 +116,25 @@ const popupHandler = (popup, marker) => {
       const address = document.querySelector('.newLocation__popup-address',).value;
       // prettier-ignore
       const description = document.querySelector('.newLocation__popup-desc',).value;
-      persistLocation(marker._lngLat, name, address, description);
+      persistLocation(popup._lngLat, name, address, description);
 
       popup.remove();
-      // waypoints.push(marker._lngLat);
-      waypoints.push([marker._lngLat.lng, marker._lngLat.lat]);
+      new mapboxgl.Marker({
+        color: '#e60000',
+        scale: 0.6,
+      })
+        .setLngLat(popup._lngLat)
+        .addTo(map);
+
+      // waypoints - array, used to create GeoJson => routes
+      waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
       if (waypoints.length > 1) {
         const geoData = await createGeoJSON(waypoints);
         drawRoute(geoData);
       }
-      return;
     },
     { once: true },
   );
-  // popup.on('close', function (e) {
-  //   console.log('popup is closed');
-  // });
 };
 
 // prettier-ignore

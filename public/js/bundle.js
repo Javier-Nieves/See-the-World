@@ -6151,19 +6151,19 @@ var drawRoute = function drawRoute(routeData) {
 };
 
 var add_marker = function add_marker(event) {
+  // clear all popups opened earlier
+  var oldPopups = document.querySelectorAll('.mapboxgl-popup');
+  oldPopups.forEach(function (popup) {
+    return popup.remove();
+  });
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
-    closeOnClick: false,
-    offset: 25
+    closeOnClick: false
   }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
-  var marker = new mapboxgl.Marker({
-    color: '#e60000',
-    scale: 0.6
-  }).setLngLat(coordinates).addTo(map);
-  popupHandler(popup, marker);
+  popupHandler(popup);
 };
 
-var popupHandler = function popupHandler(popup, marker) {
+var popupHandler = function popupHandler(popup) {
   document.querySelector('.newLocation__popup-form').addEventListener('submit',
   /*#__PURE__*/
   function () {
@@ -6180,25 +6180,26 @@ var popupHandler = function popupHandler(popup, marker) {
             address = document.querySelector('.newLocation__popup-address').value; // prettier-ignore
 
             description = document.querySelector('.newLocation__popup-desc').value;
-            persistLocation(marker._lngLat, name, address, description);
-            popup.remove(); // waypoints.push(marker._lngLat);
+            persistLocation(popup._lngLat, name, address, description);
+            popup.remove();
+            new mapboxgl.Marker({
+              color: '#e60000',
+              scale: 0.6
+            }).setLngLat(popup._lngLat).addTo(map); // waypoints - array, used to create GeoJson => routes
 
-            waypoints.push([marker._lngLat.lng, marker._lngLat.lat]);
+            waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
 
             if (!(waypoints.length > 1)) {
-              _context2.next = 12;
+              _context2.next = 13;
               break;
             }
 
-            _context2.next = 10;
+            _context2.next = 11;
             return createGeoJSON(waypoints);
 
-          case 10:
+          case 11:
             geoData = _context2.sent;
             drawRoute(geoData);
-
-          case 12:
-            return _context2.abrupt("return");
 
           case 13:
           case "end":
@@ -6212,9 +6213,7 @@ var popupHandler = function popupHandler(popup, marker) {
     };
   }(), {
     once: true
-  }); // popup.on('close', function (e) {
-  //   console.log('popup is closed');
-  // });
+  });
 }; // prettier-ignore
 
 
