@@ -46,8 +46,9 @@ if (newTripForm)
 if (locationsCenterForm) {
   locationsCenterForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const query = document.querySelector('.locations_center-input').value;
-    findLocation(query);
+    const query = document.querySelector('.locations_center-input');
+    findLocation(query.value);
+    query.value = '';
   });
 }
 if (deleteBtn) deleteBtn.addEventListener('click', deleteTrip);

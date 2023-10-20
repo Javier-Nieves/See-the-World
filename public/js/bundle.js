@@ -6044,7 +6044,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var map, TOKEN, API_KEY;
-var linePainter = [];
+var waypoints = [];
 
 var displayMap = exports.displayMap =
 /*#__PURE__*/
@@ -6052,7 +6052,7 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   _regeneratorRuntime().mark(function _callee(locations) {
-    var bounds, waypoints, routeData;
+    var bounds, routeData;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -6064,7 +6064,7 @@ function () {
           map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            scrollZoom: false // center: [-74.07, 4.64],
+            scrollZoom: "".concat(window.location.href.includes('locations')) // center: [-74.07, 4.64],
             // zoom: 11,
 
           }); // adding zoom buttons
@@ -6075,7 +6075,7 @@ function () {
           if (window.location.href.includes('locations')) map.on('click', add_marker);
           bounds = new mapboxgl.LngLatBounds();
 
-          if (locations) {
+          if (!(locations.length === 0)) {
             _context.next = 10;
             break;
           }
@@ -6083,8 +6083,7 @@ function () {
           return _context.abrupt("return");
 
         case 10:
-          waypoints = []; // adding markers and popups for each location
-
+          // adding markers and popups for each location
           locations.forEach(function (loc) {
             waypoints.push(loc.coordinates); // create marker
             // const el = document.createElement('div');
@@ -6112,14 +6111,14 @@ function () {
             }
           }); // getting GeoJSON data for location points
 
-          _context.next = 15;
+          _context.next = 14;
           return createGeoJSON(waypoints);
 
-        case 15:
+        case 14:
           routeData = _context.sent;
           drawRoute(routeData);
 
-        case 17:
+        case 16:
         case "end":
           return _context.stop();
       }
@@ -6157,14 +6156,14 @@ var add_marker = function add_marker(event) {
     closeOnClick: false,
     offset: 25
   }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
-  new mapboxgl.Marker({
+  var marker = new mapboxgl.Marker({
     color: '#e60000',
     scale: 0.6
   }).setLngLat(coordinates).addTo(map);
-  popupHandler(popup, coordinates);
+  popupHandler(popup, marker);
 };
 
-var popupHandler = function popupHandler(popup, coordinates) {
+var popupHandler = function popupHandler(popup, marker) {
   document.querySelector('.newLocation__popup-form').addEventListener('submit',
   /*#__PURE__*/
   function () {
@@ -6181,24 +6180,27 @@ var popupHandler = function popupHandler(popup, coordinates) {
             address = document.querySelector('.newLocation__popup-address').value; // prettier-ignore
 
             description = document.querySelector('.newLocation__popup-desc').value;
-            persistLocation(coordinates, name, address, description);
-            popup.remove(); // linePainter.push(coordinates);
+            persistLocation(marker._lngLat, name, address, description);
+            popup.remove(); // waypoints.push(marker._lngLat);
 
-            linePainter.push([coordinates.lng, coordinates.lat]);
+            waypoints.push([marker._lngLat.lng, marker._lngLat.lat]);
 
-            if (!(linePainter.length > 1)) {
+            if (!(waypoints.length > 1)) {
               _context2.next = 12;
               break;
             }
 
             _context2.next = 10;
-            return createGeoJSON(linePainter);
+            return createGeoJSON(waypoints);
 
           case 10:
             geoData = _context2.sent;
             drawRoute(geoData);
 
           case 12:
+            return _context2.abrupt("return");
+
+          case 13:
           case "end":
             return _context2.stop();
         }
@@ -6210,7 +6212,9 @@ var popupHandler = function popupHandler(popup, coordinates) {
     };
   }(), {
     once: true
-  });
+  }); // popup.on('close', function (e) {
+  //   console.log('popup is closed');
+  // });
 }; // prettier-ignore
 
 
@@ -6543,8 +6547,9 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
 if (locationsCenterForm) {
   locationsCenterForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var query = document.querySelector('.locations_center-input').value;
-    (0, _mapbox.findLocation)(query);
+    var query = document.querySelector('.locations_center-input');
+    (0, _mapbox.findLocation)(query.value);
+    query.value = '';
   });
 }
 

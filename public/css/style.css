@@ -125,10 +125,6 @@ h1 {
 }
 
 /* Trip page */
-.main-right-column {
-    /* width: 78vw; */
-    /* margin-left: 20vw; */
-}
 .trip-info__container {
     padding: 15px;
     gap: 2vw;
@@ -170,18 +166,18 @@ h1 {
     top: 0;
     width: 100vw;
     height: 80vh;
-    /* z-index: -5; */
-    /* border: 2px solid grey;
-    border-radius: 10px; */
 }
-.trip-info__enlarge-btn, .newTrip__nextBtn, .index__add-btn, .locations__center-btn {
+.trip-info__buttons-container {
+    gap: 5vw;
+}
+.newTrip__nextBtn, .index__add-btn, .locations__center-btn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
     background-color: rgba(255, 200, 0, 0.72);
     font-size: 18px;
 }
-.trip-info__enlarge-btn:hover, .newTrip__nextBtn:hover {
+.newTrip__nextBtn:hover {
     cursor: pointer;
     background-color: rgba(255, 200, 0, 0.9);
 }

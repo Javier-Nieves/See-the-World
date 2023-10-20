@@ -21,4 +21,7 @@ block content
           //- todo - add name as the popup on hover on the image
           img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
     .trip-info__description= trip.description
-  button(class='trip-info__delete-btn') Delete Trip
+  .flex-container.trip-info__buttons-container
+    button(class='trip-info__edit-info-btn') Edit Trip Info
+    a(class='trip-info__edit-locations-btn' href=`${trip.id}/locations`) Edit Locations
+    button(class='trip-info__delete-btn') Delete Trip

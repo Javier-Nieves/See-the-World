@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 let map, TOKEN, API_KEY;
-let linePainter = [];
+let waypoints = [];
 
 export const displayMap = async (locations) => {
   // main map configuration
@@ -11,7 +11,7 @@ export const displayMap = async (locations) => {
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    scrollZoom: false,
+    scrollZoom: `${window.location.href.includes('locations')}`,
     // center: [-74.07, 4.64],
     // zoom: 11,
   });
@@ -24,9 +24,8 @@ export const displayMap = async (locations) => {
 
   const bounds = new mapboxgl.LngLatBounds();
 
-  if (!locations) return;
+  if (locations.length === 0) return;
 
-  const waypoints = [];
   // adding markers and popups for each location
   locations.forEach((loc) => {
     waypoints.push(loc.coordinates);
@@ -100,17 +99,17 @@ const add_marker = (event) => {
     )
     .addTo(map);
 
-  new mapboxgl.Marker({
+  const marker = new mapboxgl.Marker({
     color: '#e60000',
     scale: 0.6,
   })
     .setLngLat(coordinates)
     .addTo(map);
 
-  popupHandler(popup, coordinates);
+  popupHandler(popup, marker);
 };
 
-const popupHandler = (popup, coordinates) => {
+const popupHandler = (popup, marker) => {
   document.querySelector('.newLocation__popup-form').addEventListener(
     'submit',
     async (e) => {
@@ -120,18 +119,22 @@ const popupHandler = (popup, coordinates) => {
       const address = document.querySelector('.newLocation__popup-address',).value;
       // prettier-ignore
       const description = document.querySelector('.newLocation__popup-desc',).value;
-      persistLocation(coordinates, name, address, description);
+      persistLocation(marker._lngLat, name, address, description);
 
       popup.remove();
-      // linePainter.push(coordinates);
-      linePainter.push([coordinates.lng, coordinates.lat]);
-      if (linePainter.length > 1) {
-        const geoData = await createGeoJSON(linePainter);
+      // waypoints.push(marker._lngLat);
+      waypoints.push([marker._lngLat.lng, marker._lngLat.lat]);
+      if (waypoints.length > 1) {
+        const geoData = await createGeoJSON(waypoints);
         drawRoute(geoData);
       }
+      return;
     },
     { once: true },
   );
+  // popup.on('close', function (e) {
+  //   console.log('popup is closed');
+  // });
 };
 
 // prettier-ignore
