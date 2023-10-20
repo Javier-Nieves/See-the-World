@@ -138,12 +138,17 @@ h1 {
 }
 .trip-info__lower-info {
     margin-top: 80vh;
+    align-items: baseline;
+    gap: 5vw;
 }
 .trip-info__name {
     position: absolute;
     left: 17vw;
     z-index: 500;
     margin: 5px 0 5px 0;
+}
+.trip-info__highlight {
+    margin: 0;
 }
 .trip-info__description {
     background-color: rgba(255, 200, 0, 0.2);;
@@ -159,7 +164,7 @@ h1 {
 .trip-info__description {
     width: 50vw;
 }
-.map {
+.map, .locationsMap {
     position: absolute;
     left: 0;
     top: 0;
@@ -194,7 +199,8 @@ h1 {
 .newTrip__text {
     font-size: 20px;
 }
-.newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, .newTrip__input-description, .nav__search-input {
+.newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, 
+.newTrip__input-description, .nav__search-input, .newTrip__input-duration {
     background-color: rgba(153, 153, 153, 0.255);
     border: 1px solid grey;
     border-radius: 5px;
@@ -214,15 +220,19 @@ h1 {
 }
 
 /* new locations page */
-.bigMap {
-    width: 75vw;
-    height: 80vh;
-    border: 2px solid grey;
-    border-radius: 10px;
+.locationsMap {
+    height: 90vh;
 }
 .locations__center-form > * {
     margin: 5px;
     padding: 8px;
+}
+.locations__upper-block {
+    gap: 15vw;
+    z-index: 300;
+}
+.locations__lower-block {
+    margin-top: 80vh;
 }
 
 /* Footer */

@@ -12,8 +12,8 @@ export const displayMap = async (locations) => {
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
     scrollZoom: false,
-    center: [-74.07, 4.64],
-    zoom: 11,
+    // center: [-74.07, 4.64],
+    // zoom: 11,
   });
   // adding zoom buttons
   map.addControl(new mapboxgl.NavigationControl());
@@ -52,10 +52,10 @@ export const displayMap = async (locations) => {
   // adding padding to the map
   map.fitBounds(bounds, {
     padding: {
-      top: 20,
-      bottom: 20,
-      left: 20,
-      right: 20,
+      top: 50,
+      bottom: 50,
+      left: 50,
+      right: 50,
     },
   });
 

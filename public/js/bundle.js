@@ -6064,9 +6064,9 @@ function () {
           map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            scrollZoom: false,
-            center: [-74.07, 4.64],
-            zoom: 11
+            scrollZoom: false // center: [-74.07, 4.64],
+            // zoom: 11,
+
           }); // adding zoom buttons
 
           map.addControl(new mapboxgl.NavigationControl()); // adding scale
@@ -6105,10 +6105,10 @@ function () {
 
           map.fitBounds(bounds, {
             padding: {
-              top: 20,
-              bottom: 20,
-              left: 20,
-              right: 20
+              top: 50,
+              bottom: 50,
+              left: 50,
+              right: 50
             }
           }); // getting GeoJSON data for location points
 
@@ -6426,6 +6426,7 @@ function () {
             data: {
               name: formData.name,
               date: formData.date,
+              duration: formData.duration,
               description: formData.description,
               highlight: formData.highlight
             }
@@ -6524,6 +6525,7 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var name = document.querySelector('.newTrip__input-name').value;
   var date = document.querySelector('.newTrip__input-date').value;
+  var duration = document.querySelector('.newTrip__input-duration').value;
   var highlight = document.querySelector('.newTrip__input-highlight').value; // const private = document.querySelector('.newTrip__checkbox').value;
   // todo - add "With" field
   // prettier-ignore
@@ -6532,6 +6534,7 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
   (0, _trips.createTrip)({
     name: name,
     date: date,
+    duration: duration,
     highlight: highlight,
     description: description
   });

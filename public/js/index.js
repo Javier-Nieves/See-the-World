@@ -34,12 +34,13 @@ if (newTripForm)
     e.preventDefault();
     const name = document.querySelector('.newTrip__input-name').value;
     const date = document.querySelector('.newTrip__input-date').value;
+    const duration = document.querySelector('.newTrip__input-duration').value;
     const highlight = document.querySelector('.newTrip__input-highlight').value;
     // const private = document.querySelector('.newTrip__checkbox').value;
     // todo - add "With" field
     // prettier-ignore
     const description = document.querySelector('.newTrip__input-description',).value;
-    createTrip({ name, date, highlight, description });
+    createTrip({ name, date, duration, highlight, description });
   });
 
 if (locationsCenterForm) {

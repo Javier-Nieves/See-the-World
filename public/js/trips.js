@@ -8,6 +8,7 @@ export const createTrip = async (formData) => {
     data: {
       name: formData.name,
       date: formData.date,
+      duration: formData.duration,
       description: formData.description,
       highlight: formData.highlight,
     },
