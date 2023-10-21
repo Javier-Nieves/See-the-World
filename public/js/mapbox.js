@@ -20,6 +20,10 @@ export const displayMap = async (locations) => {
   map.addControl(new mapboxgl.NavigationControl());
   // adding scale
   map.addControl(new mapboxgl.ScaleControl());
+  // change cursor
+  map.getCanvas().style.cursor = 'crosshair';
+
+  activateGeocoder();
 
   // Trip page or Locations edit page?
   if (window.location.href.includes('locations')) map.on('click', add_marker);
@@ -187,25 +191,12 @@ const createGeoJSON = async (waypoints) => {
   return routeData;
 };
 
-export const findLocation = async (query) => {
-  const mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
-  const response = await mapboxClient.geocoding
-    .forwardGeocode({
-      query,
-      autocomplete: false,
-      limit: 1,
-    })
-    .send();
-
-  if (!response.body.features.length) {
-    console.error('Invalid response', response);
-    return;
-  }
-  const feature = response.body.features[0];
-  // new center for the existing map
-  map.flyTo({
-    center: feature.center,
+export const activateGeocoder = () => {
+  const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
   });
+  document.querySelector('#geocoder').appendChild(geocoder.onAdd(map));
 };
 
 const fillGeoArrays = (locations, bounds) => {
@@ -252,7 +243,12 @@ const createLocationsLayer = () => {
       'circle-stroke-color': '#ffffff',
     },
   });
-  console.log('layer added', features);
+  // canter map on clicked location
+  map.on('click', 'locations', (e) => {
+    map.flyTo({
+      center: e.features[0].geometry.coordinates,
+    });
+  });
 };
 
 const populatePopups = () => {
@@ -269,7 +265,7 @@ const populatePopups = () => {
   });
   // hide popup when cursor leaves
   map.on('mouseleave', 'locations', () => {
-    map.getCanvas().style.cursor = '';
+    map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
   });
 };

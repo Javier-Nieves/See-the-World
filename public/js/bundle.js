@@ -6029,7 +6029,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.persistLocation = exports.findLocation = exports.displayMap = void 0;
+exports.persistLocation = exports.displayMap = exports.activateGeocoder = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6072,18 +6072,21 @@ function () {
 
           map.addControl(new mapboxgl.NavigationControl()); // adding scale
 
-          map.addControl(new mapboxgl.ScaleControl()); // Trip page or Locations edit page?
+          map.addControl(new mapboxgl.ScaleControl()); // change cursor
+
+          map.getCanvas().style.cursor = 'crosshair';
+          activateGeocoder(); // Trip page or Locations edit page?
 
           if (window.location.href.includes('locations')) map.on('click', add_marker);
 
           if (!(locations.length === 0)) {
-            _context.next = 9;
+            _context.next = 11;
             break;
           }
 
           return _context.abrupt("return");
 
-        case 9:
+        case 11:
           bounds = new mapboxgl.LngLatBounds();
           fillGeoArrays(locations, bounds);
           map.on('load', createLocationsLayer); // adding padding to the map
@@ -6098,14 +6101,14 @@ function () {
           });
           populatePopups(); // getting GeoJSON data for location points
 
-          _context.next = 16;
+          _context.next = 18;
           return createGeoJSON(waypoints);
 
-        case 16:
+        case 18:
           routeData = _context.sent;
           drawRoute(routeData);
 
-        case 18:
+        case 20:
         case "end":
           return _context.stop();
       }
@@ -6339,55 +6342,13 @@ function () {
   };
 }();
 
-var findLocation = exports.findLocation =
-/*#__PURE__*/
-function () {
-  var _ref6 = _asyncToGenerator(
-  /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee6(query) {
-    var mapboxClient, response, feature;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
-        case 0:
-          mapboxClient = mapboxSdk({
-            accessToken: mapboxgl.accessToken
-          });
-          _context6.next = 3;
-          return mapboxClient.geocoding.forwardGeocode({
-            query: query,
-            autocomplete: false,
-            limit: 1
-          }).send();
-
-        case 3:
-          response = _context6.sent;
-
-          if (response.body.features.length) {
-            _context6.next = 7;
-            break;
-          }
-
-          console.error('Invalid response', response);
-          return _context6.abrupt("return");
-
-        case 7:
-          feature = response.body.features[0]; // new center for the existing map
-
-          map.flyTo({
-            center: feature.center
-          });
-
-        case 9:
-        case "end":
-          return _context6.stop();
-      }
-    }, _callee6);
-  }));
-
-  return function findLocation(_x8) {
-    return _ref6.apply(this, arguments);
-  };
-}();
+var activateGeocoder = exports.activateGeocoder = function activateGeocoder() {
+  var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+  });
+  document.querySelector('#geocoder').appendChild(geocoder.onAdd(map));
+};
 
 var fillGeoArrays = function fillGeoArrays(locations, bounds) {
   // create an array for future map.addSource method
@@ -6433,8 +6394,13 @@ var createLocationsLayer = function createLocationsLayer() {
       'circle-stroke-width': 2,
       'circle-stroke-color': '#ffffff'
     }
+  }); // canter map on clicked location
+
+  map.on('click', 'locations', function (e) {
+    map.flyTo({
+      center: e.features[0].geometry.coordinates
+    });
   });
-  console.log('layer added', features);
 };
 
 var populatePopups = function populatePopups() {
@@ -6451,7 +6417,7 @@ var populatePopups = function populatePopups() {
   }); // hide popup when cursor leaves
 
   map.on('mouseleave', 'locations', function () {
-    map.getCanvas().style.cursor = '';
+    map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
   });
 };
@@ -6571,7 +6537,6 @@ var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('.newTrip__form');
-var locationsCenterForm = document.querySelector('.locations__center-form');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
@@ -6605,16 +6570,6 @@ if (newTripForm) newTripForm.addEventListener('submit', function (e) {
     description: description
   });
 });
-
-if (locationsCenterForm) {
-  locationsCenterForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var query = document.querySelector('.locations_center-input');
-    (0, _mapbox.findLocation)(query.value);
-    query.value = '';
-  });
-}
-
 if (deleteBtn) deleteBtn.addEventListener('click', _trips.deleteTrip);
 },{"./login.js":"login.js","./mapbox.js":"mapbox.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

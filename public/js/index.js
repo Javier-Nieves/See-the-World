@@ -8,7 +8,6 @@ const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('.newTrip__form');
-const locationsCenterForm = document.querySelector('.locations__center-form');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
 // handlers
@@ -43,12 +42,4 @@ if (newTripForm)
     createTrip({ name, date, duration, highlight, description });
   });
 
-if (locationsCenterForm) {
-  locationsCenterForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const query = document.querySelector('.locations_center-input');
-    findLocation(query.value);
-    query.value = '';
-  });
-}
 if (deleteBtn) deleteBtn.addEventListener('click', deleteTrip);

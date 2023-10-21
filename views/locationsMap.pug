@@ -1,16 +1,21 @@
 extends base
 
 block append head
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+  //- <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+  //- <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+  //- for reverse geocoding:
+  <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 
 block content
   .flex-column.main-right-column
     .flex-container.locations__upper-block
       h1 Add locations
-      form.locations__center-form
-        input(type='text' class='locations_center-input' placeholder='Center to:')
-        input(type='submit' class='locations__center-btn' value='Center')
+      <div id="geocoder" class="geocoder"></div>
     .locationsMap(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
     .flex-container.locations__lower-block
       a(class='newTrip__nextBtn' href=`/trips/${trip.id}`) View your trip's page
