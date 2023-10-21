@@ -28,8 +28,8 @@ export const displayMap = async (locations) => {
 
   const bounds = new mapboxgl.LngLatBounds();
 
-  fillFeaturesArray(locations, bounds);
-  createLocationsLayer();
+  fillGeoArrays(locations, bounds);
+  map.on('load', createLocationsLayer);
 
   // adding padding to the map
   map.fitBounds(bounds, {
@@ -110,27 +110,17 @@ const popupHandler = (popup) => {
       features.push({
         type: 'Feature',
         properties: {
-          description: `<h1>${description}</h1>`,
+          description: `<h1>${name}</h1>`,
         },
         geometry: {
           type: 'Point',
-          coordinates: popup._lngLat,
+          coordinates: [popup._lngLat.lng, popup._lngLat.lat],
         },
       });
-      console.log(features);
-      map.getSource('locations').setData({
-        type: 'FeatureCollection',
-        features: features,
-      });
 
-      // new mapboxgl.Marker({
-      //   color: '#e60000',
-      //   scale: 0.6,
-      // })
-      //   .setLngLat(popup._lngLat)
-      //   .addTo(map);
+      createLocationsLayer();
 
-      // waypoints - array, used to create GeoJson => routes
+      // waypoints - array for GeoJson creation => routes
       waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
       if (waypoints.length > 1) {
         const geoData = await createGeoJSON(waypoints);
@@ -183,7 +173,6 @@ const createGeoJSON = async (waypoints) => {
     wayPointsString += `lonlat:${place.join(',')}|`;
   });
   wayPointsString = wayPointsString.slice(0, -1);
-
   // prettier-ignore
   const res = await fetch(`https://api.geoapify.com/v1/routing?waypoints=${wayPointsString}&mode=hike&apiKey=${API_KEY}`);
   const routeData = await res.json();
@@ -212,39 +201,14 @@ export const findLocation = async (query) => {
     console.error('Invalid response', response);
     return;
   }
-
   const feature = response.body.features[0];
-
   // new center for the existing map
   map.flyTo({
     center: feature.center,
   });
 };
 
-const createLocationsLayer = () => {
-  map.on('load', function () {
-    map.addSource('locations', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: features,
-      },
-    });
-    map.addLayer({
-      id: 'locations',
-      type: 'circle',
-      source: 'locations',
-      paint: {
-        'circle-color': '#4264fb',
-        'circle-radius': 6,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff',
-      },
-    });
-  });
-};
-
-const fillFeaturesArray = (locations, bounds) => {
+const fillGeoArrays = (locations, bounds) => {
   // create an array for future map.addSource method
   // and waypoints array for Routes drawing
   locations.forEach((loc) => {
@@ -262,6 +226,33 @@ const fillFeaturesArray = (locations, bounds) => {
     // extend map to fit current location
     bounds.extend(loc.coordinates);
   });
+};
+
+const createLocationsLayer = () => {
+  if (map.getLayer('locations')) {
+    map.removeLayer('locations');
+    map.removeSource('locations');
+    console.log('layer removed');
+  }
+  map.addSource('locations', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: features,
+    },
+  });
+  map.addLayer({
+    id: 'locations',
+    type: 'circle',
+    source: 'locations',
+    paint: {
+      'circle-color': '#000012',
+      'circle-radius': 6,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ffffff',
+    },
+  });
+  console.log('layer added', features);
 };
 
 const populatePopups = () => {

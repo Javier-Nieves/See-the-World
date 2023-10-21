@@ -6085,8 +6085,8 @@ function () {
 
         case 9:
           bounds = new mapboxgl.LngLatBounds();
-          fillFeaturesArray(locations, bounds);
-          createLocationsLayer(); // adding padding to the map
+          fillGeoArrays(locations, bounds);
+          map.on('load', createLocationsLayer); // adding padding to the map
 
           map.fitBounds(bounds, {
             padding: {
@@ -6174,40 +6174,30 @@ var popupHandler = function popupHandler(popup) {
             features.push({
               type: 'Feature',
               properties: {
-                description: "<h1>".concat(description, "</h1>")
+                description: "<h1>".concat(name, "</h1>")
               },
               geometry: {
                 type: 'Point',
-                coordinates: popup._lngLat
+                coordinates: [popup._lngLat.lng, popup._lngLat.lat]
               }
             });
-            console.log(features);
-            map.getSource('locations').setData({
-              type: 'FeatureCollection',
-              features: features
-            }); // new mapboxgl.Marker({
-            //   color: '#e60000',
-            //   scale: 0.6,
-            // })
-            //   .setLngLat(popup._lngLat)
-            //   .addTo(map);
-            // waypoints - array, used to create GeoJson => routes
+            createLocationsLayer(); // waypoints - array for GeoJson creation => routes
 
             waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
 
             if (!(waypoints.length > 1)) {
-              _context2.next = 15;
+              _context2.next = 14;
               break;
             }
 
-            _context2.next = 13;
+            _context2.next = 12;
             return createGeoJSON(waypoints);
 
-          case 13:
+          case 12:
             geoData = _context2.sent;
             drawRoute(geoData);
 
-          case 15:
+          case 14:
           case "end":
             return _context2.stop();
         }
@@ -6399,30 +6389,7 @@ function () {
   };
 }();
 
-var createLocationsLayer = function createLocationsLayer() {
-  map.on('load', function () {
-    map.addSource('locations', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: features
-      }
-    });
-    map.addLayer({
-      id: 'locations',
-      type: 'circle',
-      source: 'locations',
-      paint: {
-        'circle-color': '#4264fb',
-        'circle-radius': 6,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#ffffff'
-      }
-    });
-  });
-};
-
-var fillFeaturesArray = function fillFeaturesArray(locations, bounds) {
+var fillGeoArrays = function fillGeoArrays(locations, bounds) {
   // create an array for future map.addSource method
   // and waypoints array for Routes drawing
   locations.forEach(function (loc) {
@@ -6440,6 +6407,34 @@ var fillFeaturesArray = function fillFeaturesArray(locations, bounds) {
 
     bounds.extend(loc.coordinates);
   });
+};
+
+var createLocationsLayer = function createLocationsLayer() {
+  if (map.getLayer('locations')) {
+    map.removeLayer('locations');
+    map.removeSource('locations');
+    console.log('layer removed');
+  }
+
+  map.addSource('locations', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: features
+    }
+  });
+  map.addLayer({
+    id: 'locations',
+    type: 'circle',
+    source: 'locations',
+    paint: {
+      'circle-color': '#000012',
+      'circle-radius': 6,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ffffff'
+    }
+  });
+  console.log('layer added', features);
 };
 
 var populatePopups = function populatePopups() {
