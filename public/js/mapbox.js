@@ -23,15 +23,18 @@ export const displayMap = async (locations) => {
   // change cursor
   map.getCanvas().style.cursor = 'crosshair';
 
-  activateGeocoder();
-
   // Trip page or Locations edit page?
-  if (window.location.href.includes('locations')) map.on('click', add_marker);
+  if (window.location.href.includes('locations')) {
+    activateGeocoder();
+    map.on('click', add_marker);
+  }
 
   if (locations.length === 0) return;
 
   const bounds = new mapboxgl.LngLatBounds();
 
+  // locations and routes are created on the map via new layers
+  // layers use Sourses, which are filled from arrays:
   fillGeoArrays(locations, bounds);
   map.on('load', createLocationsLayer);
 
@@ -114,7 +117,13 @@ const popupHandler = (popup) => {
       features.push({
         type: 'Feature',
         properties: {
-          description: `<h1>${name}</h1>`,
+          description: `
+          <div class='location-description'>
+            <h3>${name}</h3>
+            <h4>${address}</h4>
+            <h5>${description}</h5>
+          </div>
+          `,
         },
         geometry: {
           type: 'Point',
@@ -191,7 +200,7 @@ const createGeoJSON = async (waypoints) => {
   return routeData;
 };
 
-export const activateGeocoder = () => {
+const activateGeocoder = () => {
   const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     mapboxgl: mapboxgl,
@@ -207,7 +216,16 @@ const fillGeoArrays = (locations, bounds) => {
     features.push({
       type: 'Feature',
       properties: {
-        description: `<h1>${loc.description}</h1>`,
+        description: `
+        <div class='location-description'>
+          <h3>${loc.name}</h3>
+          <h4>${loc.address}</h4>
+          <h5>${loc.description}</h5>
+        </div>
+        `,
+        name: loc.name,
+        address: loc.address,
+        desc: loc.description,
       },
       geometry: {
         type: 'Point',
@@ -243,12 +261,12 @@ const createLocationsLayer = () => {
       'circle-stroke-color': '#ffffff',
     },
   });
-  // canter map on clicked location
-  map.on('click', 'locations', (e) => {
-    map.flyTo({
-      center: e.features[0].geometry.coordinates,
-    });
-  });
+  // center map on clicked location
+  // map.on('click', 'locations', (e) => {
+  //   map.flyTo({
+  //     center: e.features[0].geometry.coordinates,
+  //   });
+  // });
 };
 
 const populatePopups = () => {
@@ -268,4 +286,21 @@ const populatePopups = () => {
     map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
   });
+  map.on('click', 'locations', (e) => {
+    // console.log('location is clicked', e.features[0].properties.description);
+    popup.remove();
+    displayLocationInfo(e.features[0].properties);
+  });
+};
+
+const displayLocationInfo = (info) => {
+  const parent = document.querySelector('.trip-info__details-window');
+  parent.innerHTML = '';
+  const markup = `
+    <h1>${info.name}</h1>
+    <h2>${info.address}</h2>
+    <h3>${info.desc}</h3>
+  `;
+  parent.insertAdjacentHTML('afterBegin', markup);
+  parent.style.display = 'flex';
 };

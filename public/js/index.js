@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { login, logout } from './login.js';
-import { displayMap, findLocation } from './mapbox.js';
+import { displayMap } from './mapbox.js';
 import { createTrip, deleteTrip } from './trips.js';
 
 // DOM elements

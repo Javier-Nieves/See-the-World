@@ -6029,7 +6029,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.persistLocation = exports.displayMap = exports.activateGeocoder = void 0;
+exports.persistLocation = exports.displayMap = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6074,20 +6074,24 @@ function () {
 
           map.addControl(new mapboxgl.ScaleControl()); // change cursor
 
-          map.getCanvas().style.cursor = 'crosshair';
-          activateGeocoder(); // Trip page or Locations edit page?
+          map.getCanvas().style.cursor = 'crosshair'; // Trip page or Locations edit page?
 
-          if (window.location.href.includes('locations')) map.on('click', add_marker);
+          if (window.location.href.includes('locations')) {
+            activateGeocoder();
+            map.on('click', add_marker);
+          }
 
           if (!(locations.length === 0)) {
-            _context.next = 11;
+            _context.next = 10;
             break;
           }
 
           return _context.abrupt("return");
 
-        case 11:
-          bounds = new mapboxgl.LngLatBounds();
+        case 10:
+          bounds = new mapboxgl.LngLatBounds(); // locations and routes are created on the map via new layers
+          // layers use Sourses, which are filled from arrays:
+
           fillGeoArrays(locations, bounds);
           map.on('load', createLocationsLayer); // adding padding to the map
 
@@ -6101,14 +6105,14 @@ function () {
           });
           populatePopups(); // getting GeoJSON data for location points
 
-          _context.next = 18;
+          _context.next = 17;
           return createGeoJSON(waypoints);
 
-        case 18:
+        case 17:
           routeData = _context.sent;
           drawRoute(routeData);
 
-        case 20:
+        case 19:
         case "end":
           return _context.stop();
       }
@@ -6177,7 +6181,7 @@ var popupHandler = function popupHandler(popup) {
             features.push({
               type: 'Feature',
               properties: {
-                description: "<h1>".concat(name, "</h1>")
+                description: "\n          <div class='location-description'>\n            <h3>".concat(name, "</h3>\n            <h4>").concat(address, "</h4>\n            <h5>").concat(description, "</h5>\n          </div>\n          ")
               },
               geometry: {
                 type: 'Point',
@@ -6342,7 +6346,7 @@ function () {
   };
 }();
 
-var activateGeocoder = exports.activateGeocoder = function activateGeocoder() {
+var activateGeocoder = function activateGeocoder() {
   var geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     mapboxgl: mapboxgl
@@ -6358,7 +6362,10 @@ var fillGeoArrays = function fillGeoArrays(locations, bounds) {
     features.push({
       type: 'Feature',
       properties: {
-        description: "<h1>".concat(loc.description, "</h1>")
+        description: "\n        <div class='location-description'>\n          <h3>".concat(loc.name, "</h3>\n          <h4>").concat(loc.address, "</h4>\n          <h5>").concat(loc.description, "</h5>\n        </div>\n        "),
+        name: loc.name,
+        address: loc.address,
+        desc: loc.description
       },
       geometry: {
         type: 'Point',
@@ -6394,13 +6401,12 @@ var createLocationsLayer = function createLocationsLayer() {
       'circle-stroke-width': 2,
       'circle-stroke-color': '#ffffff'
     }
-  }); // canter map on clicked location
-
-  map.on('click', 'locations', function (e) {
-    map.flyTo({
-      center: e.features[0].geometry.coordinates
-    });
-  });
+  }); // center map on clicked location
+  // map.on('click', 'locations', (e) => {
+  //   map.flyTo({
+  //     center: e.features[0].geometry.coordinates,
+  //   });
+  // });
 };
 
 var populatePopups = function populatePopups() {
@@ -6420,6 +6426,19 @@ var populatePopups = function populatePopups() {
     map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
   });
+  map.on('click', 'locations', function (e) {
+    // console.log('location is clicked', e.features[0].properties.description);
+    popup.remove();
+    displayLocationInfo(e.features[0].properties);
+  });
+};
+
+var displayLocationInfo = function displayLocationInfo(info) {
+  var parent = document.querySelector('.trip-info__details-window');
+  parent.innerHTML = '';
+  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n  ");
+  parent.insertAdjacentHTML('afterBegin', markup);
+  parent.style.display = 'flex';
 };
 },{"axios":"../../node_modules/axios/index.js"}],"trips.js":[function(require,module,exports) {
 "use strict";

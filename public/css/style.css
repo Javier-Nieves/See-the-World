@@ -181,6 +181,16 @@ h1 {
     cursor: pointer;
     background-color: rgba(255, 200, 0, 0.9);
 }
+.trip-info__details-window {
+    display: none;
+    background-color: rgba(250, 235, 215, 0.664);
+    width: 20vw;
+    height: 40vh;
+    position: absolute;
+    top: 10vh;
+    right: 0;
+    z-index: 100;
+}
 
 /* New Trip page */
 .newTrip__container {
