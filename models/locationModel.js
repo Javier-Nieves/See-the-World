@@ -36,6 +36,7 @@ const locationScheema = new mongoose.Schema({
     },
   },
   address: String,
+  images: [String],
 });
 
 const Location = mongoose.model('Location', locationScheema);

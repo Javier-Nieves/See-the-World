@@ -6155,7 +6155,7 @@ var add_marker = function add_marker(event) {
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
     closeOnClick: false
-  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
+  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name' name='name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address' name='address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description' name='desc'>\n        <input type='file' accept='image/*' id='images' multiple name='images'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(map);
   popupHandler(popup);
 };
 
@@ -6166,17 +6166,28 @@ var popupHandler = function popupHandler(popup) {
     var _ref2 = _asyncToGenerator(
     /*#__PURE__*/
     _regeneratorRuntime().mark(function _callee2(e) {
-      var name, address, description, geoData;
+      var coordArray, name, address, description, form, images, i, geoData;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
             e.preventDefault();
+            coordArray = [];
+            coordArray.push(popup._lngLat.lng, popup._lngLat.lat);
             name = document.querySelector('.newLocation__popup-name').value; // prettier-ignore
 
             address = document.querySelector('.newLocation__popup-address').value; // prettier-ignore
 
             description = document.querySelector('.newLocation__popup-desc').value;
-            persistLocation(popup._lngLat, name, address, description);
+            form = new FormData();
+            form.append('name', name);
+            form.append('address', address);
+            form.append('description', description);
+            form.append('coordinates', coordArray);
+            images = document.querySelector('#images').files;
+
+            for (i = 0; i < images.length; i++) form.append('images', images[i]);
+
+            persistLocation(form);
             popup.remove();
             features.push({
               type: 'Feature',
@@ -6185,26 +6196,26 @@ var popupHandler = function popupHandler(popup) {
               },
               geometry: {
                 type: 'Point',
-                coordinates: [popup._lngLat.lng, popup._lngLat.lat]
+                coordinates: coordArray
               }
             });
             createLocationsLayer(); // waypoints - array for GeoJson creation => routes
 
-            waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
+            waypoints.push(coordArray);
 
             if (!(waypoints.length > 1)) {
-              _context2.next = 14;
+              _context2.next = 23;
               break;
             }
 
-            _context2.next = 12;
+            _context2.next = 21;
             return createGeoJSON(waypoints);
 
-          case 12:
+          case 21:
             geoData = _context2.sent;
             drawRoute(geoData);
 
-          case 14:
+          case 23:
           case "end":
             return _context2.stop();
         }
@@ -6225,29 +6236,22 @@ var persistLocation = exports.persistLocation =
 function () {
   var _ref3 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee3(coordinates, name, address, description) {
-    var coordArray, link, url, res;
+  _regeneratorRuntime().mark(function _callee3(data) {
+    var link, url, res;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          coordArray = [];
-          coordArray.push(coordinates.lng, coordinates.lat);
           link = window.location.href; // prettier-ignore
 
           url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-          _context3.next = 6;
+          _context3.next = 4;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
-            data: {
-              coordinates: coordArray,
-              name: name,
-              address: address,
-              description: description
-            }
+            data: data
           });
 
-        case 6:
+        case 4:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
@@ -6257,14 +6261,14 @@ function () {
             // }, 1500);
           }
 
-        case 8:
+        case 6:
         case "end":
           return _context3.stop();
       }
     }, _callee3);
   }));
 
-  return function persistLocation(_x3, _x4, _x5, _x6) {
+  return function persistLocation(_x3) {
     return _ref3.apply(this, arguments);
   };
 }();
@@ -6341,7 +6345,7 @@ function () {
     }, _callee5);
   }));
 
-  return function createGeoJSON(_x7) {
+  return function createGeoJSON(_x4) {
     return _ref5.apply(this, arguments);
   };
 }();
@@ -6381,7 +6385,6 @@ var createLocationsLayer = function createLocationsLayer() {
   if (map.getLayer('locations')) {
     map.removeLayer('locations');
     map.removeSource('locations');
-    console.log('layer removed');
   }
 
   map.addSource('locations', {
@@ -6618,7 +6621,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54253" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54752" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

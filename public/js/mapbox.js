@@ -89,9 +89,10 @@ const add_marker = (event) => {
     .setLngLat(coordinates)
     .setHTML(
       `<form class='newLocation__popup-form'>
-        <input type='text' class='newLocation__popup-name' placeholder='Name'>
-        <input type='text' class='newLocation__popup-address' placeholder='Address'>
-        <input type='text' class='newLocation__popup-desc' placeholder='Description'>
+        <input type='text' class='newLocation__popup-name' placeholder='Name' name='name'>
+        <input type='text' class='newLocation__popup-address' placeholder='Address' name='address'>
+        <input type='text' class='newLocation__popup-desc' placeholder='Description' name='desc'>
+        <input type='file' accept='image/*' id='images' multiple name='images'>
         <input type='submit' value='Add location'>
       </form>`,
     )
@@ -105,13 +106,25 @@ const popupHandler = (popup) => {
     'submit',
     async (e) => {
       e.preventDefault();
+      const coordArray = [];
+      coordArray.push(popup._lngLat.lng, popup._lngLat.lat);
+
       const name = document.querySelector('.newLocation__popup-name').value;
       // prettier-ignore
       const address = document.querySelector('.newLocation__popup-address').value;
       // prettier-ignore
       const description = document.querySelector('.newLocation__popup-desc').value;
-      persistLocation(popup._lngLat, name, address, description);
 
+      const form = new FormData();
+      form.append('name', name);
+      form.append('address', address);
+      form.append('description', description);
+      form.append('coordinates', coordArray);
+
+      const images = document.querySelector('#images').files;
+      for (let i = 0; i < images.length; i++) form.append('images', images[i]);
+
+      persistLocation(form);
       popup.remove();
 
       features.push({
@@ -127,14 +140,14 @@ const popupHandler = (popup) => {
         },
         geometry: {
           type: 'Point',
-          coordinates: [popup._lngLat.lng, popup._lngLat.lat],
+          coordinates: coordArray,
         },
       });
 
       createLocationsLayer();
 
       // waypoints - array for GeoJson creation => routes
-      waypoints.push([popup._lngLat.lng, popup._lngLat.lat]);
+      waypoints.push(coordArray);
       if (waypoints.length > 1) {
         const geoData = await createGeoJSON(waypoints);
         drawRoute(geoData);
@@ -145,21 +158,14 @@ const popupHandler = (popup) => {
 };
 
 // prettier-ignore
-export const persistLocation = async (coordinates, name, address, description) => {
-  const coordArray = [];
-  coordArray.push(coordinates.lng, coordinates.lat);
+export const persistLocation = async (data) => {
   const link = window.location.href;
   // prettier-ignore
   const url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
   const res = await axios({
     method: 'POST',
     url,
-    data: {
-      coordinates: coordArray,
-      name,
-      address,
-      description,
-    },
+    data
   });
 
   if (res.data.status === 'success') {
@@ -241,7 +247,6 @@ const createLocationsLayer = () => {
   if (map.getLayer('locations')) {
     map.removeLayer('locations');
     map.removeSource('locations');
-    console.log('layer removed');
   }
   map.addSource('locations', {
     type: 'geojson',

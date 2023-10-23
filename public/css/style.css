@@ -183,12 +183,14 @@ h1 {
 }
 .trip-info__details-window {
     display: none;
-    background-color: rgba(250, 235, 215, 0.664);
-    width: 20vw;
-    height: 40vh;
+    background-color: rgba(250, 235, 215, 0.94);
+    width: 30vw;
+    height: 78vh;
     position: absolute;
-    top: 10vh;
-    right: 0;
+    top: 1vh;
+    right: 1vh;
+    border: 1px solid grey;
+    border-radius: 10px;
     z-index: 100;
 }
 
