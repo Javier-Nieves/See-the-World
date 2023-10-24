@@ -193,6 +193,10 @@ h1 {
     border-radius: 10px;
     z-index: 100;
 }
+.trip-info__loc-image {
+    width: 8vw;
+
+}
 
 /* New Trip page */
 .newTrip__container {

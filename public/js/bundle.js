@@ -6369,7 +6369,8 @@ var fillGeoArrays = function fillGeoArrays(locations, bounds) {
         description: "\n        <div class='location-description'>\n          <h3>".concat(loc.name, "</h3>\n          <h4>").concat(loc.address, "</h4>\n          <h5>").concat(loc.description, "</h5>\n        </div>\n        "),
         name: loc.name,
         address: loc.address,
-        desc: loc.description
+        desc: loc.description,
+        images: loc.images
       },
       geometry: {
         type: 'Point',
@@ -6430,16 +6431,20 @@ var populatePopups = function populatePopups() {
     popup.remove();
   });
   map.on('click', 'locations', function (e) {
-    // console.log('location is clicked', e.features[0].properties.description);
-    popup.remove();
     displayLocationInfo(e.features[0].properties);
+    popup.remove();
   });
 };
 
 var displayLocationInfo = function displayLocationInfo(info) {
   var parent = document.querySelector('.trip-info__details-window');
   parent.innerHTML = '';
-  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n  ");
+  var imagesArray = JSON.parse(info.images);
+  var gallery = '';
+
+  for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
+
+  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
   parent.insertAdjacentHTML('afterBegin', markup);
   parent.style.display = 'flex';
 };

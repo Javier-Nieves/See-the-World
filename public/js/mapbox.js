@@ -232,6 +232,7 @@ const fillGeoArrays = (locations, bounds) => {
         name: loc.name,
         address: loc.address,
         desc: loc.description,
+        images: loc.images,
       },
       geometry: {
         type: 'Point',
@@ -252,7 +253,7 @@ const createLocationsLayer = () => {
     type: 'geojson',
     data: {
       type: 'FeatureCollection',
-      features: features,
+      features,
     },
   });
   map.addLayer({
@@ -292,19 +293,25 @@ const populatePopups = () => {
     popup.remove();
   });
   map.on('click', 'locations', (e) => {
-    // console.log('location is clicked', e.features[0].properties.description);
-    popup.remove();
     displayLocationInfo(e.features[0].properties);
+    popup.remove();
   });
 };
 
 const displayLocationInfo = (info) => {
   const parent = document.querySelector('.trip-info__details-window');
   parent.innerHTML = '';
+  const imagesArray = JSON.parse(info.images);
+  let gallery = '';
+  for (let i = 0; i < imagesArray.length; i++)
+    gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
   const markup = `
     <h1>${info.name}</h1>
     <h2>${info.address}</h2>
     <h3>${info.desc}</h3>
+    <div class='flex-container'>
+        ${gallery}
+    </div>
   `;
   parent.insertAdjacentHTML('afterBegin', markup);
   parent.style.display = 'flex';
