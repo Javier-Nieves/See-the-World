@@ -1,4 +1,5 @@
 node_modules
+public/img/locations
 config.env
 *.env
 # Logs
