@@ -6029,7 +6029,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.add_marker = exports.activateGeocoder = void 0;
+exports.displayLocationInfo = exports.add_marker = exports.activateGeocoder = void 0;
 
 var _mapboxController = require("./mapboxController");
 
@@ -6078,6 +6078,20 @@ var createFormData = function createFormData(coordArray) {
   for (var i = 0; i < images.length; i++) form.append('images', images[i]);
 
   return form;
+};
+
+var displayLocationInfo = exports.displayLocationInfo = function displayLocationInfo(info) {
+  var parent = document.querySelector('.trip-info__details-window');
+  parent.innerHTML = '';
+  parent.classList.remove('hidden');
+  var imagesArray = JSON.parse(info.images);
+  var gallery = '';
+
+  for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
+
+  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
+  parent.insertAdjacentHTML('afterBegin', markup);
+  parent.style.display = 'flex';
 };
 },{"./mapboxController":"mapboxController.js"}],"mapboxModel.js":[function(require,module,exports) {
 "use strict";
@@ -6228,7 +6242,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.waypoints = exports.map = exports.features = exports.displayMap = void 0;
+exports.map = exports.displayMap = void 0;
 
 var mapboxViews = _interopRequireWildcard(require("./mapboxViews.js"));
 
@@ -6246,9 +6260,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var map;
-var waypoints = exports.waypoints = [];
-var features = exports.features = [];
+var map; // waypoints - array for GeoJson creation => routes
+
+var waypoints = []; // features - array for the map.addSource method, contains Locations data
+
+var features = [];
 
 var displayMap = exports.displayMap =
 /*#__PURE__*/
@@ -6306,7 +6322,8 @@ function () {
               bottom: 50,
               left: 50,
               right: 50
-            }
+            },
+            duration: 3000
           });
           populatePopups(); // getting GeoJSON data for location points
 
@@ -6377,11 +6394,16 @@ var createLocationsLayer = function createLocationsLayer() {
       'circle-stroke-color': '#ffffff'
     }
   }); // center map on clicked location
-  // map.on('click', 'locations', (e) => {
-  //   map.flyTo({
-  //     center: e.features[0].geometry.coordinates,
-  //   });
-  // });
+
+  map.on('click', 'locations', function (e) {
+    map.easeTo({
+      center: e.features[0].geometry.coordinates,
+      padding: {
+        right: window.innerWidth * 0.2
+      },
+      duration: 1000
+    });
+  });
 };
 
 var populatePopups = function populatePopups() {
@@ -6402,22 +6424,9 @@ var populatePopups = function populatePopups() {
     popup.remove();
   });
   map.on('click', 'locations', function (e) {
-    displayLocationInfo(e.features[0].properties);
+    mapboxViews.displayLocationInfo(e.features[0].properties);
     popup.remove();
   });
-};
-
-var displayLocationInfo = function displayLocationInfo(info) {
-  var parent = document.querySelector('.trip-info__details-window');
-  parent.innerHTML = '';
-  var imagesArray = JSON.parse(info.images);
-  var gallery = '';
-
-  for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
-
-  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
-  parent.insertAdjacentHTML('afterBegin', markup);
-  parent.style.display = 'flex';
 };
 
 var drawRoute = function drawRoute(routeData) {
@@ -6467,8 +6476,7 @@ function () {
         case 0:
           mapboxModel.persistLocation(form);
           createFeature(form.get('name'), form.get('address'), form.get('description'), coordArray);
-          createLocationsLayer(); // waypoints - array for GeoJson creation => routes
-
+          createLocationsLayer();
           waypoints.push(coordArray);
 
           if (!(waypoints.length > 1)) {

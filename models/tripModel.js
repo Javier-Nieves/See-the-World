@@ -37,7 +37,7 @@ const tripSchema = new mongoose.Schema({
   createdBy: String,
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: new Date('<YYYY-mm-dd>'),
     select: false,
   },
   private: {

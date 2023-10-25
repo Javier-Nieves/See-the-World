@@ -3,8 +3,10 @@ import * as mapboxViews from './mapboxViews.js';
 import * as mapboxModel from './mapboxModel.js';
 
 export let map;
-export let waypoints = [];
-export let features = [];
+// waypoints - array for GeoJson creation => routes
+let waypoints = [];
+// features - array for the map.addSource method, contains Locations data
+let features = [];
 
 export const displayMap = async (locations) => {
   // main map configuration
@@ -47,6 +49,7 @@ export const displayMap = async (locations) => {
       left: 50,
       right: 50,
     },
+    duration: 3000,
   });
 
   populatePopups();
@@ -110,11 +113,13 @@ const createLocationsLayer = () => {
     },
   });
   // center map on clicked location
-  // map.on('click', 'locations', (e) => {
-  //   map.flyTo({
-  //     center: e.features[0].geometry.coordinates,
-  //   });
-  // });
+  map.on('click', 'locations', (e) => {
+    map.easeTo({
+      center: e.features[0].geometry.coordinates,
+      padding: { right: window.innerWidth * 0.2 },
+      duration: 1000,
+    });
+  });
 };
 
 const populatePopups = () => {
@@ -135,28 +140,9 @@ const populatePopups = () => {
     popup.remove();
   });
   map.on('click', 'locations', (e) => {
-    displayLocationInfo(e.features[0].properties);
+    mapboxViews.displayLocationInfo(e.features[0].properties);
     popup.remove();
   });
-};
-
-const displayLocationInfo = (info) => {
-  const parent = document.querySelector('.trip-info__details-window');
-  parent.innerHTML = '';
-  const imagesArray = JSON.parse(info.images);
-  let gallery = '';
-  for (let i = 0; i < imagesArray.length; i++)
-    gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
-  const markup = `
-    <h1>${info.name}</h1>
-    <h2>${info.address}</h2>
-    <h3>${info.desc}</h3>
-    <div class='flex-container'>
-        ${gallery}
-    </div>
-  `;
-  parent.insertAdjacentHTML('afterBegin', markup);
-  parent.style.display = 'flex';
 };
 
 const drawRoute = (routeData) => {
@@ -210,7 +196,6 @@ const locationPopupHandler = async (form, coordArray) => {
     coordArray,
   );
   createLocationsLayer();
-  // waypoints - array for GeoJson creation => routes
   waypoints.push(coordArray);
   if (waypoints.length > 1) {
     const geoData = await mapboxModel.createGeoJSON(waypoints);

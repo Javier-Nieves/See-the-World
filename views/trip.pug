@@ -11,7 +11,7 @@ block content
       .trip-info__date= `${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})} ${trip.duration ? '- ' + trip.duration : ''}`
     .map(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
 
-  .flex-column.trip-info__details-window
+  .flex-column.trip-info__details-window.hidden 
 
   .flex-container.trip-info__lower-info
     .flex-column
@@ -25,6 +25,6 @@ block content
     .trip-info__description= trip.description
 
   .flex-container.trip-info__buttons-container
-    button(class='trip-info__edit-info-btn') Edit Trip Info
+    a(class='trip-info__edit-info-btn' href=`${trip.id}/edit`) Edit Trip Info
     a(class='trip-info__edit-locations-btn' href=`${trip.id}/locations`) Edit Locations
     button(class='trip-info__delete-btn') Delete Trip

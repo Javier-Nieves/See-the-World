@@ -56,3 +56,23 @@ const createFormData = (coordArray) => {
   for (let i = 0; i < images.length; i++) form.append('images', images[i]);
   return form;
 };
+
+export const displayLocationInfo = (info) => {
+  const parent = document.querySelector('.trip-info__details-window');
+  parent.innerHTML = '';
+  parent.classList.remove('hidden');
+  const imagesArray = JSON.parse(info.images);
+  let gallery = '';
+  for (let i = 0; i < imagesArray.length; i++)
+    gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
+  const markup = `
+    <h1>${info.name}</h1>
+    <h2>${info.address}</h2>
+    <h3>${info.desc}</h3>
+    <div class='flex-container'>
+        ${gallery}
+    </div>
+  `;
+  parent.insertAdjacentHTML('afterBegin', markup);
+  parent.style.display = 'flex';
+};

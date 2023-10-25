@@ -32,8 +32,16 @@ exports.getTrip = catchAsync(async (req, res) => {
 });
 
 exports.newTripPage = catchAsync(async (req, res) => {
-  res.status(200).render('createTrip', {
-    title: `Create new trip`,
+  let title;
+  let trip;
+  if (req.url.includes('edit')) {
+    title = 'Edit trip info';
+    const { tripId } = req.params;
+    trip = await Trip.findById(tripId);
+  } else title = 'Create new trip';
+  res.status(200).render('fillTripInfo', {
+    title,
+    trip,
   });
 });
 

@@ -12,6 +12,7 @@ router.get('/', viewsController.index);
 router.get('/login', viewsController.login);
 router.get('/trips/:tripId', viewsController.getTrip);
 router.get('/trips/:tripId/locations', viewsController.newLocations);
+router.get('/trips/:tripId/edit', viewsController.newTripPage);
 router.get('/createTrip', authController.protect, viewsController.newTripPage);
 router.get('/getKeys', authController.getKeys);
 
