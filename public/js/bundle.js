@@ -6508,7 +6508,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteTrip = exports.createTrip = void 0;
+exports.deleteTrip = exports.changeTrip = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6522,26 +6522,27 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var createTrip = exports.createTrip =
+var changeTrip = exports.changeTrip =
 /*#__PURE__*/
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee(formData) {
+  _regeneratorRuntime().mark(function _callee(data, tripId) {
     var res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
           return (0, _axios.default)({
-            method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/trips',
+            method: tripId ? 'PATCH' : 'POST',
+            url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
             data: {
-              name: formData.name,
-              date: formData.date,
-              duration: formData.duration,
-              description: formData.description,
-              highlight: formData.highlight
+              name: data.name,
+              date: data.date,
+              duration: data.duration,
+              description: data.description,
+              highlight: data.highlight,
+              private: data.friendsOnly
             }
           });
 
@@ -6549,8 +6550,7 @@ function () {
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            // console.log(res.data.data.newTrip._id);
-            location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
+            tripId ? console.log('Trip is modified') : location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
           }
 
         case 4:
@@ -6560,7 +6560,7 @@ function () {
     }, _callee);
   }));
 
-  return function createTrip(_x) {
+  return function changeTrip(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -6602,7 +6602,25 @@ function () {
   return function deleteTrip() {
     return _ref2.apply(this, arguments);
   };
-}();
+}(); // export const editTrip = async (data, tripId) => {
+//   const res = await axios({
+//     method: 'PATCH',
+//     url: `http://127.0.0.1:3000/api/v1/trips/${tripId}`,
+//     data: {
+//       name: data.name,
+//       date: data.date,
+//       duration: data.duration,
+//       description: data.description,
+//       highlight: data.highlight,
+//       private: data.friendsOnly,
+//     },
+//   });
+//   if (res.data.status === 'success') {
+//     console.log('trip modified');
+//     // console.log(res.data.data.newTrip._id);
+//     // location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
+//   }
+// };
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -6617,7 +6635,8 @@ var _trips = require("./trips.js");
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
-var newTripForm = document.querySelector('.newTrip__form');
+var newTripForm = document.querySelector('#newTripForm');
+var editTripForm = document.querySelector('#editTripForm');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
@@ -6633,24 +6652,38 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   (0, _login.login)(email, password);
 });
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
-if (newTripForm) newTripForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-  var name = document.querySelector('.newTrip__input-name').value;
-  var date = document.querySelector('.newTrip__input-date').value;
-  var duration = document.querySelector('.newTrip__input-duration').value;
-  var highlight = document.querySelector('.newTrip__input-highlight').value; // const private = document.querySelector('.newTrip__checkbox').value;
-  // todo - add "With" field
-  // prettier-ignore
 
-  var description = document.querySelector('.newTrip__input-description').value;
-  (0, _trips.createTrip)({
-    name: name,
-    date: date,
-    duration: duration,
-    highlight: highlight,
-    description: description
+if (newTripForm || editTripForm) {
+  var filledForm = newTripForm || editTripForm;
+  filledForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = document.querySelector('.newTrip__input-name').value;
+    var date = document.querySelector('.newTrip__input-date').value;
+    var duration = document.querySelector('.newTrip__input-duration').value;
+    var highlight = document.querySelector('.newTrip__input-highlight').value;
+    var friendsOnly = document.querySelector('.newTrip__checkbox').checked; // prettier-ignore
+
+    var description = document.querySelector('.newTrip__input-description').value; // todo - add "With" field
+
+    filledForm === newTripForm && (0, _trips.changeTrip)({
+      name: name,
+      date: date,
+      duration: duration,
+      highlight: highlight,
+      description: description,
+      friendsOnly: friendsOnly
+    });
+    filledForm === editTripForm && (0, _trips.changeTrip)({
+      name: name,
+      date: date,
+      duration: duration,
+      highlight: highlight,
+      description: description,
+      friendsOnly: friendsOnly
+    }, filledForm.dataset.tripid);
   });
-});
+}
+
 if (deleteBtn) deleteBtn.addEventListener('click', _trips.deleteTrip);
 },{"./login.js":"login.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

@@ -33,7 +33,7 @@ exports.getTrip = catchAsync(async (req, res) => {
 
 exports.newTripPage = catchAsync(async (req, res) => {
   let title;
-  let trip;
+  let trip = '';
   if (req.url.includes('edit')) {
     title = 'Edit trip info';
     const { tripId } = req.params;

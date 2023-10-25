@@ -3,24 +3,27 @@ extends base
 mixin inputBlock (text, type, placeholder, required, value)
   .flex-container.newTrip__textLine
     .newTrip__text= text
-    unless type == 'textarea'
-      input(type=`${type}` class!=attributes.class placeholder=`${placeholder}` required=`${required}` value=`${value}`)
-    else
+    if type == 'textarea'
       textarea(class!=attributes.class placeholder=`${placeholder}`)= value
+    else if type == 'checkbox'
+      - const checked = value === 'true'
+      input(type=`${type}` class!=attributes.class checked=checked)
+    else
+      input(type=`${type}` class!=attributes.class placeholder=`${placeholder}` required=`${required}` value=`${value}`)
 
 block content
   .main-right-column.flex-column
     h1= title
-    form.flex-column.newTrip__form
+    form.flex-column.newTrip__form(id=`${trip ? 'editTripForm' : 'newTripForm'}` data-tripid=`${trip.id}`)
       .newTrip__container
         if trip
           - const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
           - const formattedDate = trip.date.toLocaleDateString('en-CA', options);
           +inputBlock('Name of the trip:', 'text', 'Awesome summer Europe trip', true, `${trip.name}`)(class='newTrip__input-name')
           +inputBlock('Starting date:', 'date', '', true, `${formattedDate}`)(class='newTrip__input-date')
-          +inputBlock('Duration:', 'text', '2 weeks', false, `${trip.duration}`)(class='newTrip__input-duration')
-          +inputBlock('Trip highlight:', 'text', '8 countries, 4 people, 100 delicious baguetes!', false, `${trip.highlight}`)(class='newTrip__input-highlight')
-          +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false, `${trip.description}`)(class='newTrip__input-description')
+          +inputBlock('Duration:', 'text', '2 weeks', false, `${trip.duration ? trip.duration : '-'}`)(class='newTrip__input-duration')
+          +inputBlock('Trip highlight:', 'text', '8 countries, 4 people, 100 delicious baguetes!', false, `${trip.highlight ? trip.highlight : '-'}`)(class='newTrip__input-highlight')
+          +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false, `${trip.description ? trip.description : '-'}`)(class='newTrip__input-description')
           +inputBlock('Show only to your friends:', 'checkbox', '', false, `${trip.private}`)(class='newTrip__checkbox')
         else
           +inputBlock('Name of the trip:', 'text', 'Awesome summer Europe trip', true, '')(class='newTrip__input-name')
@@ -29,4 +32,4 @@ block content
           +inputBlock('Trip highlight:', 'text', '8 countries, 4 people, 100 delicious baguetes!', false, '')(class='newTrip__input-highlight')
           +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false)(class='newTrip__input-description')
           +inputBlock('Show only to your friends:', 'checkbox', '', false)(class='newTrip__checkbox')
-      input(type='submit' value='Next')
+      input(type='submit' value=`${trip ? 'Save changes' : 'Next'}`)

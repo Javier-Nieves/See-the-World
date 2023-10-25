@@ -1,22 +1,26 @@
 /* eslint-disable */
 import axios from 'axios';
 
-export const createTrip = async (formData) => {
+export const changeTrip = async (data, tripId) => {
   const res = await axios({
-    method: 'POST',
-    url: 'http://127.0.0.1:3000/api/v1/trips',
+    method: tripId ? 'PATCH' : 'POST',
+    url: tripId
+      ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
+      : 'http://127.0.0.1:3000/api/v1/trips',
     data: {
-      name: formData.name,
-      date: formData.date,
-      duration: formData.duration,
-      description: formData.description,
-      highlight: formData.highlight,
+      name: data.name,
+      date: data.date,
+      duration: data.duration,
+      description: data.description,
+      highlight: data.highlight,
+      private: data.friendsOnly,
     },
   });
 
   if (res.data.status === 'success') {
-    // console.log(res.data.data.newTrip._id);
-    location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
+    tripId
+      ? console.log('Trip is modified')
+      : location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
   }
 };
 
@@ -37,3 +41,24 @@ export const deleteTrip = async () => {
     }, 1500);
   }
 };
+
+// export const editTrip = async (data, tripId) => {
+//   const res = await axios({
+//     method: 'PATCH',
+//     url: `http://127.0.0.1:3000/api/v1/trips/${tripId}`,
+//     data: {
+//       name: data.name,
+//       date: data.date,
+//       duration: data.duration,
+//       description: data.description,
+//       highlight: data.highlight,
+//       private: data.friendsOnly,
+//     },
+//   });
+
+//   if (res.data.status === 'success') {
+//     console.log('trip modified');
+//     // console.log(res.data.data.newTrip._id);
+//     // location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
+//   }
+// };

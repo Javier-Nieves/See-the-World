@@ -37,12 +37,12 @@ const tripSchema = new mongoose.Schema({
   createdBy: String,
   createdAt: {
     type: Date,
-    default: new Date('<YYYY-mm-dd>'),
+    default: Date.now(),
     select: false,
   },
   private: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   locations: [
     {
