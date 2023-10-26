@@ -19,7 +19,6 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 exports.uploadImages = upload.array('images', 10); // upload.single('photo');
 
 exports.resizeImages = catchAsync(async (req, res, next) => {
-  console.log('photo resize:', req.files);
   if (!req.files) return next();
 
   req.body.images = [];
@@ -45,12 +44,11 @@ exports.addLocation = catchAsync(async (req, res, next) => {
   req.body.coordinates = req.body.coordinates.split(',');
 
   const newLocation = await Location.create(req.body);
-  const parentTrip = await Trip.findByIdAndUpdate(
+  await Trip.findByIdAndUpdate(
     req.params.tripId,
     { $push: { locations: newLocation.id } },
     { new: true },
   );
-  console.log(parentTrip);
   res.status(201).json({ status: 'success', data: { newLocation } });
 });
 

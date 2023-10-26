@@ -17,5 +17,10 @@ block content
       h1 Add locations
       <div id="geocoder" class="geocoder"></div>
     .locationsMap(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
+    .flex-column.trip-info__details-window.hidden
+      form.flex-column.trip-info__location-info
+      .flex-container.locations__buttons-container
+        input(type='submit' class="locations__submitBtn" value='Save changes')
+        button.locations__deleteBtn Delete Location
     .flex-container.locations__lower-block
       a(class='newTrip__nextBtn' href=`/trips/${trip.id}`) View your trip's page

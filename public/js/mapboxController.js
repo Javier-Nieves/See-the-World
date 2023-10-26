@@ -26,37 +26,37 @@ export const displayMap = async (locations) => {
   // change cursor
   map.getCanvas().style.cursor = 'crosshair';
 
-  // Trip page or Locations edit page?
-  if (window.location.href.includes('locations')) {
-    mapboxViews.activateGeocoder();
-    map.on('click', (e) => mapboxViews.add_marker(e, locationPopupHandler));
-  }
+  map.on('load', async () => {
+    // Trip page or Locations page?
+    if (window.location.href.includes('locations')) {
+      mapboxViews.activateGeocoder();
+      map.on('click', (e) => mapboxViews.add_marker(e, locationPopupHandler));
+    }
 
-  if (locations.length === 0) return;
+    if (locations.length === 0) return;
 
-  const bounds = new mapboxgl.LngLatBounds();
+    const bounds = new mapboxgl.LngLatBounds();
+    // locations and routes are created on the map via new layers
+    // layers use Sourses, which are filled from arrays:
+    fillGeoArrays(locations, bounds);
+    createLocationsLayer();
+    populatePopups();
 
-  // locations and routes are created on the map via new layers
-  // layers use Sourses, which are filled from arrays:
-  fillGeoArrays(locations, bounds);
-  map.on('load', createLocationsLayer);
+    // adding padding to the map
+    map.fitBounds(bounds, {
+      padding: {
+        top: 50,
+        bottom: 50,
+        left: 50,
+        right: 50,
+      },
+      duration: 3000,
+    });
 
-  // adding padding to the map
-  map.fitBounds(bounds, {
-    padding: {
-      top: 50,
-      bottom: 50,
-      left: 50,
-      right: 50,
-    },
-    duration: 3000,
+    // getting GeoJSON data for location points
+    const routeData = await mapboxModel.createGeoJSON(waypoints);
+    drawRoute(routeData);
   });
-
-  populatePopups();
-
-  // getting GeoJSON data for location points
-  const routeData = await mapboxModel.createGeoJSON(waypoints);
-  drawRoute(routeData);
 };
 
 const fillGeoArrays = (locations, bounds) => {
@@ -64,34 +64,20 @@ const fillGeoArrays = (locations, bounds) => {
   // and waypoints array for Routes drawing
   locations.forEach((loc) => {
     waypoints.push(loc.coordinates);
-    features.push({
-      type: 'Feature',
-      properties: {
-        description: `
-        <div class='location-description'>
-          <h3>${loc.name}</h3>
-          <h4>${loc.address}</h4>
-          <h5>${loc.description}</h5>
-        </div>
-        `,
-        name: loc.name,
-        address: loc.address,
-        desc: loc.description,
-        images: loc.images,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: loc.coordinates,
-      },
+    createFeature({
+      name: loc.name,
+      address: loc.address,
+      description: loc.description,
+      coordinates: loc.coordinates,
+      images: loc.images,
     });
-    // extend map to fit current location
     bounds.extend(loc.coordinates);
   });
 };
 
 const createLocationsLayer = () => {
   // creating or updating layer's source
-  if (!map.getSource('locations'))
+  if (!map.getSource('locations')) {
     map.addSource('locations', {
       type: 'geojson',
       data: {
@@ -99,11 +85,12 @@ const createLocationsLayer = () => {
         features,
       },
     });
-  else
+  } else {
     map.getSource('locations').setData({
       type: 'FeatureCollection',
       features,
     });
+  }
   // creating Locations layer
   if (!map.getLayer('locations')) {
     map.addLayer({
@@ -145,9 +132,10 @@ const populatePopups = () => {
     map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
   });
+  // clicking on the Location
   map.on('click', 'locations', (e) => {
+    console.log(e.features[0].properties);
     mapboxViews.displayLocationInfo(e.features[0].properties);
-    popup.remove();
   });
 };
 
@@ -174,33 +162,39 @@ const drawRoute = (routeData) => {
   map.moveLayer('route-layer', 'locations');
 };
 
-const createFeature = (name, address, description, coordArray) => {
+const createFeature = (loc) => {
   features.push({
     type: 'Feature',
     properties: {
       description: `
-    <div class='location-description'>
-      <h3>${name}</h3>
-      <h4>${address}</h4>
-      <h5>${description}</h5>
-    </div>
-    `,
+        <div class='location-description'>
+          <h3>${loc.name}</h3>
+          <h4>${loc.address}</h4>
+          <h5>${loc.description}</h5>
+        </div>
+        `,
+      name: loc.name,
+      address: loc.address,
+      desc: loc.description,
+      coordinates: loc.coordinates,
+      images: loc.images,
     },
     geometry: {
       type: 'Point',
-      coordinates: coordArray,
+      coordinates: loc.coordinates,
     },
   });
 };
 
 const locationPopupHandler = async (form, coordArray) => {
   mapboxModel.persistLocation(form);
-  createFeature(
-    form.get('name'),
-    form.get('address'),
-    form.get('description'),
-    coordArray,
-  );
+  createFeature({
+    name: form.get('name'),
+    address: form.get('address'),
+    description: form.get('description'),
+    coordinates: coordArray,
+    images: form.get('images'),
+  });
   createLocationsLayer();
   waypoints.push(coordArray);
   if (waypoints.length > 1) {

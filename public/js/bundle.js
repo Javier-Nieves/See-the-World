@@ -6029,7 +6029,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayLocationInfo = exports.add_marker = exports.activateGeocoder = void 0;
+exports.removePopup = exports.displayLocationInfo = exports.add_marker = exports.activateGeocoder = void 0;
 
 var _mapboxController = require("./mapboxController");
 
@@ -6080,18 +6080,32 @@ var createFormData = function createFormData(coordArray) {
   return form;
 };
 
+var removePopup = exports.removePopup = function removePopup() {
+  return document.querySelectorAll('.mapboxgl-popup').forEach(function (popup) {
+    return popup.remove();
+  });
+};
+
 var displayLocationInfo = exports.displayLocationInfo = function displayLocationInfo(info) {
-  var parent = document.querySelector('.trip-info__details-window');
-  parent.innerHTML = '';
-  parent.classList.remove('hidden');
-  var imagesArray = JSON.parse(info.images);
+  document.querySelectorAll('.mapboxgl-popup').forEach(function (popup) {
+    return popup.remove();
+  });
+  var infoBlock = document.querySelector('.trip-info__location-info');
+  infoBlock.innerHTML = '';
+  infoBlock.parentElement.classList.remove('hidden');
+  infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  infoBlock.parentElement.style.display = 'flex';
+};
+
+var generateMarkup = function generateMarkup(info) {
+  var markup;
   var gallery = '';
+  var imagesArray = JSON.parse(info.images);
 
   for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
 
-  var markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
-  parent.insertAdjacentHTML('afterBegin', markup);
-  parent.style.display = 'flex';
+  window.location.href.includes('locations') ? markup = "\n    <h2>Change location info</h2>\n    <div class='flex-container'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' value=".concat(info.name, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Adress: </div>\n      <input type='text' value=").concat(info.address, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Description: </div>\n      <textarea> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <div class='flex-column'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' value=").concat(info.coordinates, ">\n        </div>\n        <button> Choose new coordinates </button>\n        </div>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ") : markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
+  return markup;
 };
 },{"./mapboxController":"mapboxController.js"}],"mapboxModel.js":[function(require,module,exports) {
 "use strict";
@@ -6271,12 +6285,11 @@ var displayMap = exports.displayMap =
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee(locations) {
-    var bounds, routeData;
-    return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
+  _regeneratorRuntime().mark(function _callee2(locations) {
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          _context.next = 2;
+          _context2.next = 2;
           return mapboxModel.getKeys();
 
         case 2:
@@ -6293,52 +6306,68 @@ function () {
 
           map.addControl(new mapboxgl.ScaleControl()); // change cursor
 
-          map.getCanvas().style.cursor = 'crosshair'; // Trip page or Locations edit page?
+          map.getCanvas().style.cursor = 'crosshair';
+          map.on('load',
+          /*#__PURE__*/
+          _asyncToGenerator(
+          /*#__PURE__*/
+          _regeneratorRuntime().mark(function _callee() {
+            var bounds, routeData;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  // Trip page or Locations page?
+                  if (window.location.href.includes('locations')) {
+                    mapboxViews.activateGeocoder();
+                    map.on('click', function (e) {
+                      return mapboxViews.add_marker(e, locationPopupHandler);
+                    });
+                  }
 
-          if (window.location.href.includes('locations')) {
-            mapboxViews.activateGeocoder();
-            map.on('click', function (e) {
-              return mapboxViews.add_marker(e, locationPopupHandler);
-            });
-          }
+                  if (!(locations.length === 0)) {
+                    _context.next = 3;
+                    break;
+                  }
 
-          if (!(locations.length === 0)) {
-            _context.next = 10;
-            break;
-          }
+                  return _context.abrupt("return");
 
-          return _context.abrupt("return");
+                case 3:
+                  bounds = new mapboxgl.LngLatBounds(); // locations and routes are created on the map via new layers
+                  // layers use Sourses, which are filled from arrays:
 
-        case 10:
-          bounds = new mapboxgl.LngLatBounds(); // locations and routes are created on the map via new layers
-          // layers use Sourses, which are filled from arrays:
+                  fillGeoArrays(locations, bounds);
+                  createLocationsLayer();
+                  populatePopups(); // adding padding to the map
 
-          fillGeoArrays(locations, bounds);
-          map.on('load', createLocationsLayer); // adding padding to the map
+                  map.fitBounds(bounds, {
+                    padding: {
+                      top: 50,
+                      bottom: 50,
+                      left: 50,
+                      right: 50
+                    },
+                    duration: 3000
+                  }); // getting GeoJSON data for location points
 
-          map.fitBounds(bounds, {
-            padding: {
-              top: 50,
-              bottom: 50,
-              left: 50,
-              right: 50
-            },
-            duration: 3000
-          });
-          populatePopups(); // getting GeoJSON data for location points
+                  _context.next = 10;
+                  return mapboxModel.createGeoJSON(waypoints);
 
-          _context.next = 17;
-          return mapboxModel.createGeoJSON(waypoints);
+                case 10:
+                  routeData = _context.sent;
+                  drawRoute(routeData);
 
-        case 17:
-          routeData = _context.sent;
-          drawRoute(routeData);
+                case 12:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee);
+          })));
 
-        case 19:
+        case 8:
         case "end":
-          return _context.stop();
+          return _context2.stop();
       }
-    }, _callee);
+    }, _callee2);
   }));
 
   return function displayMap(_x) {
@@ -6351,37 +6380,34 @@ var fillGeoArrays = function fillGeoArrays(locations, bounds) {
   // and waypoints array for Routes drawing
   locations.forEach(function (loc) {
     waypoints.push(loc.coordinates);
-    features.push({
-      type: 'Feature',
-      properties: {
-        description: "\n        <div class='location-description'>\n          <h3>".concat(loc.name, "</h3>\n          <h4>").concat(loc.address, "</h4>\n          <h5>").concat(loc.description, "</h5>\n        </div>\n        "),
-        name: loc.name,
-        address: loc.address,
-        desc: loc.description,
-        images: loc.images
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: loc.coordinates
-      }
-    }); // extend map to fit current location
-
+    createFeature({
+      name: loc.name,
+      address: loc.address,
+      description: loc.description,
+      coordinates: loc.coordinates,
+      images: loc.images
+    });
     bounds.extend(loc.coordinates);
   });
 };
 
 var createLocationsLayer = function createLocationsLayer() {
   // creating or updating layer's source
-  if (!map.getSource('locations')) map.addSource('locations', {
-    type: 'geojson',
-    data: {
+  if (!map.getSource('locations')) {
+    map.addSource('locations', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features
+      }
+    });
+  } else {
+    map.getSource('locations').setData({
       type: 'FeatureCollection',
       features: features
-    }
-  });else map.getSource('locations').setData({
-    type: 'FeatureCollection',
-    features: features
-  }); // creating Locations layer
+    });
+  } // creating Locations layer
+
 
   if (!map.getLayer('locations')) {
     map.addLayer({
@@ -6425,10 +6451,11 @@ var populatePopups = function populatePopups() {
   map.on('mouseleave', 'locations', function () {
     map.getCanvas().style.cursor = 'crosshair';
     popup.remove();
-  });
+  }); // clicking on the Location
+
   map.on('click', 'locations', function (e) {
+    console.log(e.features[0].properties);
     mapboxViews.displayLocationInfo(e.features[0].properties);
-    popup.remove();
   });
 };
 
@@ -6454,15 +6481,20 @@ var drawRoute = function drawRoute(routeData) {
   map.moveLayer('route-layer', 'locations');
 };
 
-var createFeature = function createFeature(name, address, description, coordArray) {
+var createFeature = function createFeature(loc) {
   features.push({
     type: 'Feature',
     properties: {
-      description: "\n    <div class='location-description'>\n      <h3>".concat(name, "</h3>\n      <h4>").concat(address, "</h4>\n      <h5>").concat(description, "</h5>\n    </div>\n    ")
+      description: "\n        <div class='location-description'>\n          <h3>".concat(loc.name, "</h3>\n          <h4>").concat(loc.address, "</h4>\n          <h5>").concat(loc.description, "</h5>\n        </div>\n        "),
+      name: loc.name,
+      address: loc.address,
+      desc: loc.description,
+      coordinates: loc.coordinates,
+      images: loc.images
     },
     geometry: {
       type: 'Point',
-      coordinates: coordArray
+      coordinates: loc.coordinates
     }
   });
 };
@@ -6470,39 +6502,45 @@ var createFeature = function createFeature(name, address, description, coordArra
 var locationPopupHandler =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref3 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(form, coordArray) {
+  _regeneratorRuntime().mark(function _callee3(form, coordArray) {
     var geoData;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
           mapboxModel.persistLocation(form);
-          createFeature(form.get('name'), form.get('address'), form.get('description'), coordArray);
+          createFeature({
+            name: form.get('name'),
+            address: form.get('address'),
+            description: form.get('description'),
+            coordinates: coordArray,
+            images: form.get('images')
+          });
           createLocationsLayer();
           waypoints.push(coordArray);
 
           if (!(waypoints.length > 1)) {
-            _context2.next = 9;
+            _context3.next = 9;
             break;
           }
 
-          _context2.next = 7;
+          _context3.next = 7;
           return mapboxModel.createGeoJSON(waypoints);
 
         case 7:
-          geoData = _context2.sent;
+          geoData = _context3.sent;
           drawRoute(geoData);
 
         case 9:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }));
 
   return function locationPopupHandler(_x2, _x3) {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 },{"./mapboxViews.js":"mapboxViews.js","./mapboxModel.js":"mapboxModel.js"}],"trips.js":[function(require,module,exports) {

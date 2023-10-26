@@ -57,22 +57,64 @@ const createFormData = (coordArray) => {
   return form;
 };
 
+export const removePopup = () =>
+  document
+    .querySelectorAll('.mapboxgl-popup')
+    .forEach((popup) => popup.remove());
+
 export const displayLocationInfo = (info) => {
-  const parent = document.querySelector('.trip-info__details-window');
-  parent.innerHTML = '';
-  parent.classList.remove('hidden');
-  const imagesArray = JSON.parse(info.images);
+  document
+    .querySelectorAll('.mapboxgl-popup')
+    .forEach((popup) => popup.remove());
+  const infoBlock = document.querySelector('.trip-info__location-info');
+  infoBlock.innerHTML = '';
+  infoBlock.parentElement.classList.remove('hidden');
+  infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  infoBlock.parentElement.style.display = 'flex';
+};
+
+const generateMarkup = (info) => {
+  let markup;
   let gallery = '';
+  const imagesArray = JSON.parse(info.images);
   for (let i = 0; i < imagesArray.length; i++)
     gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
-  const markup = `
+
+  window.location.href.includes('locations')
+    ? (markup = `
+    <h2>Change location info</h2>
+    <div class='flex-container'>
+      <div class='location-info__text'> Name: </div>
+      <input type='text' value=${info.name}>
+    </div>
+    <div class='flex-container'>
+      <div class='location-info__text'> Adress: </div>
+      <input type='text' value=${info.address}>
+    </div>
+    <div class='flex-container'>
+      <div class='location-info__text'> Description: </div>
+      <textarea> ${info.desc} </textarea>
+    </div>  
+    <div class='flex-container'>
+      <div class='flex-column'>
+        <div>
+          <div class='location-info__text'> Location: </div>
+          <input type='text' value=${info.coordinates}>
+        </div>
+        <button> Choose new coordinates </button>
+        </div>
+    </div> 
+    <div class='flex-container'>
+      ${gallery}
+    </div>
+    `)
+    : (markup = `
     <h1>${info.name}</h1>
     <h2>${info.address}</h2>
     <h3>${info.desc}</h3>
     <div class='flex-container'>
         ${gallery}
     </div>
-  `;
-  parent.insertAdjacentHTML('afterBegin', markup);
-  parent.style.display = 'flex';
+  `);
+  return markup;
 };
