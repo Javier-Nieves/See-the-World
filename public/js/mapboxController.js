@@ -90,29 +90,35 @@ const fillGeoArrays = (locations, bounds) => {
 };
 
 const createLocationsLayer = () => {
-  if (map.getLayer('locations')) {
-    map.removeLayer('locations');
-    map.removeSource('locations');
-  }
-  map.addSource('locations', {
-    type: 'geojson',
-    data: {
+  // creating or updating layer's source
+  if (!map.getSource('locations'))
+    map.addSource('locations', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features,
+      },
+    });
+  else
+    map.getSource('locations').setData({
       type: 'FeatureCollection',
       features,
-    },
-  });
-  map.addLayer({
-    id: 'locations',
-    type: 'circle',
-    source: 'locations',
-    paint: {
-      'circle-color': '#000012',
-      'circle-radius': 6,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': '#ffffff',
-    },
-  });
-  // center map on clicked location
+    });
+  // creating Locations layer
+  if (!map.getLayer('locations')) {
+    map.addLayer({
+      id: 'locations',
+      type: 'circle',
+      source: 'locations',
+      paint: {
+        'circle-color': '#000012',
+        'circle-radius': 6,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff',
+      },
+    });
+  }
+  // center map on clicked location (with padding to the right)
   map.on('click', 'locations', (e) => {
     map.easeTo({
       center: e.features[0].geometry.coordinates,

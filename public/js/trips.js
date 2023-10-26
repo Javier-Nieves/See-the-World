@@ -41,24 +41,3 @@ export const deleteTrip = async () => {
     }, 1500);
   }
 };
-
-// export const editTrip = async (data, tripId) => {
-//   const res = await axios({
-//     method: 'PATCH',
-//     url: `http://127.0.0.1:3000/api/v1/trips/${tripId}`,
-//     data: {
-//       name: data.name,
-//       date: data.date,
-//       duration: data.duration,
-//       description: data.description,
-//       highlight: data.highlight,
-//       private: data.friendsOnly,
-//     },
-//   });
-
-//   if (res.data.status === 'success') {
-//     console.log('trip modified');
-//     // console.log(res.data.data.newTrip._id);
-//     // location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
-//   }
-// };

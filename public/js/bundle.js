@@ -6371,29 +6371,32 @@ var fillGeoArrays = function fillGeoArrays(locations, bounds) {
 };
 
 var createLocationsLayer = function createLocationsLayer() {
-  if (map.getLayer('locations')) {
-    map.removeLayer('locations');
-    map.removeSource('locations');
-  }
-
-  map.addSource('locations', {
+  // creating or updating layer's source
+  if (!map.getSource('locations')) map.addSource('locations', {
     type: 'geojson',
     data: {
       type: 'FeatureCollection',
       features: features
     }
-  });
-  map.addLayer({
-    id: 'locations',
-    type: 'circle',
-    source: 'locations',
-    paint: {
-      'circle-color': '#000012',
-      'circle-radius': 6,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': '#ffffff'
-    }
-  }); // center map on clicked location
+  });else map.getSource('locations').setData({
+    type: 'FeatureCollection',
+    features: features
+  }); // creating Locations layer
+
+  if (!map.getLayer('locations')) {
+    map.addLayer({
+      id: 'locations',
+      type: 'circle',
+      source: 'locations',
+      paint: {
+        'circle-color': '#000012',
+        'circle-radius': 6,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#ffffff'
+      }
+    });
+  } // center map on clicked location (with padding to the right)
+
 
   map.on('click', 'locations', function (e) {
     map.easeTo({
@@ -6602,25 +6605,7 @@ function () {
   return function deleteTrip() {
     return _ref2.apply(this, arguments);
   };
-}(); // export const editTrip = async (data, tripId) => {
-//   const res = await axios({
-//     method: 'PATCH',
-//     url: `http://127.0.0.1:3000/api/v1/trips/${tripId}`,
-//     data: {
-//       name: data.name,
-//       date: data.date,
-//       duration: data.duration,
-//       description: data.description,
-//       highlight: data.highlight,
-//       private: data.friendsOnly,
-//     },
-//   });
-//   if (res.data.status === 'success') {
-//     console.log('trip modified');
-//     // console.log(res.data.data.newTrip._id);
-//     // location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
-//   }
-// };
+}();
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
