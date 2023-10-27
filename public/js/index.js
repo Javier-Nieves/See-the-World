@@ -39,7 +39,6 @@ if (editLocationForm)
     const locationId = document.querySelector('.location-data-holder').dataset
       .locationid;
     editLocation({ name, address, desc, coord }, locationId);
-    console.log(name, address, desc, coord);
   });
 
 if (logoutBtn) logoutBtn.addEventListener('click', logout);

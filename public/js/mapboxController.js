@@ -135,7 +135,6 @@ const populatePopups = () => {
   });
   // clicking on the Location
   map.on('click', 'locations', (e) => {
-    console.log(e.features[0].properties);
     mapboxViews.displayLocationInfo(e.features[0].properties);
   });
 };

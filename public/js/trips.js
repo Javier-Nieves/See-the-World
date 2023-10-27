@@ -43,7 +43,6 @@ export const deleteTrip = async () => {
 };
 
 export const editLocation = async (data, locationId) => {
-  console.log(data, locationId);
   const res = await axios({
     method: 'PATCH',
     url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,

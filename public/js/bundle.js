@@ -6460,7 +6460,6 @@ var populatePopups = function populatePopups() {
   }); // clicking on the Location
 
   map.on('click', 'locations', function (e) {
-    console.log(e.features[0].properties);
     mapboxViews.displayLocationInfo(e.features[0].properties);
   });
 };
@@ -6662,22 +6661,21 @@ function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          console.log(data, locationId);
-          _context3.next = 3;
+          _context3.next = 2;
           return (0, _axios.default)({
             method: 'PATCH',
             url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId),
             data: data
           });
 
-        case 3:
+        case 2:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
             console.log('Location is modified');
           }
 
-        case 5:
+        case 4:
         case "end":
           return _context3.stop();
       }
@@ -6733,7 +6731,6 @@ if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {
     desc: desc,
     coord: coord
   }, locationId);
-  console.log(name, address, desc, coord);
 });
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
 

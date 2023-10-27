@@ -19,7 +19,6 @@ block content
       .flex-container.trip-info__travelers-container
         p With:
         each traveler in trip.travelers
-          //- p= traveler.name
           //- todo - add name as the popup on hover on the image
           img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
     .trip-info__description= trip.description
