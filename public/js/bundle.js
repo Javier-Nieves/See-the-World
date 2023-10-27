@@ -6666,15 +6666,8 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: "http://127.0.0.1:3000/api/v1/trips/".concat(locationId),
-            data: {
-              name: data.name,
-              date: data.date,
-              duration: data.duration,
-              description: data.description,
-              highlight: data.highlight,
-              private: data.friendsOnly
-            }
+            url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId),
+            data: data
           });
 
         case 3:
