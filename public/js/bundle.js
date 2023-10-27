@@ -6104,7 +6104,12 @@ var generateMarkup = function generateMarkup(info) {
 
   for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
 
-  window.location.href.includes('locations') ? markup = "\n    <h2>Change location info</h2>\n    <div class='flex-container'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' value=".concat(info.name, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Adress: </div>\n      <input type='text' value=").concat(info.address, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Description: </div>\n      <textarea> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <div class='flex-column'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' value=").concat(info.coordinates, ">\n        </div>\n        <button> Choose new coordinates </button>\n        </div>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ") : markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
+  if (window.location.href.includes('locations')) {
+    markup = "\n    <h2 class='location-data-holder' data-locationid=".concat(info.id, ">Change location info</h2>\n    <div class='flex-container'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value=").concat(info.name, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Adress: </div>\n      <input type='text' class='location-info__editAddress' value=").concat(info.address, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <div class='flex-column'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' class='location-info__editCoord' value=").concat(info.coordinates, ">\n        </div>\n        <button> Choose new coordinates </button>\n        </div>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
+  } else {
+    markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
+  }
+
   return markup;
 };
 },{"./mapboxController":"mapboxController.js"}],"mapboxModel.js":[function(require,module,exports) {
@@ -6385,7 +6390,8 @@ var fillGeoArrays = function fillGeoArrays(locations, bounds) {
       address: loc.address,
       description: loc.description,
       coordinates: loc.coordinates,
-      images: loc.images
+      images: loc.images,
+      id: loc._id
     });
     bounds.extend(loc.coordinates);
   });
@@ -6490,7 +6496,8 @@ var createFeature = function createFeature(loc) {
       address: loc.address,
       desc: loc.description,
       coordinates: loc.coordinates,
-      images: loc.images
+      images: loc.images,
+      id: loc.id
     },
     geometry: {
       type: 'Point',
@@ -6549,7 +6556,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteTrip = exports.changeTrip = void 0;
+exports.editLocation = exports.deleteTrip = exports.changeTrip = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6644,6 +6651,50 @@ function () {
     return _ref2.apply(this, arguments);
   };
 }();
+
+var editLocation = exports.editLocation =
+/*#__PURE__*/
+function () {
+  var _ref3 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee3(data, locationId) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          console.log(data, locationId);
+          _context3.next = 3;
+          return (0, _axios.default)({
+            method: 'PATCH',
+            url: "http://127.0.0.1:3000/api/v1/trips/".concat(locationId),
+            data: {
+              name: data.name,
+              date: data.date,
+              duration: data.duration,
+              description: data.description,
+              highlight: data.highlight,
+              private: data.friendsOnly
+            }
+          });
+
+        case 3:
+          res = _context3.sent;
+
+          if (res.data.status === 'success') {
+            console.log('Location is modified');
+          }
+
+        case 5:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+
+  return function editLocation(_x3, _x4) {
+    return _ref3.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -6660,6 +6711,7 @@ var loginForm = document.querySelector('.login-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
+var editLocationForm = document.querySelector('.locations__editForm');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
@@ -6674,6 +6726,22 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   var password = document.querySelector('#login-password').value;
   (0, _login.login)(email, password);
 });
+if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.querySelector('.location-info__editName').value;
+  var address = document.querySelector('.location-info__editAddress').value;
+  var coord = document.querySelector('.location-info__editCoord').value;
+  var desc = document.querySelector('.location-info__editDesc').value;
+  coord = JSON.parse(coord);
+  var locationId = document.querySelector('.location-data-holder').dataset.locationid;
+  (0, _trips.editLocation)({
+    name: name,
+    address: address,
+    desc: desc,
+    coord: coord
+  }, locationId);
+  console.log(name, address, desc, coord);
+});
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
 
 if (newTripForm || editTripForm) {
@@ -6684,16 +6752,15 @@ if (newTripForm || editTripForm) {
     var date = document.querySelector('.newTrip__input-date').value;
     var duration = document.querySelector('.newTrip__input-duration').value;
     var highlight = document.querySelector('.newTrip__input-highlight').value;
-    var friendsOnly = document.querySelector('.newTrip__checkbox').checked; // prettier-ignore
-
-    var description = document.querySelector('.newTrip__input-description').value; // todo - add "With" field
+    var friendsOnly = document.querySelector('.newTrip__checkbox').checked;
+    var desc = document.querySelector('.newTrip__input-description').value; // todo - add "With" field
 
     filledForm === newTripForm && (0, _trips.changeTrip)({
       name: name,
       date: date,
       duration: duration,
       highlight: highlight,
-      description: description,
+      desc: desc,
       friendsOnly: friendsOnly
     });
     filledForm === editTripForm && (0, _trips.changeTrip)({
@@ -6701,7 +6768,7 @@ if (newTripForm || editTripForm) {
       date: date,
       duration: duration,
       highlight: highlight,
-      description: description,
+      desc: desc,
       friendsOnly: friendsOnly
     }, filledForm.dataset.tripid);
   });

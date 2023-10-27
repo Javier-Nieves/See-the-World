@@ -52,6 +52,15 @@ exports.addLocation = catchAsync(async (req, res, next) => {
   res.status(201).json({ status: 'success', data: { newLocation } });
 });
 
+exports.editLocation = catchAsync(async (req, res, next) => {
+  const modifiedLocation = await Location.findByIdAndUpdate(
+    req.params.locationId,
+    req.body,
+    { new: true, runValidators: true },
+  );
+  res.status(200).json({ status: 'success', data: { modifiedLocation } });
+});
+
 exports.allLocations = catchAsync(async (req, res, next) => {
   const locations = await Location.find();
   res.status(200).json({ status: 'success', data: { locations } });

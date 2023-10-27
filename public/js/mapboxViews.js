@@ -80,26 +80,26 @@ const generateMarkup = (info) => {
   for (let i = 0; i < imagesArray.length; i++)
     gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
 
-  window.location.href.includes('locations')
-    ? (markup = `
-    <h2>Change location info</h2>
+  if (window.location.href.includes('locations')) {
+    markup = `
+    <h2 class='location-data-holder' data-locationid=${info.id}>Change location info</h2>
     <div class='flex-container'>
       <div class='location-info__text'> Name: </div>
-      <input type='text' value=${info.name}>
+      <input type='text' class='location-info__editName' value=${info.name}>
     </div>
     <div class='flex-container'>
       <div class='location-info__text'> Adress: </div>
-      <input type='text' value=${info.address}>
+      <input type='text' class='location-info__editAddress' value=${info.address}>
     </div>
     <div class='flex-container'>
       <div class='location-info__text'> Description: </div>
-      <textarea> ${info.desc} </textarea>
+      <textarea class='location-info__editDesc'> ${info.desc} </textarea>
     </div>  
     <div class='flex-container'>
       <div class='flex-column'>
         <div>
           <div class='location-info__text'> Location: </div>
-          <input type='text' value=${info.coordinates}>
+          <input type='text' class='location-info__editCoord' value=${info.coordinates}>
         </div>
         <button> Choose new coordinates </button>
         </div>
@@ -107,14 +107,16 @@ const generateMarkup = (info) => {
     <div class='flex-container'>
       ${gallery}
     </div>
-    `)
-    : (markup = `
+    `;
+  } else {
+    markup = `
     <h1>${info.name}</h1>
     <h2>${info.address}</h2>
     <h3>${info.desc}</h3>
     <div class='flex-container'>
         ${gallery}
     </div>
-  `);
+  `;
+  }
   return markup;
 };

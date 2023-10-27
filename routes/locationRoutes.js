@@ -16,6 +16,12 @@ router
     locationController.addLocation,
   );
 
+router.route('/:locationId').patch(
+  // authController.protect,
+  // authController.restrictTo,
+  locationController.editLocation,
+);
+
 router.route('/all').get(locationController.allLocations);
 
 module.exports = router;

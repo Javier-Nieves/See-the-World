@@ -70,6 +70,7 @@ const fillGeoArrays = (locations, bounds) => {
       description: loc.description,
       coordinates: loc.coordinates,
       images: loc.images,
+      id: loc._id,
     });
     bounds.extend(loc.coordinates);
   });
@@ -178,6 +179,7 @@ const createFeature = (loc) => {
       desc: loc.description,
       coordinates: loc.coordinates,
       images: loc.images,
+      id: loc.id,
     },
     geometry: {
       type: 'Point',

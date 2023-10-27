@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { login, logout } from './login.js';
 import { displayMap } from './mapboxController.js';
-import { changeTrip, deleteTrip, editTrip } from './trips.js';
+import { changeTrip, deleteTrip, editLocation } from './trips.js';
 
 // DOM elements
 const mapBox = document.getElementById('map');
@@ -9,6 +9,7 @@ const loginForm = document.querySelector('.login-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
+const editLocationForm = document.querySelector('.locations__editForm');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
 // handlers
@@ -27,6 +28,20 @@ if (loginForm)
     login(email, password);
   });
 
+if (editLocationForm)
+  editLocationForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.querySelector('.location-info__editName').value;
+    const address = document.querySelector('.location-info__editAddress').value;
+    let coord = document.querySelector('.location-info__editCoord').value;
+    const desc = document.querySelector('.location-info__editDesc').value;
+    coord = JSON.parse(coord);
+    const locationId = document.querySelector('.location-data-holder').dataset
+      .locationid;
+    editLocation({ name, address, desc, coord }, locationId);
+    console.log(name, address, desc, coord);
+  });
+
 if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
 if (newTripForm || editTripForm) {
@@ -38,14 +53,13 @@ if (newTripForm || editTripForm) {
     const duration = document.querySelector('.newTrip__input-duration').value;
     const highlight = document.querySelector('.newTrip__input-highlight').value;
     const friendsOnly = document.querySelector('.newTrip__checkbox').checked;
-    // prettier-ignore
-    const description = document.querySelector('.newTrip__input-description').value;
+    const desc = document.querySelector('.newTrip__input-description').value;
     // todo - add "With" field
     filledForm === newTripForm &&
-      changeTrip({ name, date, duration, highlight, description, friendsOnly });
+      changeTrip({ name, date, duration, highlight, desc, friendsOnly });
     filledForm === editTripForm &&
       changeTrip(
-        { name, date, duration, highlight, description, friendsOnly },
+        { name, date, duration, highlight, desc, friendsOnly },
         filledForm.dataset.tripid,
       );
   });
