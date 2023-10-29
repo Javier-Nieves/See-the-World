@@ -63,13 +63,15 @@ export const removePopup = () =>
     .forEach((popup) => popup.remove());
 
 export const displayLocationInfo = (info) => {
+  // remove old popups
   document
     .querySelectorAll('.mapboxgl-popup')
     .forEach((popup) => popup.remove());
+  // show and fill location info block
   const infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
-  infoBlock.parentElement.classList.remove('hidden');
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  infoBlock.classList.remove('hidden');
   infoBlock.parentElement.style.display = 'flex';
 };
 

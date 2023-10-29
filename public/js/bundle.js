@@ -6087,13 +6087,15 @@ var removePopup = exports.removePopup = function removePopup() {
 };
 
 var displayLocationInfo = exports.displayLocationInfo = function displayLocationInfo(info) {
+  // remove old popups
   document.querySelectorAll('.mapboxgl-popup').forEach(function (popup) {
     return popup.remove();
-  });
+  }); // show and fill location info block
+
   var infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
-  infoBlock.parentElement.classList.remove('hidden');
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  infoBlock.classList.remove('hidden');
   infoBlock.parentElement.style.display = 'flex';
 };
 
@@ -6722,13 +6724,13 @@ if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {
   var name = document.querySelector('.location-info__editName').value;
   var address = document.querySelector('.location-info__editAddress').value;
   var coord = document.querySelector('.location-info__editCoord').value;
-  var desc = document.querySelector('.location-info__editDesc').value;
+  var description = document.querySelector('.location-info__editDesc').value;
   coord = JSON.parse(coord);
   var locationId = document.querySelector('.location-data-holder').dataset.locationid;
   (0, _trips.editLocation)({
     name: name,
     address: address,
-    desc: desc,
+    description: description,
     coord: coord
   }, locationId);
 });

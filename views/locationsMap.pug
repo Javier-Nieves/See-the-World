@@ -18,8 +18,8 @@ block content
       <div id="geocoder" class="geocoder"></div>
     .locationsMap(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
 
-    form.flex-column.trip-info__details-window.locations__editForm.hidden
-      .flex-column.trip-info__location-info
+    form.flex-column.trip-info__details-window.locations__editForm
+      .flex-column.trip-info__location-info.hidden
       .flex-container.locations__buttons-container
         input(type='submit' class="locations__submitBtn" value='Save changes')
         button.locations__deleteBtn Delete Location

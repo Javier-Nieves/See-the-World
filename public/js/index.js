@@ -34,11 +34,13 @@ if (editLocationForm)
     const name = document.querySelector('.location-info__editName').value;
     const address = document.querySelector('.location-info__editAddress').value;
     let coord = document.querySelector('.location-info__editCoord').value;
-    const desc = document.querySelector('.location-info__editDesc').value;
+    const description = document.querySelector(
+      '.location-info__editDesc',
+    ).value;
     coord = JSON.parse(coord);
     const locationId = document.querySelector('.location-data-holder').dataset
       .locationid;
-    editLocation({ name, address, desc, coord }, locationId);
+    editLocation({ name, address, description, coord }, locationId);
   });
 
 if (logoutBtn) logoutBtn.addEventListener('click', logout);
