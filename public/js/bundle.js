@@ -6263,7 +6263,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.map = exports.displayMap = void 0;
+exports.removeLocation = exports.map = exports.displayMap = void 0;
 
 var mapboxViews = _interopRequireWildcard(require("./mapboxViews.js"));
 
@@ -6379,6 +6379,44 @@ function () {
 
   return function displayMap(_x) {
     return _ref.apply(this, arguments);
+  };
+}();
+
+var removeLocation = exports.removeLocation =
+/*#__PURE__*/
+function () {
+  var _ref3 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee3(locationId) {
+    var location, index, routeData;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          location = features.find(function (loc) {
+            return loc.properties.id === locationId;
+          });
+          index = features.indexOf(location);
+          features.splice(index, 1); // create new layer without the deleted location
+
+          createLocationsLayer(); // redraw all routes
+
+          waypoints.splice(index, 1);
+          _context3.next = 7;
+          return mapboxModel.createGeoJSON(waypoints);
+
+        case 7:
+          routeData = _context3.sent;
+          drawRoute(routeData);
+
+        case 9:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+
+  return function removeLocation(_x2) {
+    return _ref3.apply(this, arguments);
   };
 }();
 
@@ -6510,12 +6548,12 @@ var createFeature = function createFeature(loc) {
 var locationPopupHandler =
 /*#__PURE__*/
 function () {
-  var _ref3 = _asyncToGenerator(
+  var _ref4 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee3(form, coordArray) {
+  _regeneratorRuntime().mark(function _callee4(form, coordArray) {
     var geoData;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
         case 0:
           mapboxModel.persistLocation(form);
           createFeature({
@@ -6529,26 +6567,26 @@ function () {
           waypoints.push(coordArray);
 
           if (!(waypoints.length > 1)) {
-            _context3.next = 9;
+            _context4.next = 9;
             break;
           }
 
-          _context3.next = 7;
+          _context4.next = 7;
           return mapboxModel.createGeoJSON(waypoints);
 
         case 7:
-          geoData = _context3.sent;
+          geoData = _context4.sent;
           drawRoute(geoData);
 
         case 9:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
-    }, _callee3);
+    }, _callee4);
   }));
 
-  return function locationPopupHandler(_x2, _x3) {
-    return _ref3.apply(this, arguments);
+  return function locationPopupHandler(_x3, _x4) {
+    return _ref4.apply(this, arguments);
   };
 }();
 },{"./mapboxViews.js":"mapboxViews.js","./mapboxModel.js":"mapboxModel.js"}],"trips.js":[function(require,module,exports) {
@@ -6557,7 +6595,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.editLocation = exports.deleteTrip = exports.changeTrip = void 0;
+exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.changeTrip = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6688,14 +6726,53 @@ function () {
     return _ref3.apply(this, arguments);
   };
 }();
+
+var deleteLocation = exports.deleteLocation =
+/*#__PURE__*/
+function () {
+  var _ref4 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee4(locationId) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.next = 2;
+          return (0, _axios.default)({
+            method: 'DELETE',
+            url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId)
+          });
+
+        case 2:
+          res = _context4.sent;
+
+          if (res.data.status === 'success') {
+            console.log('Location is deleted');
+          }
+
+        case 4:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4);
+  }));
+
+  return function deleteLocation(_x5) {
+    return _ref4.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _login = require("./login.js");
 
-var _mapboxController = require("./mapboxController.js");
+var mapController = _interopRequireWildcard(require("./mapboxController.js"));
 
-var _trips = require("./trips.js");
+var trips = _interopRequireWildcard(require("./trips.js"));
+
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
+
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 
 /* eslint-disable */
 // DOM elements
@@ -6705,12 +6782,13 @@ var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
 var editLocationForm = document.querySelector('.locations__editForm');
+var deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
 if (mapBox) {
   var locations;
   if (mapBox.dataset.hasOwnProperty('locations')) locations = JSON.parse(mapBox.dataset.locations);
-  (0, _mapboxController.displayMap)(locations);
+  mapController.displayMap(locations);
 }
 
 if (loginForm) loginForm.addEventListener('submit', function (e) {
@@ -6719,22 +6797,28 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   var password = document.querySelector('#login-password').value;
   (0, _login.login)(email, password);
 });
+if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
 if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {
   e.preventDefault();
+  console.log('modifying?');
   var name = document.querySelector('.location-info__editName').value;
   var address = document.querySelector('.location-info__editAddress').value;
   var coord = document.querySelector('.location-info__editCoord').value;
   var description = document.querySelector('.location-info__editDesc').value;
   coord = JSON.parse(coord);
   var locationId = document.querySelector('.location-data-holder').dataset.locationid;
-  (0, _trips.editLocation)({
+  trips.editLocation({
     name: name,
     address: address,
     description: description,
     coord: coord
   }, locationId);
 });
-if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
+if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
+  var locationId = document.querySelector('.location-data-holder').dataset.locationid;
+  trips.deleteLocation(locationId);
+  mapController.removeLocation(locationId);
+});
 
 if (newTripForm || editTripForm) {
   var filledForm = newTripForm || editTripForm;
@@ -6747,7 +6831,7 @@ if (newTripForm || editTripForm) {
     var friendsOnly = document.querySelector('.newTrip__checkbox').checked;
     var desc = document.querySelector('.newTrip__input-description').value; // todo - add "With" field
 
-    filledForm === newTripForm && (0, _trips.changeTrip)({
+    filledForm === newTripForm && trips.changeTrip({
       name: name,
       date: date,
       duration: duration,
@@ -6755,7 +6839,7 @@ if (newTripForm || editTripForm) {
       desc: desc,
       friendsOnly: friendsOnly
     });
-    filledForm === editTripForm && (0, _trips.changeTrip)({
+    filledForm === editTripForm && trips.changeTrip({
       name: name,
       date: date,
       duration: duration,
@@ -6766,7 +6850,7 @@ if (newTripForm || editTripForm) {
   });
 }
 
-if (deleteBtn) deleteBtn.addEventListener('click', _trips.deleteTrip);
+if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 },{"./login.js":"login.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

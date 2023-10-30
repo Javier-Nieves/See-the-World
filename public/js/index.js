@@ -1,7 +1,8 @@
 /* eslint-disable */
 import { login, logout } from './login.js';
-import { displayMap } from './mapboxController.js';
-import { changeTrip, deleteTrip, editLocation } from './trips.js';
+import * as mapController from './mapboxController.js';
+
+import * as trips from './trips.js';
 
 // DOM elements
 const mapBox = document.getElementById('map');
@@ -10,6 +11,7 @@ const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
 const editLocationForm = document.querySelector('.locations__editForm');
+const deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
 // handlers
@@ -17,7 +19,7 @@ if (mapBox) {
   let locations;
   if (mapBox.dataset.hasOwnProperty('locations'))
     locations = JSON.parse(mapBox.dataset.locations);
-  displayMap(locations);
+  mapController.displayMap(locations);
 }
 
 if (loginForm)
@@ -28,9 +30,12 @@ if (loginForm)
     login(email, password);
   });
 
+if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
 if (editLocationForm)
   editLocationForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    console.log('modifying?');
     const name = document.querySelector('.location-info__editName').value;
     const address = document.querySelector('.location-info__editAddress').value;
     let coord = document.querySelector('.location-info__editCoord').value;
@@ -40,10 +45,16 @@ if (editLocationForm)
     coord = JSON.parse(coord);
     const locationId = document.querySelector('.location-data-holder').dataset
       .locationid;
-    editLocation({ name, address, description, coord }, locationId);
+    trips.editLocation({ name, address, description, coord }, locationId);
   });
 
-if (logoutBtn) logoutBtn.addEventListener('click', logout);
+if (deleteLocationBtn)
+  deleteLocationBtn.addEventListener('click', () => {
+    const locationId = document.querySelector('.location-data-holder').dataset
+      .locationid;
+    trips.deleteLocation(locationId);
+    mapController.removeLocation(locationId);
+  });
 
 if (newTripForm || editTripForm) {
   const filledForm = newTripForm || editTripForm;
@@ -57,13 +68,13 @@ if (newTripForm || editTripForm) {
     const desc = document.querySelector('.newTrip__input-description').value;
     // todo - add "With" field
     filledForm === newTripForm &&
-      changeTrip({ name, date, duration, highlight, desc, friendsOnly });
+      trips.changeTrip({ name, date, duration, highlight, desc, friendsOnly });
     filledForm === editTripForm &&
-      changeTrip(
+      trips.changeTrip(
         { name, date, duration, highlight, desc, friendsOnly },
         filledForm.dataset.tripid,
       );
   });
 }
 
-if (deleteBtn) deleteBtn.addEventListener('click', deleteTrip);
+if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);

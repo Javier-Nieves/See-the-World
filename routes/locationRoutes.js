@@ -17,9 +17,15 @@ router
   );
 
 router.route('/:locationId').patch(
-  // authController.protect,
+  authController.protect,
   // authController.restrictTo,
   locationController.editLocation,
+);
+
+router.route('/:locationId').delete(
+  authController.protect,
+  // authController.restrictTo,
+  locationController.deleteLocation,
 );
 
 router.route('/all').get(locationController.allLocations);

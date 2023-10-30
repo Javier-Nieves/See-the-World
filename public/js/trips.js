@@ -53,3 +53,14 @@ export const editLocation = async (data, locationId) => {
     console.log('Location is modified');
   }
 };
+
+export const deleteLocation = async (locationId) => {
+  const res = await axios({
+    method: 'DELETE',
+    url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,
+  });
+
+  if (res.data.status === 'success') {
+    console.log('Location is deleted');
+  }
+};

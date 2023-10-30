@@ -61,6 +61,14 @@ exports.editLocation = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', data: { modifiedLocation } });
 });
 
+exports.deleteLocation = catchAsync(async (req, res, next) => {
+  const location = await Location.findByIdAndDelete(req.params.locationId);
+  if (!location)
+    return next(new AppError('No document found with that ID', 404));
+
+  res.status(204).json({ status: 'success', data: null });
+});
+
 exports.allLocations = catchAsync(async (req, res, next) => {
   const locations = await Location.find();
   res.status(200).json({ status: 'success', data: { locations } });

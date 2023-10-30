@@ -59,6 +59,18 @@ export const displayMap = async (locations) => {
   });
 };
 
+export const removeLocation = async (locationId) => {
+  const location = features.find((loc) => loc.properties.id === locationId);
+  const index = features.indexOf(location);
+  features.splice(index, 1);
+  // create new layer without the deleted location
+  createLocationsLayer();
+  // redraw all routes
+  waypoints.splice(index, 1);
+  const routeData = await mapboxModel.createGeoJSON(waypoints);
+  drawRoute(routeData);
+};
+
 const fillGeoArrays = (locations, bounds) => {
   // create an array for future map.addSource method
   // and waypoints array for Routes drawing
