@@ -5929,7 +5929,7 @@ exports.Axios = Axios;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = void 0;
+exports.registerUser = exports.logout = exports.login = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6021,6 +6021,46 @@ function () {
 
   return function logout() {
     return _ref2.apply(this, arguments);
+  };
+}();
+
+var registerUser = exports.registerUser =
+/*#__PURE__*/
+function () {
+  var _ref3 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee3(data) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: 'http://127.0.0.1:3000/api/v1/users/signup',
+            data: data
+          });
+
+        case 2:
+          res = _context3.sent;
+
+          if (res.data.status === 'success') {
+            // showAlert('success', 'Logged in ok');
+            console.log('new user is created');
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 1500);
+          }
+
+        case 4:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+
+  return function registerUser(_x3) {
+    return _ref3.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js"}],"mapboxViews.js":[function(require,module,exports) {
@@ -6778,6 +6818,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 // DOM elements
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.login-form');
+var registerForm = document.querySelector('.register-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
@@ -6796,6 +6837,19 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   var email = document.querySelector('#login-email').value;
   var password = document.querySelector('#login-password').value;
   (0, _login.login)(email, password);
+});
+if (registerForm) registerForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.querySelector('#register-name').value;
+  var email = document.querySelector('#register-email').value;
+  var password = document.querySelector('#register-password').value;
+  var passwordConfirm = document.querySelector('#register-confirm').value;
+  (0, _login.registerUser)({
+    name: name,
+    email: email,
+    password: password,
+    passwordConfirm: passwordConfirm
+  });
 });
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
 if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {

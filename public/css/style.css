@@ -126,6 +126,11 @@ h1 {
     cursor: pointer;
     background-color: rgba(255, 200, 0, 0.8);
 }
+.vertical-line {
+    margin: 20px;
+    border-left: 3px solid rgb(252, 2, 2);
+    height: 35vh;
+  }
 
 /* Trip page */
 .trip-info__container {

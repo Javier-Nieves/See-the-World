@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { login, logout } from './login.js';
+import { login, logout, registerUser } from './login.js';
 import * as mapController from './mapboxController.js';
 
 import * as trips from './trips.js';
@@ -7,6 +7,7 @@ import * as trips from './trips.js';
 // DOM elements
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form');
+const registerForm = document.querySelector('.register-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
@@ -28,6 +29,16 @@ if (loginForm)
     const email = document.querySelector('#login-email').value;
     const password = document.querySelector('#login-password').value;
     login(email, password);
+  });
+
+if (registerForm)
+  registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.querySelector('#register-name').value;
+    const email = document.querySelector('#register-email').value;
+    const password = document.querySelector('#register-password').value;
+    const passwordConfirm = document.querySelector('#register-confirm').value;
+    registerUser({ name, email, password, passwordConfirm });
   });
 
 if (logoutBtn) logoutBtn.addEventListener('click', logout);
