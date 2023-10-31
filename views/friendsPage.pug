@@ -1,0 +1,15 @@
+extends base
+
+block content
+  h1= user.name
+  h1= user.friends
+
+  .flex-column
+    .flex-container
+      .friendsPage__simple-text Look for travelers:
+      form.friendsPage__searchForm
+        input(type='text' placeholder='Name' class='friendsPage__input-name' required)
+        button.friendsPage__searchBtn Search
+
+  .friendsPage__search-results
+

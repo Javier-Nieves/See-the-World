@@ -130,7 +130,16 @@ h1 {
     margin: 20px;
     border-left: 3px solid rgb(252, 2, 2);
     height: 35vh;
-  }
+}
+
+/* My profile page */
+.userProfile__parameter-container {
+    width: 40vw;
+    padding: 10px;
+    margin: 2vh 0 2vh 0;
+    border: 1px solid black;
+    border-radius: 5px;
+}
 
 /* Trip page */
 .trip-info__container {

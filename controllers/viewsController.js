@@ -22,6 +22,20 @@ exports.login = (req, res) => {
   });
 };
 
+exports.myProfile = (req, res) => {
+  res.status(200).render('userProfile', {
+    title: 'My profile',
+    user: res.locals.user,
+  });
+};
+
+exports.myFriends = (req, res) => {
+  res.status(200).render('friendsPage', {
+    title: 'My friends',
+    user: res.locals.user,
+  });
+};
+
 exports.getTrip = catchAsync(async (req, res) => {
   const { tripId } = req.params;
   const trip = await Trip.findById(tripId);

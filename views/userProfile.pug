@@ -1,0 +1,17 @@
+extends base
+
+block content
+
+  .flex-column
+    h1= user.name
+    .flex-column.userProfile__infoTable
+      .flex-container.userProfile__parameter-container
+        .userProfile__simple-text Name:
+        .userProfile__parameter= user.name
+      .flex-container.userProfile__parameter-container
+        .userProfile__simple-text Email:
+        .userProfile__parameter= user.email
+      .flex-container.userProfile__parameter-container
+        .userProfile__simple-text Photo:
+        img(src=`/img/users/${user.photo}`).userProfile__parameter
+        input(type='file' class='userProfile__changePhotoBtn' value='New photo')

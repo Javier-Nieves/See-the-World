@@ -9,7 +9,8 @@ mixin inputBlock (text, type, placeholder, required, value)
       - const checked = value === 'true'
       input(type=`${type}` class!=attributes.class checked=checked)
     else
-      input(type=`${type}` class!=attributes.class placeholder=`${placeholder}` required=`${required}` value=`${value}`)
+      - const needed = required === 'true'
+      input(type=`${type}` class!=attributes.class placeholder=`${placeholder}` required=needed value=`${value}`)
 
 block content
   .main-right-column.flex-column

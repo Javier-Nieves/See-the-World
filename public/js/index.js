@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { login, logout, registerUser } from './login.js';
+import * as users from './users.js';
 import * as mapController from './mapboxController.js';
 
 import * as trips from './trips.js';
@@ -12,6 +13,7 @@ const logoutBtn = document.querySelector('.nav__logout-btn');
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
 const editLocationForm = document.querySelector('.locations__editForm');
+const friendSearchForm = document.querySelector('.friendsPage__searchForm');
 const deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
 
@@ -89,3 +91,10 @@ if (newTripForm || editTripForm) {
 }
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
+
+if (friendSearchForm)
+  friendSearchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = document.querySelector('.friendsPage__input-name').value;
+    users.friendSearch(query);
+  });

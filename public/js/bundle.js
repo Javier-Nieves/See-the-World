@@ -6063,7 +6063,19 @@ function () {
     return _ref3.apply(this, arguments);
   };
 }();
-},{"axios":"../../node_modules/axios/index.js"}],"mapboxViews.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js"}],"users.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.friendSearch = void 0;
+
+/* eslint-disable */
+var friendSearch = exports.friendSearch = function friendSearch() {
+  console.log('searching for users');
+};
+},{}],"mapboxViews.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6806,6 +6818,8 @@ function () {
 
 var _login = require("./login.js");
 
+var users = _interopRequireWildcard(require("./users.js"));
+
 var mapController = _interopRequireWildcard(require("./mapboxController.js"));
 
 var trips = _interopRequireWildcard(require("./trips.js"));
@@ -6823,6 +6837,7 @@ var logoutBtn = document.querySelector('.nav__logout-btn');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
 var editLocationForm = document.querySelector('.locations__editForm');
+var friendSearchForm = document.querySelector('.friendsPage__searchForm');
 var deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
 
@@ -6905,7 +6920,12 @@ if (newTripForm || editTripForm) {
 }
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
-},{"./login.js":"login.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var query = document.querySelector('.friendsPage__input-name').value;
+  users.friendSearch(query);
+});
+},{"./login.js":"login.js","./users.js":"users.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
