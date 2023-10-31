@@ -94,5 +94,5 @@ if (friendSearchForm)
   friendSearchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const query = document.querySelector('.friendsPage__input-name').value;
-    users.friendSearch(query);
+    users.friendSearch({ query });
   });

@@ -6096,7 +6096,7 @@ function () {
           console.log('searching for users', data);
           _context.next = 3;
           return (0, _axios.default)({
-            method: 'GET',
+            method: 'POST',
             url: 'http://127.0.0.1:3000/api/v1/users/search',
             data: data
           });
@@ -6965,7 +6965,9 @@ if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var query = document.querySelector('.friendsPage__input-name').value;
-  users.friendSearch(query);
+  users.friendSearch({
+    query: query
+  });
 });
 },{"./login.js":"login.js","./users.js":"users.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
