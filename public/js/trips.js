@@ -64,3 +64,6 @@ export const deleteLocation = async (locationId) => {
     console.log('Location is deleted');
   }
 };
+
+export const tripsOfUser = (userId) =>
+  (window.location = `http://127.0.0.1:3000/users/${userId}`);

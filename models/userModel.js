@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
       ref: 'User',
     },
   ],
+  friendRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   password: {
     type: String,
     required: true,

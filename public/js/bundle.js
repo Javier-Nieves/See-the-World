@@ -6638,7 +6638,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
   data.forEach(function (result) {
-    var markup = "\n    <tr>\n      <td>\n        <img src='/img/users/".concat(result.photo, "' class='friendsPage__pic'></img>\n      </td>\n      <td>").concat(result.name, "</td>\n      <td>Trips of this person</td>\n    </tr>");
+    var markup = "<tr class='data-holder' data-userid=".concat(result._id, ">\n          <td>\n            <img src='/img/users/").concat(result.photo, "' class='friendsPage__pic'></img>\n          </td>\n          <td>").concat(result.name, "</td>\n          <td>Trips of this person</td>\n          </tr>");
     container.insertAdjacentHTML('beforeend', markup);
   });
 };
@@ -6710,7 +6710,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.changeTrip = void 0;
+exports.tripsOfUser = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.changeTrip = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6876,6 +6876,10 @@ function () {
     return _ref4.apply(this, arguments);
   };
 }();
+
+var tripsOfUser = exports.tripsOfUser = function tripsOfUser(userId) {
+  return window.location = "http://127.0.0.1:3000/users/".concat(userId);
+};
 },{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -6883,9 +6887,9 @@ var _login = require("./login.js");
 
 var users = _interopRequireWildcard(require("./users.js"));
 
-var mapController = _interopRequireWildcard(require("./mapboxController.js"));
-
 var trips = _interopRequireWildcard(require("./trips.js"));
+
+var mapController = _interopRequireWildcard(require("./mapboxController.js"));
 
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 
@@ -6894,6 +6898,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 /* eslint-disable */
 // DOM elements
 var mapBox = document.getElementById('map');
+var friendsTable = document.querySelector('.friendsPage__table');
 var loginForm = document.querySelector('.login-form');
 var registerForm = document.querySelector('.register-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
@@ -6990,7 +6995,13 @@ if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
     query: query
   });
 });
-},{"./login.js":"login.js","./users.js":"users.js","./mapboxController.js":"mapboxController.js","./trips.js":"trips.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+if (friendsTable) // open user's profile at click
+  friendsTable.addEventListener('click', function (e) {
+    var userId = e.target.closest('.data-holder').dataset.userid;
+    console.log('userid is ', userId);
+    trips.tripsOfUser(userId);
+  });
+},{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -7018,7 +7029,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54752" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52578" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,17 +1,32 @@
 const Trip = require('../models/tripModel');
+const User = require('../models/userModel');
 // const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.index = catchAsync(async (req, res) => {
+  const visitorId = res.locals.user.id;
+  let userId;
+  let visitor;
   // if user is not authentificated
   if (!res.locals.user)
     res.status(200).render('startPage', {
       title: `Welcome to 'See the World' website`,
     });
 
-  const trips = await Trip.find({ createdBy: res.locals.user.id });
+  // if user's trips are summoned UserId will be the URL parameter
+  // otherwise logged in user's trips will be shown
+  if (req.params.userId) ({ userId } = req.params);
+  else userId = visitorId;
+
+  const owner = await User.findById(userId);
+  if (userId !== visitorId) visitor = await User.findById(visitorId);
+  else visitor = owner;
+
+  // todo - change createdBy to 'in the travelers array'
+  const trips = await Trip.find({ createdBy: userId });
   res.status(200).render('index', {
-    title: `All trips of ${res.locals.user.name}`,
+    owner,
+    visitor,
     trips,
   });
 });

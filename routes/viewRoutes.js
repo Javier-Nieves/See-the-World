@@ -7,6 +7,7 @@ const router = express.Router();
 router.use(authController.isLoggedIn);
 
 router.get('/', viewsController.index);
+router.get('/users/:userId', viewsController.index);
 router.get('/me', authController.protect, viewsController.myProfile);
 router.get('/friends', authController.protect, viewsController.myFriends);
 router.get('/login', viewsController.login);

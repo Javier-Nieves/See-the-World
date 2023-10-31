@@ -1,12 +1,12 @@
 /* eslint-disable */
 import { login, logout, registerUser } from './login.js';
 import * as users from './users.js';
-import * as mapController from './mapboxController.js';
-
 import * as trips from './trips.js';
+import * as mapController from './mapboxController.js';
 
 // DOM elements
 const mapBox = document.getElementById('map');
+const friendsTable = document.querySelector('.friendsPage__table');
 const loginForm = document.querySelector('.login-form');
 const registerForm = document.querySelector('.register-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
@@ -95,4 +95,12 @@ if (friendSearchForm)
     e.preventDefault();
     const query = document.querySelector('.friendsPage__input-name').value;
     users.friendSearch({ query });
+  });
+
+if (friendsTable)
+  // open user's profile at click
+  friendsTable.addEventListener('click', (e) => {
+    const userId = e.target.closest('.data-holder').dataset.userid;
+    console.log('userid is ', userId);
+    trips.tripsOfUser(userId);
   });

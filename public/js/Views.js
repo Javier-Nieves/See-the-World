@@ -131,14 +131,13 @@ export const loadSearchResults = (data) => {
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
   data.forEach((result) => {
-    const markup = `
-    <tr>
-      <td>
-        <img src='/img/users/${result.photo}' class='friendsPage__pic'></img>
-      </td>
-      <td>${result.name}</td>
-      <td>Trips of this person</td>
-    </tr>`;
+    const markup = `<tr class='data-holder' data-userid=${result._id}>
+          <td>
+            <img src='/img/users/${result.photo}' class='friendsPage__pic'></img>
+          </td>
+          <td>${result.name}</td>
+          <td>Trips of this person</td>
+          </tr>`;
     container.insertAdjacentHTML('beforeend', markup);
   });
 };
