@@ -68,11 +68,12 @@ export const displayLocationInfo = (info) => {
     .querySelectorAll('.mapboxgl-popup')
     .forEach((popup) => popup.remove());
   // show and fill location info block
+  const infoContainer = document.querySelector('.trip-info__details-window');
   const infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
   infoBlock.classList.remove('hidden');
-  infoBlock.parentElement.style.display = 'flex';
+  infoContainer.style.display = 'flex';
 };
 
 const generateMarkup = (info) => {
@@ -98,13 +99,13 @@ const generateMarkup = (info) => {
       <textarea class='location-info__editDesc'> ${info.desc} </textarea>
     </div>  
     <div class='flex-container'>
-      <div class='flex-column'>
+      <form class='flex-column location-info__newCoordForm'>
         <div>
           <div class='location-info__text'> Location: </div>
           <input type='text' class='location-info__editCoord' value=${info.coordinates}>
         </div>
         <button> Choose new coordinates </button>
-        </div>
+      </form>
     </div> 
     <div class='flex-container'>
       ${gallery}

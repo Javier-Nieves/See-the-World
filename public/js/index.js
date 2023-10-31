@@ -48,13 +48,11 @@ if (logoutBtn) logoutBtn.addEventListener('click', logout);
 if (editLocationForm)
   editLocationForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('modifying?');
     const name = document.querySelector('.location-info__editName').value;
     const address = document.querySelector('.location-info__editAddress').value;
     let coord = document.querySelector('.location-info__editCoord').value;
-    const description = document.querySelector(
-      '.location-info__editDesc',
-    ).value;
+    // prettier-ignore
+    const description = document.querySelector('.location-info__editDesc',).value;
     coord = JSON.parse(coord);
     const locationId = document.querySelector('.location-data-holder').dataset
       .locationid;

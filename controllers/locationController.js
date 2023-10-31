@@ -53,6 +53,7 @@ exports.addLocation = catchAsync(async (req, res, next) => {
 });
 
 exports.editLocation = catchAsync(async (req, res, next) => {
+  console.log('request body in locations:', req.body);
   const modifiedLocation = await Location.findByIdAndUpdate(
     req.params.locationId,
     req.body,
