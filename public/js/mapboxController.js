@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as mapboxViews from './mapboxViews.js';
+import * as mapboxViews from './Views.js';
 import * as mapboxModel from './mapboxModel.js';
 
 export let map;

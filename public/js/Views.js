@@ -123,3 +123,22 @@ const generateMarkup = (info) => {
   }
   return markup;
 };
+
+// Search:
+export const loadSearchResults = (data) => {
+  console.log('search data: ', data);
+  const container = document.querySelector('.friendsPage__search-results');
+  container.innerHTML = '';
+  document.querySelector('.friendsPage__table').style.display = 'flex';
+  data.forEach((result) => {
+    const markup = `
+    <tr>
+      <td>
+        <img src='/img/users/${result.photo}' class='friendsPage__pic'></img>
+      </td>
+      <td>${result.name}</td>
+      <td>Trips of this person</td>
+    </tr>`;
+    container.insertAdjacentHTML('beforeend', markup);
+  });
+};

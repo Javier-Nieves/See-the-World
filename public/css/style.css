@@ -141,6 +141,40 @@ h1 {
     border-radius: 5px;
 }
 
+/* Friends */
+table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+}
+table th, table td {
+    width: 25vw;
+    background-color: rgba(181, 181, 1, 0.2);
+    padding: 0.75rem;
+    vertical-align: middle;
+    font-family: Didot, serif;
+    text-align: center;
+    font-size: 19px;
+}
+tbody tr:nth-of-type(odd) {
+    background-color: rgba(248, 212, 168, 0.209);
+
+}
+tbody tr:nth-of-type(even) {
+    background-color: rgba(114, 115, 115, 0.3);
+}
+
+tbody tr:hover {
+    background-color: rgba(240, 194, 27, 0.3);
+    cursor: pointer;
+}
+.friendsPage__table {
+    display: none;
+}
+.friendsPage__pic {
+    width: 10vw;
+}
+
 /* Trip page */
 .trip-info__container {
     padding: 15px;
