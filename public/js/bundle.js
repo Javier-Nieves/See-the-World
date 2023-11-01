@@ -6004,7 +6004,7 @@ function () {
 
         case 3:
           res = _context2.sent;
-          if (res.data.status === 'success') location.reload(true);
+          if (res.data.status === 'success') location.assign('/');
           _context2.next = 9;
           break;
 
@@ -6648,7 +6648,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendFriendRequest = exports.friendSearch = void 0;
+exports.friendSearch = exports.friendRequest = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6705,7 +6705,7 @@ function () {
   };
 }();
 
-var sendFriendRequest = exports.sendFriendRequest =
+var friendRequest = exports.friendRequest =
 /*#__PURE__*/
 function () {
   var _ref2 = _asyncToGenerator(
@@ -6736,7 +6736,7 @@ function () {
     }, _callee2);
   }));
 
-  return function sendFriendRequest(_x2) {
+  return function friendRequest(_x2) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -6936,6 +6936,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 var mapBox = document.getElementById('map');
 var friendsTable = document.querySelector('.friendsPage__table');
 var addFriendBtn = document.querySelector('.addFriendBtn');
+var friendRequests = document.querySelector('.friendsPage__friendRequests');
 var loginForm = document.querySelector('.login-form');
 var registerForm = document.querySelector('.register-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
@@ -7035,16 +7036,22 @@ if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
 if (friendsTable) // open user's profile at click
   friendsTable.addEventListener('click', function (e) {
     var userId = e.target.closest('.data-holder').dataset.userid;
-    console.log('userid is ', userId);
     trips.tripsOfUser(userId);
   });
 if (addFriendBtn) addFriendBtn.addEventListener('click', function () {
   var btn = document.querySelector('.addFriendBtn');
   var hostId = btn.dataset.hostid;
-  var askId = btn.dataset.askid;
-  users.sendFriendRequest({
+  users.friendRequest({
     hostId: hostId,
-    askId: askId
+    action: 'send'
+  });
+});
+if (friendRequests) friendRequests.addEventListener('click', function (e) {
+  var userId = e.target.dataset.userid;
+  console.log('userid is ', userId);
+  users.friendRequest({
+    userId: userId,
+    action: 'accept'
   });
 });
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {

@@ -2,7 +2,22 @@ extends base
 
 block content
   h1= user.name
-  h1= user.friends
+  .flex-container
+    .flex-column
+      h2 Friends:
+      each person of user.friends
+        .friendsPage__friendContainer.flex-container
+          img(src=`/img/users/${person.photo}` class='friendsPage__picSmall')
+          .friendsPage__text= person.name
+    .vertical-line
+
+    .flex-column.friendsPage__friendRequests
+      h2 Friend requests:
+      each person of user.friendRequests
+        .friendsPage__friendContainer.flex-container
+          img(src=`/img/users/${person.photo}` class='friendsPage__picSmall')
+          .friendsPage__text= person.name
+          button(class='1' data-userid=`${person._id}`) Add friend
 
   .flex-column
     .flex-container

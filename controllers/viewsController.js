@@ -4,7 +4,7 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 
 exports.index = catchAsync(async (req, res) => {
-  const visitorId = res.locals.user.id;
+  const visitorId = res.locals?.user?.id;
   let userId;
   let visitor;
   // if user is not authentificated

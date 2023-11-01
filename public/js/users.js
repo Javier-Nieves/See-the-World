@@ -15,7 +15,7 @@ export const friendSearch = async (data) => {
   }
 };
 
-export const sendFriendRequest = async (data) => {
+export const friendRequest = async (data) => {
   const res = await axios({
     method: 'POST',
     url: 'http://127.0.0.1:3000/api/v1/users/friends',

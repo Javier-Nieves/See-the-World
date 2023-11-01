@@ -6,11 +6,15 @@ import * as mapController from './mapboxController.js';
 
 // DOM elements
 const mapBox = document.getElementById('map');
+
 const friendsTable = document.querySelector('.friendsPage__table');
 const addFriendBtn = document.querySelector('.addFriendBtn');
+const friendRequests = document.querySelector('.friendsPage__friendRequests');
+
 const loginForm = document.querySelector('.login-form');
 const registerForm = document.querySelector('.register-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
+
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
 const editLocationForm = document.querySelector('.locations__editForm');
@@ -102,7 +106,6 @@ if (friendsTable)
   // open user's profile at click
   friendsTable.addEventListener('click', (e) => {
     const userId = e.target.closest('.data-holder').dataset.userid;
-    console.log('userid is ', userId);
     trips.tripsOfUser(userId);
   });
 
@@ -110,6 +113,12 @@ if (addFriendBtn)
   addFriendBtn.addEventListener('click', () => {
     const btn = document.querySelector('.addFriendBtn');
     const hostId = btn.dataset.hostid;
-    const askId = btn.dataset.askid;
-    users.sendFriendRequest({ hostId, askId });
+    users.friendRequest({ hostId, action: 'send' });
+  });
+
+if (friendRequests)
+  friendRequests.addEventListener('click', (e) => {
+    const userId = e.target.dataset.userid;
+    console.log('userid is ', userId);
+    users.friendRequest({ userId, action: 'accept' });
   });

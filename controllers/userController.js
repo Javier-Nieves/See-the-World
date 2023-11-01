@@ -18,11 +18,26 @@ exports.search = catchAsync(async (req, res, next) => {
 });
 
 exports.friendRequest = catchAsync(async (req, res, next) => {
-  const host = await User.findByIdAndUpdate(
-    req.body.hostId,
-    { $addToSet: { friendRequests: req.body.askId } },
-    { new: true },
-  );
+  let host;
 
+  // if friend request is send:
+  if (req.body.action === 'send')
+    host = await User.findByIdAndUpdate(
+      req.body.hostId,
+      { $addToSet: { friendRequests: req.user.id } },
+      { new: true },
+    );
+
+  // if user accepts a friend request:
+  if (req.body.action === 'accept') {
+    host = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $addToSet: { friends: req.body.userId },
+        $pull: { friendRequests: req.body.userId },
+      },
+      { new: true },
+    );
+  }
   res.status(200).json({ status: 'success', data: { host } });
 });
