@@ -7,6 +7,7 @@ import * as mapController from './mapboxController.js';
 // DOM elements
 const mapBox = document.getElementById('map');
 const friendsTable = document.querySelector('.friendsPage__table');
+const addFriendBtn = document.querySelector('.addFriendBtn');
 const loginForm = document.querySelector('.login-form');
 const registerForm = document.querySelector('.register-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
@@ -103,4 +104,12 @@ if (friendsTable)
     const userId = e.target.closest('.data-holder').dataset.userid;
     console.log('userid is ', userId);
     trips.tripsOfUser(userId);
+  });
+
+if (addFriendBtn)
+  addFriendBtn.addEventListener('click', () => {
+    const btn = document.querySelector('.addFriendBtn');
+    const hostId = btn.dataset.hostid;
+    const askId = btn.dataset.askid;
+    users.sendFriendRequest({ hostId, askId });
   });

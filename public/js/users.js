@@ -14,3 +14,15 @@ export const friendSearch = async (data) => {
     Views.loadSearchResults(res.data.data.searchRes);
   }
 };
+
+export const sendFriendRequest = async (data) => {
+  const res = await axios({
+    method: 'POST',
+    url: 'http://127.0.0.1:3000/api/v1/users/friends',
+    data,
+  });
+  if (res.data.status === 'success') {
+    console.log('Results: ');
+    // Views.loadSearchResults(res.data.data.searchRes);
+  }
+};

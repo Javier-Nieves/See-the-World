@@ -7,7 +7,7 @@ block content
   .flex-container
     h1= `All trips of ${owner.name}`
     if owner.id !== visitor.id
-      button(class='addFriendBtn' data-userid=`${owner.id}`) Send Friend Request
+      button(class='addFriendBtn' data-hostid=`${owner.id}` data-askid=`${visitor.id}`) Send Friend Request
   .cardContainer
     each trip in trips
       a(class='cardLink' href=`/trips/${trip.id}`)

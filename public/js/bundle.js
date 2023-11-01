@@ -6648,7 +6648,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.friendSearch = void 0;
+exports.sendFriendRequest = exports.friendSearch = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6702,6 +6702,42 @@ function () {
 
   return function friendSearch(_x) {
     return _ref.apply(this, arguments);
+  };
+}();
+
+var sendFriendRequest = exports.sendFriendRequest =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee2(data) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: 'http://127.0.0.1:3000/api/v1/users/friends',
+            data: data
+          });
+
+        case 2:
+          res = _context2.sent;
+
+          if (res.data.status === 'success') {
+            console.log('Results: '); // Views.loadSearchResults(res.data.data.searchRes);
+          }
+
+        case 4:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+
+  return function sendFriendRequest(_x2) {
+    return _ref2.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./Views.js":"Views.js"}],"trips.js":[function(require,module,exports) {
@@ -6899,6 +6935,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 // DOM elements
 var mapBox = document.getElementById('map');
 var friendsTable = document.querySelector('.friendsPage__table');
+var addFriendBtn = document.querySelector('.addFriendBtn');
 var loginForm = document.querySelector('.login-form');
 var registerForm = document.querySelector('.register-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
@@ -7001,6 +7038,15 @@ if (friendsTable) // open user's profile at click
     console.log('userid is ', userId);
     trips.tripsOfUser(userId);
   });
+if (addFriendBtn) addFriendBtn.addEventListener('click', function () {
+  var btn = document.querySelector('.addFriendBtn');
+  var hostId = btn.dataset.hostid;
+  var askId = btn.dataset.askid;
+  users.sendFriendRequest({
+    hostId: hostId,
+    askId: askId
+  });
+});
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
