@@ -4,7 +4,9 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.getAll = catchAsync(async (req, res, next) => {
   const users = await User.find();
-  res.status(200).json({ status: 'success', data: { users } });
+  res
+    .status(200)
+    .json({ status: 'success', results: users.length, data: { users } });
 });
 
 exports.search = catchAsync(async (req, res, next) => {
@@ -16,7 +18,11 @@ exports.search = catchAsync(async (req, res, next) => {
 });
 
 exports.friendRequest = catchAsync(async (req, res, next) => {
-  const host = await User.findById(req.body.hostId).select('-password');
-  host.friendRequests.push(req.body.askId);
+  const host = await User.findByIdAndUpdate(
+    req.body.hostId,
+    { $addToSet: { friendRequests: req.body.askId } },
+    { new: true },
+  );
+
   res.status(200).json({ status: 'success', data: { host } });
 });
