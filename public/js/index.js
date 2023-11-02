@@ -4,6 +4,9 @@ import * as users from './users.js';
 import * as trips from './trips.js';
 import * as mapController from './mapboxController.js';
 
+// variables
+let travelers = [];
+
 // DOM elements
 const mapBox = document.getElementById('map');
 
@@ -21,6 +24,9 @@ const editLocationForm = document.querySelector('.locations__editForm');
 const friendSearchForm = document.querySelector('.friendsPage__searchForm');
 const deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
+const datalist = document.querySelector('#travelersList');
+const withSelector = document.querySelector('.newTrip__input-with');
+const travelersList = document.querySelector('.newTrip__travelersList');
 
 // handlers
 if (mapBox) {
@@ -73,6 +79,8 @@ if (deleteLocationBtn)
   });
 
 if (newTripForm || editTripForm) {
+  withSelector.addEventListener('change', (e) => fillTravelers(e));
+
   const filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -82,12 +90,14 @@ if (newTripForm || editTripForm) {
     const highlight = document.querySelector('.newTrip__input-highlight').value;
     const friendsOnly = document.querySelector('.newTrip__checkbox').checked;
     const desc = document.querySelector('.newTrip__input-description').value;
-    // todo - add "With" field
+
     filledForm === newTripForm &&
-      trips.changeTrip({ name, date, duration, highlight, desc, friendsOnly });
+      // prettier-ignore
+      trips.changeTrip({ name, date, duration, highlight, desc, travelers, friendsOnly });
+
     filledForm === editTripForm &&
       trips.changeTrip(
-        { name, date, duration, highlight, desc, friendsOnly },
+        { name, date, duration, highlight, desc, travelers, friendsOnly },
         filledForm.dataset.tripid,
       );
   });
@@ -122,3 +132,23 @@ if (friendRequests)
     console.log('userid is ', userId);
     users.friendRequest({ userId, action: 'accept' });
   });
+
+const fillTravelers = (event) => {
+  let friendId;
+  // "with" field. Creating an array od ID's of friends
+  // when datalist option is selected we get friend's name and look for their ID in the options
+  const friend = event.target.value;
+  // prettier-ignore
+  const selectedOption = Array.from(datalist.options).find((option) => option.value === friend);
+  if (selectedOption) {
+    friendId = selectedOption.getAttribute('data-travelerid');
+    travelers.push(friendId);
+  }
+  withSelector.value = '';
+  console.log(travelers);
+
+  const markup = `<div data-friendid=${friendId}>
+                    ${friend}
+                    </div>`;
+  travelersList.insertAdjacentHTML('beforeend', markup);
+};

@@ -276,7 +276,8 @@ tbody tr:hover {
     font-size: 20px;
 }
 .newTrip__input-name, .newTrip__input-date, .newTrip__input-highlight, 
-.newTrip__input-description, .nav__search-input, .newTrip__input-duration {
+.newTrip__input-description, .nav__search-input,
+.newTrip__input-duration, .newTrip__input-with {
     background-color: rgba(153, 153, 153, 0.255);
     border: 1px solid grey;
     border-radius: 5px;
@@ -293,6 +294,11 @@ tbody tr:hover {
 .nav__search-input {
     margin: 0;
     width: 10vw;
+}
+.newTrip__with-container {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 /* new locations page */

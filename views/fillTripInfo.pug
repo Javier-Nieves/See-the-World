@@ -24,6 +24,7 @@ block content
           +inputBlock('Starting date:', 'date', '', true, `${formattedDate}`)(class='newTrip__input-date')
           +inputBlock('Duration:', 'text', '2 weeks', false, `${trip.duration ? trip.duration : '-'}`)(class='newTrip__input-duration')
           +inputBlock('Trip highlight:', 'text', '8 countries, 4 people, 100 delicious baguetes!', false, `${trip.highlight ? trip.highlight : '-'}`)(class='newTrip__input-highlight')
+          +inputBlock('With:', 'text', "Type your friend's name", false, '')(class='newTrip__input-with')
           +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false, `${trip.description ? trip.description : '-'}`)(class='newTrip__input-description')
           +inputBlock('Show only to your friends:', 'checkbox', '', false, `${trip.private}`)(class='newTrip__checkbox')
         else
@@ -31,6 +32,15 @@ block content
           +inputBlock('Starting date:', 'date', '', true, '')(class='newTrip__input-date')
           +inputBlock('Duration:', 'text', '2 weeks', false, '')(class='newTrip__input-duration')
           +inputBlock('Trip highlight:', 'text', '8 countries, 4 people, 100 delicious baguetes!', false, '')(class='newTrip__input-highlight')
+          .flex-column.newTrip__with-container
+            .flex-container.newTrip__textLine
+              .newTrip__text With:
+              //- +inputBlock('With:', 'text', "Type your friend's name", false, '')(class='newTrip__input-with')
+              input(type="text" class="newTrip__input-with" list="travelersList" placeholder="Friend's name")
+              datalist(id="travelersList")
+                each friend of user.friends
+                  option(data-travelerId=`${friend._id}`)= friend.name
+            .flex-container.newTrip__travelersList
           +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false)(class='newTrip__input-description')
           +inputBlock('Show only to your friends:', 'checkbox', '', false)(class='newTrip__checkbox')
       input(type='submit' value=`${trip ? 'Save changes' : 'Next'}`)

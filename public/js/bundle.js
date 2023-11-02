@@ -6774,12 +6774,14 @@ function () {
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
             url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
+            // todo - simplify. Just 'data'
             data: {
               name: data.name,
               date: data.date,
               duration: data.duration,
               description: data.description,
               highlight: data.highlight,
+              travelers: data.travelers,
               private: data.friendsOnly
             }
           });
@@ -6932,7 +6934,9 @@ function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return 
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 
 /* eslint-disable */
-// DOM elements
+// variables
+var travelers = []; // DOM elements
+
 var mapBox = document.getElementById('map');
 var friendsTable = document.querySelector('.friendsPage__table');
 var addFriendBtn = document.querySelector('.addFriendBtn');
@@ -6945,7 +6949,10 @@ var editTripForm = document.querySelector('#editTripForm');
 var editLocationForm = document.querySelector('.locations__editForm');
 var friendSearchForm = document.querySelector('.friendsPage__searchForm');
 var deleteLocationBtn = document.querySelector('.locations__deleteBtn');
-var deleteBtn = document.querySelector('.trip-info__delete-btn'); // handlers
+var deleteBtn = document.querySelector('.trip-info__delete-btn');
+var datalist = document.querySelector('#travelersList');
+var withSelector = document.querySelector('.newTrip__input-with');
+var travelersList = document.querySelector('.newTrip__travelersList'); // handlers
 
 if (mapBox) {
   var locations;
@@ -6996,6 +7003,9 @@ if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
 });
 
 if (newTripForm || editTripForm) {
+  withSelector.addEventListener('change', function (e) {
+    return fillTravelers(e);
+  });
   var filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -7004,14 +7014,15 @@ if (newTripForm || editTripForm) {
     var duration = document.querySelector('.newTrip__input-duration').value;
     var highlight = document.querySelector('.newTrip__input-highlight').value;
     var friendsOnly = document.querySelector('.newTrip__checkbox').checked;
-    var desc = document.querySelector('.newTrip__input-description').value; // todo - add "With" field
-
-    filledForm === newTripForm && trips.changeTrip({
+    var desc = document.querySelector('.newTrip__input-description').value;
+    filledForm === newTripForm && // prettier-ignore
+    trips.changeTrip({
       name: name,
       date: date,
       duration: duration,
       highlight: highlight,
       desc: desc,
+      travelers: travelers,
       friendsOnly: friendsOnly
     });
     filledForm === editTripForm && trips.changeTrip({
@@ -7020,6 +7031,7 @@ if (newTripForm || editTripForm) {
       duration: duration,
       highlight: highlight,
       desc: desc,
+      travelers: travelers,
       friendsOnly: friendsOnly
     }, filledForm.dataset.tripid);
   });
@@ -7054,6 +7066,27 @@ if (friendRequests) friendRequests.addEventListener('click', function (e) {
     action: 'accept'
   });
 });
+
+var fillTravelers = function fillTravelers(event) {
+  var friendId; // "with" field. Creating an array od ID's of friends
+  // when datalist option is selected we get friend's name and look for their ID in the options
+
+  var friend = event.target.value; // prettier-ignore
+
+  var selectedOption = Array.from(datalist.options).find(function (option) {
+    return option.value === friend;
+  });
+
+  if (selectedOption) {
+    friendId = selectedOption.getAttribute('data-travelerid');
+    travelers.push(friendId);
+  }
+
+  withSelector.value = '';
+  console.log(travelers);
+  var markup = "<div data-friendid=".concat(friendId, ">\n                    ").concat(friend, "\n                    </div>");
+  travelersList.insertAdjacentHTML('beforeend', markup);
+};
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -7082,7 +7115,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52578" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57060" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

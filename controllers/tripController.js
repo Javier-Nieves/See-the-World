@@ -11,7 +11,8 @@ exports.getAllTrips = catchAsync(async (req, res, next) => {
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
-  req.body.travelers = [];
+  // req.body.travelers = [];
+  console.log(req.body.travelers);
   req.body.travelers.push(req.user.id);
   req.body.createdBy = req.user.id;
   const newTrip = await Trip.create(req.body);

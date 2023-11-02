@@ -3,11 +3,13 @@ extends base
 block content
   .flex-container
     form.login-form.flex-column
+      h1 Login
       input(type='text' id='login-email' class='login-form__input' placeholder='email')
       input(type='password' id='login-password' class='login-form__input' placeholder='password')
       button.login-form__btn Login
     .vertical-line
     form.flex-column.register-form
+      h1 Register
       input(type='text' id='register-name' class='login-form__input' placeholder='Name')
       input(type='text' id='register-email' class='login-form__input' placeholder='Email')
       input(type='password' id='register-password' class='login-form__input' placeholder='Password')

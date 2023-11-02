@@ -7,12 +7,14 @@ export const changeTrip = async (data, tripId) => {
     url: tripId
       ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
       : 'http://127.0.0.1:3000/api/v1/trips',
+    // todo - simplify. Just 'data'
     data: {
       name: data.name,
       date: data.date,
       duration: data.duration,
       description: data.description,
       highlight: data.highlight,
+      travelers: data.travelers,
       private: data.friendsOnly,
     },
   });

@@ -63,6 +63,7 @@ exports.getTrip = catchAsync(async (req, res) => {
 exports.newTripPage = catchAsync(async (req, res) => {
   let title;
   let trip = '';
+  const user = await User.findById(req.user.id);
   if (req.url.includes('edit')) {
     title = 'Edit trip info';
     const { tripId } = req.params;
@@ -71,6 +72,7 @@ exports.newTripPage = catchAsync(async (req, res) => {
   res.status(200).render('fillTripInfo', {
     title,
     trip,
+    user,
   });
 });
 
