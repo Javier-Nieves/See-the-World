@@ -189,7 +189,7 @@ tbody tr:hover {
     margin: 5px;
 }
 
-/* Trip page */
+/*! Trip page */
 .trip-info__container {
     padding: 15px;
     gap: 2vw;
@@ -221,6 +221,9 @@ tbody tr:hover {
 }
 .trip-desc__user-photo {
     width: 7vw;
+}
+.trip-desc__user-photo:hover {
+    cursor: pointer;
 }
 .trip-info__description {
     width: 50vw;
@@ -261,7 +264,23 @@ tbody tr:hover {
 }
 .trip-info__loc-image {
     width: 8vw;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
 
+    position: absolute;
+
+    margin-left: -100px;
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 /* New Trip page */

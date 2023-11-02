@@ -21,7 +21,10 @@ block content
         p With:
         each traveler in trip.travelers
           //- todo - add name as the popup on hover on the image
-          img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+          .tooltip
+            a(href=`/users/${traveler._id}`)
+              img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+              span.tooltiptext= traveler.name
     .trip-info__description= trip.description
 
   .flex-container.trip-info__buttons-container
