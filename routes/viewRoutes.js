@@ -13,8 +13,12 @@ router.get('/friends', authController.protect, viewsController.myFriends);
 router.get('/login', viewsController.login);
 router.get('/trips/:tripId', viewsController.getTrip);
 router.get('/trips/:tripId/locations', viewsController.newLocations);
-router.get('/trips/:tripId/edit', viewsController.newTripPage);
-router.get('/createTrip', authController.protect, viewsController.newTripPage);
+router.get('/createTrip', authController.protect, viewsController.fillTripInfo);
+router.get(
+  '/trips/:tripId/edit',
+  authController.protect,
+  viewsController.fillTripInfo,
+);
 router.get('/getKeys', authController.getKeys);
 
 module.exports = router;

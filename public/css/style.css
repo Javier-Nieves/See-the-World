@@ -300,6 +300,21 @@ tbody tr:hover {
     border-radius: 10px;
     padding: 10px;
 }
+.newTrip__friendIcon {
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 3px;
+}
+.newTrip__friendIcon > * {
+    padding: 5px;
+}
+.newTrip__deleteTraveler {
+    font-size: 15px;
+    font-weight: 600;
+  }
+.newTrip__deleteTraveler:hover {
+    cursor: pointer;
+  }
 
 /* new locations page */
 .locationsMap {

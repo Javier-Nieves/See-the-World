@@ -60,7 +60,7 @@ exports.getTrip = catchAsync(async (req, res) => {
   });
 });
 
-exports.newTripPage = catchAsync(async (req, res) => {
+exports.fillTripInfo = catchAsync(async (req, res) => {
   let title;
   let trip = '';
   const user = await User.findById(req.user.id);

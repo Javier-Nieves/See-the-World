@@ -7004,36 +7004,23 @@ if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
 
 if (newTripForm || editTripForm) {
   withSelector.addEventListener('change', function (e) {
-    return fillTravelers(e);
+    return addTraveler(e);
   });
   var filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.querySelector('.newTrip__input-name').value;
-    var date = document.querySelector('.newTrip__input-date').value;
-    var duration = document.querySelector('.newTrip__input-duration').value;
-    var highlight = document.querySelector('.newTrip__input-highlight').value;
-    var friendsOnly = document.querySelector('.newTrip__checkbox').checked;
-    var desc = document.querySelector('.newTrip__input-description').value;
-    filledForm === newTripForm && // prettier-ignore
-    trips.changeTrip({
-      name: name,
-      date: date,
-      duration: duration,
-      highlight: highlight,
-      desc: desc,
-      travelers: travelers,
-      friendsOnly: friendsOnly
-    });
-    filledForm === editTripForm && trips.changeTrip({
-      name: name,
-      date: date,
-      duration: duration,
-      highlight: highlight,
-      desc: desc,
-      travelers: travelers,
-      friendsOnly: friendsOnly
-    }, filledForm.dataset.tripid);
+    var data = {
+      name: document.querySelector('.newTrip__input-name').value,
+      date: document.querySelector('.newTrip__input-date').value,
+      duration: document.querySelector('.newTrip__input-duration').value,
+      highlight: document.querySelector('.newTrip__input-highlight').value,
+      description: document.querySelector('.newTrip__input-description').value,
+      friendsOnly: document.querySelector('.newTrip__checkbox').checked,
+      travelers: travelers
+    };
+    filledForm === newTripForm && trips.changeTrip(data); // prettier-ignore
+
+    filledForm === editTripForm && trips.changeTrip(data, filledForm.dataset.tripid);
   });
 }
 
@@ -7067,7 +7054,7 @@ if (friendRequests) friendRequests.addEventListener('click', function (e) {
   });
 });
 
-var fillTravelers = function fillTravelers(event) {
+var addTraveler = function addTraveler(event) {
   var friendId; // "with" field. Creating an array od ID's of friends
   // when datalist option is selected we get friend's name and look for their ID in the options
 
@@ -7082,10 +7069,23 @@ var fillTravelers = function fillTravelers(event) {
     travelers.push(friendId);
   }
 
-  withSelector.value = '';
-  console.log(travelers);
-  var markup = "<div data-friendid=".concat(friendId, ">\n                    ").concat(friend, "\n                    </div>");
-  travelersList.insertAdjacentHTML('beforeend', markup);
+  withSelector.value = ''; // adding user block to the page
+
+  var markup = "<div class='flex-container newTrip__friendIcon' data-friendid=".concat(friendId, ">\n                    <div>").concat(friend, "</div>\n                    <span class=\"newTrip__deleteTraveler\">&times;</span>\n                  </div>");
+  travelersList.insertAdjacentHTML('beforeend', markup); // removing user from travelers array when close button is pushed:
+
+  document.querySelector('.newTrip__deleteTraveler').addEventListener('click', function (e) {
+    return removeTraveler(e);
+  });
+};
+
+var removeTraveler = function removeTraveler(event) {
+  var userElement = event.target.closest('.newTrip__friendIcon');
+  var travelerId = userElement.dataset.friendid;
+  userElement.remove();
+  travelers = travelers.filter(function (id) {
+    return id !== travelerId;
+  });
 };
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

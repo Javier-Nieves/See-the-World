@@ -79,27 +79,22 @@ if (deleteLocationBtn)
   });
 
 if (newTripForm || editTripForm) {
-  withSelector.addEventListener('change', (e) => fillTravelers(e));
-
+  withSelector.addEventListener('change', (e) => addTraveler(e));
   const filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.querySelector('.newTrip__input-name').value;
-    const date = document.querySelector('.newTrip__input-date').value;
-    const duration = document.querySelector('.newTrip__input-duration').value;
-    const highlight = document.querySelector('.newTrip__input-highlight').value;
-    const friendsOnly = document.querySelector('.newTrip__checkbox').checked;
-    const desc = document.querySelector('.newTrip__input-description').value;
-
-    filledForm === newTripForm &&
-      // prettier-ignore
-      trips.changeTrip({ name, date, duration, highlight, desc, travelers, friendsOnly });
-
-    filledForm === editTripForm &&
-      trips.changeTrip(
-        { name, date, duration, highlight, desc, travelers, friendsOnly },
-        filledForm.dataset.tripid,
-      );
+    const data = {
+      name: document.querySelector('.newTrip__input-name').value,
+      date: document.querySelector('.newTrip__input-date').value,
+      duration: document.querySelector('.newTrip__input-duration').value,
+      highlight: document.querySelector('.newTrip__input-highlight').value,
+      description: document.querySelector('.newTrip__input-description').value,
+      friendsOnly: document.querySelector('.newTrip__checkbox').checked,
+      travelers,
+    };
+    filledForm === newTripForm && trips.changeTrip(data);
+    // prettier-ignore
+    filledForm === editTripForm && trips.changeTrip(data, filledForm.dataset.tripid);
   });
 }
 
@@ -133,7 +128,7 @@ if (friendRequests)
     users.friendRequest({ userId, action: 'accept' });
   });
 
-const fillTravelers = (event) => {
+const addTraveler = (event) => {
   let friendId;
   // "with" field. Creating an array od ID's of friends
   // when datalist option is selected we get friend's name and look for their ID in the options
@@ -145,10 +140,21 @@ const fillTravelers = (event) => {
     travelers.push(friendId);
   }
   withSelector.value = '';
-  console.log(travelers);
-
-  const markup = `<div data-friendid=${friendId}>
-                    ${friend}
-                    </div>`;
+  // adding user block to the page
+  const markup = `<div class='flex-container newTrip__friendIcon' data-friendid=${friendId}>
+                    <div>${friend}</div>
+                    <span class="newTrip__deleteTraveler">&times;</span>
+                  </div>`;
   travelersList.insertAdjacentHTML('beforeend', markup);
+  // removing user from travelers array when close button is pushed:
+  document
+    .querySelector('.newTrip__deleteTraveler')
+    .addEventListener('click', (e) => removeTraveler(e));
+};
+
+const removeTraveler = (event) => {
+  const userElement = event.target.closest('.newTrip__friendIcon');
+  const travelerId = userElement.dataset.friendid;
+  userElement.remove();
+  travelers = travelers.filter((id) => id !== travelerId);
 };
