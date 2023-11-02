@@ -6648,7 +6648,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.friendSearch = exports.friendRequest = void 0;
+exports.friendSearch = exports.friendRequest = exports.changeUserInfo = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6738,6 +6738,43 @@ function () {
 
   return function friendRequest(_x2) {
     return _ref2.apply(this, arguments);
+  };
+}();
+
+var changeUserInfo = exports.changeUserInfo =
+/*#__PURE__*/
+function () {
+  var _ref3 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee3(data) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          console.log('before send', data);
+          _context3.next = 3;
+          return (0, _axios.default)({
+            method: 'PATCH',
+            url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
+            data: data
+          });
+
+        case 3:
+          res = _context3.sent;
+
+          if (res.data.status === 'success') {
+            console.log('Results: '); // Views.loadSearchResults(res.data.data.searchRes);
+          }
+
+        case 5:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+
+  return function changeUserInfo(_x3) {
+    return _ref3.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./Views.js":"Views.js"}],"trips.js":[function(require,module,exports) {
@@ -6944,6 +6981,7 @@ var friendRequests = document.querySelector('.friendsPage__friendRequests');
 var loginForm = document.querySelector('.login-form');
 var registerForm = document.querySelector('.register-form');
 var logoutBtn = document.querySelector('.nav__logout-btn');
+var userInfoForm = document.querySelector('.userProfile__infoTable');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
 var editLocationForm = document.querySelector('.locations__editForm');
@@ -7086,6 +7124,15 @@ var removeTraveler = function removeTraveler(event) {
   userElement.remove();
   travelers.delete(travelerId);
 };
+
+if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
+  e.preventDefault(); // for multer to process photos - they have to be inside the FormData object
+
+  var form = new FormData(); // prettier-ignore
+
+  form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
+  users.changeUserInfo(form);
+});
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

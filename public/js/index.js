@@ -17,6 +17,7 @@ const friendRequests = document.querySelector('.friendsPage__friendRequests');
 const loginForm = document.querySelector('.login-form');
 const registerForm = document.querySelector('.register-form');
 const logoutBtn = document.querySelector('.nav__logout-btn');
+const userInfoForm = document.querySelector('.userProfile__infoTable');
 
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
@@ -159,3 +160,13 @@ const removeTraveler = (event) => {
   userElement.remove();
   travelers.delete(travelerId);
 };
+
+if (userInfoForm)
+  userInfoForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // for multer to process photos - they have to be inside the FormData object
+    const form = new FormData();
+    // prettier-ignore
+    form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
+    users.changeUserInfo(form);
+  });

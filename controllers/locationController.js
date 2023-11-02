@@ -8,11 +8,8 @@ const AppError = require('../utils/appError');
 const multerStorage = multer.memoryStorage();
 // checks if uploaded files are images
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image', 400), false);
-  }
+  if (file.mimetype.startsWith('image')) cb(null, true);
+  else cb(new AppError('Not an image', 400), false);
 };
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
