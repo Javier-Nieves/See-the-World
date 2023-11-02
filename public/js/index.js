@@ -5,7 +5,7 @@ import * as trips from './trips.js';
 import * as mapController from './mapboxController.js';
 
 // variables
-let travelers = [];
+let travelers = new Set();
 
 // DOM elements
 const mapBox = document.getElementById('map');
@@ -137,9 +137,10 @@ const addTraveler = (event) => {
   const selectedOption = Array.from(datalist.options).find((option) => option.value === friend);
   if (selectedOption) {
     friendId = selectedOption.getAttribute('data-travelerid');
-    travelers.push(friendId);
+    withSelector.value = '';
+    if (travelers.has(friendId)) return;
+    travelers.add(friendId);
   }
-  withSelector.value = '';
   // adding user block to the page
   const markup = `<div class='flex-container newTrip__friendIcon' data-friendid=${friendId}>
                     <div>${friend}</div>
@@ -156,5 +157,5 @@ const removeTraveler = (event) => {
   const userElement = event.target.closest('.newTrip__friendIcon');
   const travelerId = userElement.dataset.friendid;
   userElement.remove();
-  travelers = travelers.filter((id) => id !== travelerId);
+  travelers.delete(travelerId);
 };

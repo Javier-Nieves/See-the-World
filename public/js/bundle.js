@@ -6935,7 +6935,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 
 /* eslint-disable */
 // variables
-var travelers = []; // DOM elements
+var travelers = new Set(); // DOM elements
 
 var mapBox = document.getElementById('map');
 var friendsTable = document.querySelector('.friendsPage__table');
@@ -7066,10 +7066,11 @@ var addTraveler = function addTraveler(event) {
 
   if (selectedOption) {
     friendId = selectedOption.getAttribute('data-travelerid');
-    travelers.push(friendId);
-  }
+    withSelector.value = '';
+    if (travelers.has(friendId)) return;
+    travelers.add(friendId);
+  } // adding user block to the page
 
-  withSelector.value = ''; // adding user block to the page
 
   var markup = "<div class='flex-container newTrip__friendIcon' data-friendid=".concat(friendId, ">\n                    <div>").concat(friend, "</div>\n                    <span class=\"newTrip__deleteTraveler\">&times;</span>\n                  </div>");
   travelersList.insertAdjacentHTML('beforeend', markup); // removing user from travelers array when close button is pushed:
@@ -7083,9 +7084,7 @@ var removeTraveler = function removeTraveler(event) {
   var userElement = event.target.closest('.newTrip__friendIcon');
   var travelerId = userElement.dataset.friendid;
   userElement.remove();
-  travelers = travelers.filter(function (id) {
-    return id !== travelerId;
-  });
+  travelers.delete(travelerId);
 };
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
