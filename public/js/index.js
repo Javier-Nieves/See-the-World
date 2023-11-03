@@ -104,6 +104,7 @@ if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (friendSearchForm)
   friendSearchForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    console.log('look for friend...');
     const query = document.querySelector('.friendsPage__input-name').value;
     users.friendSearch({ query });
   });
@@ -167,6 +168,11 @@ if (userInfoForm)
     // for multer to process photos - they have to be inside the FormData object
     const form = new FormData();
     // prettier-ignore
+    form.append('name', document.querySelector('.userProfile__changeName').value);
+    // prettier-ignore
+    form.append('email', document.querySelector('.userProfile__changeEmail').value);
+    // prettier-ignore
     form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
+    console.log('go change');
     users.changeUserInfo(form);
   });

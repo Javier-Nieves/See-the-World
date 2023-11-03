@@ -3,16 +3,15 @@ extends base
 block content
 
   .flex-column
-    h1= user.name
     form.flex-column.userProfile__infoTable
-      .flex-container.userProfile__parameter-container
-        .userProfile__simple-text Name:
-        .userProfile__parameter= user.name
-      .flex-container.userProfile__parameter-container
-        .userProfile__simple-text Email:
-        .userProfile__parameter= user.email
-      .flex-container.userProfile__parameter-container
-        .userProfile__simple-text Photo:
+      .flex-column
         img(src=`/img/users/${user.photo}` class='userProfile__userPhoto').userProfile__parameter
         input(type='file' class='userProfile__changePhoto' id='photo', name='photo' accept='image/*')
+      .flex-container.userProfile__parameter-container
+        .userProfile__simple-text Name:
+        input(class='userProfile__changeName' type='text' value= user.name)
+      .flex-container.userProfile__parameter-container
+        .userProfile__simple-text Email:
+        input(class='userProfile__changeEmail' type='text' value= user.email)
       button.userProfile__saveBtn Save changes
+    button.userProfile__deleteBtn Delete account

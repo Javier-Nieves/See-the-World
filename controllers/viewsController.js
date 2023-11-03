@@ -10,7 +10,7 @@ exports.index = catchAsync(async (req, res) => {
   // if user is not authentificated
   if (!res.locals.user)
     res.status(200).render('startPage', {
-      title: `Welcome to 'See the World' website`,
+      title: `Welcome`,
     });
 
   // if user's trips are summoned UserId will be the URL parameter

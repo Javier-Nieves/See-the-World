@@ -53,11 +53,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.search = catchAsync(async (req, res, next) => {
-  //   .populate({path: 'reviews',fields: 'review rating user '});
-  const searchRes = await User.find({
-    name: { $regex: new RegExp(req.body.query, 'i') },
-  }).select('-password -__v -slug -role -active');
-  res.status(200).json({ status: 'success', data: { searchRes } });
+  try {
+    console.log('searching..');
+    //   .populate({path: 'reviews',fields: 'review rating user '});
+    const searchRes = await User.find({
+      name: { $regex: new RegExp(req.body.query, 'i') },
+    }).select('-password -__v -slug -role -active');
+    console.log('response', res);
+    res.status(200).json({ status: 'success', data: { searchRes } });
+  } catch (err) {
+    console.error('error', err);
+  }
 });
 
 exports.friendRequest = catchAsync(async (req, res, next) => {
@@ -81,6 +87,9 @@ exports.friendRequest = catchAsync(async (req, res, next) => {
       },
       { new: true },
     );
+    await User.findByIdAndUpdate(req.body.userId, {
+      $addToSet: { friends: req.user.id },
+    });
   }
   res.status(200).json({ status: 'success', data: { host } });
 });

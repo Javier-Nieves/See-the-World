@@ -133,10 +133,17 @@ h1 {
 }
 
 /*! My profile page */
+.userProfile__infoTable {
+    background-color: rgba(187, 140, 20, 0.2);
+    padding: 10px;
+    margin-top: 5vh;
+    border: 1px solid black;
+    border-radius: 10px;
+}
 .userProfile__parameter-container {
     width: 40vw;
     padding: 10px;
-    margin: 2vh 0 2vh 0;
+    /* margin: 2vh 0 2vh 0; */
     border: 1px solid black;
     border-radius: 5px;
 }
@@ -238,14 +245,17 @@ tbody tr:hover {
 .trip-info__buttons-container {
     gap: 5vw;
 }
-.newTrip__nextBtn, .index__add-btn, .locations__center-btn {
+.newTrip__nextBtn, .index__add-btn, .locations__center-btn, .userProfile__saveBtn, .userProfile__deleteBtn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
     background-color: rgba(255, 200, 0, 0.72);
     font-size: 18px;
 }
-.newTrip__nextBtn:hover {
+.userProfile__deleteBtn {
+    background-color: rgba(255, 21, 0, 0.72);
+}
+.newTrip__nextBtn:hover, .userProfile__saveBtn {
     cursor: pointer;
     background-color: rgba(255, 200, 0, 0.9);
 }
@@ -283,7 +293,7 @@ tbody tr:hover {
     visibility: visible;
 }
 
-/* New Trip page */
+/*! New Trip page */
 .newTrip__container {
     padding: 8px;
     background-color: rgba(255, 200, 0, 0.32);

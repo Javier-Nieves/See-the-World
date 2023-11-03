@@ -6678,14 +6678,15 @@ function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          console.log('sending req..');
+          _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
             url: 'http://127.0.0.1:3000/api/v1/users/search',
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context.sent;
 
           if (res.data.status === 'success') {
@@ -6693,7 +6694,7 @@ function () {
             Views.loadSearchResults(res.data.data.searchRes);
           }
 
-        case 4:
+        case 5:
         case "end":
           return _context.stop();
       }
@@ -7065,6 +7066,7 @@ if (newTripForm || editTripForm) {
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
   e.preventDefault();
+  console.log('look for friend...');
   var query = document.querySelector('.friendsPage__input-name').value;
   users.friendSearch({
     query: query
@@ -7130,7 +7132,12 @@ if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
 
   var form = new FormData(); // prettier-ignore
 
+  form.append('name', document.querySelector('.userProfile__changeName').value); // prettier-ignore
+
+  form.append('email', document.querySelector('.userProfile__changeEmail').value); // prettier-ignore
+
   form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
+  console.log('go change');
   users.changeUserInfo(form);
 });
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -7161,7 +7168,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57060" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55059" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
