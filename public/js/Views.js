@@ -131,7 +131,7 @@ export const loadSearchResults = (data) => {
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
   data.forEach((result) => {
-    const markup = `<tr class='data-holder' data-userid=${result._id}>
+    const markup = `<tr class='data-holder' data-userid=${result.id}>
           <td>
             <img src='/img/users/${result.photo}' class='friendsPage__pic'></img>
           </td>

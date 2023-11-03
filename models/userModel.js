@@ -62,6 +62,17 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    // Define what fields to include when the document is transformed to JSON
+    return {
+      name: ret.name,
+      photo: ret.photo,
+      id: ret._id,
+    };
+  },
+});
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   this.password = await bcrypt.hash(this.password, 12);
@@ -69,18 +80,18 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'friendRequests',
-    select: 'name photo',
-  });
-  next();
-  this.populate({
-    path: 'friends',
-    select: 'name photo',
-  });
-  next();
-});
+// userSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'friendRequests',
+//     select: 'name photo',
+//   });
+//   next();
+//   this.populate({
+//     path: 'friends',
+//     select: 'name photo',
+//   });
+//   next();
+// });
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,

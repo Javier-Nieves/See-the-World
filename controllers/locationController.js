@@ -68,5 +68,9 @@ exports.deleteLocation = catchAsync(async (req, res, next) => {
 
 exports.allLocations = catchAsync(async (req, res, next) => {
   const locations = await Location.find();
-  res.status(200).json({ status: 'success', data: { locations } });
+  res.status(200).json({
+    status: 'success',
+    results: locations.length,
+    data: { locations },
+  });
 });

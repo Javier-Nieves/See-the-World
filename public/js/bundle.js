@@ -6638,7 +6638,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
   data.forEach(function (result) {
-    var markup = "<tr class='data-holder' data-userid=".concat(result._id, ">\n          <td>\n            <img src='/img/users/").concat(result.photo, "' class='friendsPage__pic'></img>\n          </td>\n          <td>").concat(result.name, "</td>\n          <td>Trips of this person</td>\n          </tr>");
+    var markup = "<tr class='data-holder' data-userid=".concat(result.id, ">\n          <td>\n            <img src='/img/users/").concat(result.photo, "' class='friendsPage__pic'></img>\n          </td>\n          <td>").concat(result.name, "</td>\n          <td>Trips of this person</td>\n          </tr>");
     container.insertAdjacentHTML('beforeend', markup);
   });
 };
@@ -6678,15 +6678,14 @@ function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          console.log('sending req..');
-          _context.next = 3;
+          _context.next = 2;
           return (0, _axios.default)({
             method: 'POST',
             url: 'http://127.0.0.1:3000/api/v1/users/search',
             data: data
           });
 
-        case 3:
+        case 2:
           res = _context.sent;
 
           if (res.data.status === 'success') {
@@ -6694,7 +6693,7 @@ function () {
             Views.loadSearchResults(res.data.data.searchRes);
           }
 
-        case 5:
+        case 4:
         case "end":
           return _context.stop();
       }
@@ -7066,7 +7065,6 @@ if (newTripForm || editTripForm) {
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
   e.preventDefault();
-  console.log('look for friend...');
   var query = document.querySelector('.friendsPage__input-name').value;
   users.friendSearch({
     query: query
@@ -7168,7 +7166,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55059" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49655" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -104,7 +104,6 @@ if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (friendSearchForm)
   friendSearchForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('look for friend...');
     const query = document.querySelector('.friendsPage__input-name').value;
     users.friendSearch({ query });
   });

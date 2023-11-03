@@ -53,17 +53,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.search = catchAsync(async (req, res, next) => {
-  try {
-    console.log('searching..');
-    //   .populate({path: 'reviews',fields: 'review rating user '});
-    const searchRes = await User.find({
-      name: { $regex: new RegExp(req.body.query, 'i') },
-    }).select('-password -__v -slug -role -active');
-    console.log('response', res);
-    res.status(200).json({ status: 'success', data: { searchRes } });
-  } catch (err) {
-    console.error('error', err);
-  }
+  //   .populate({path: 'reviews',fields: 'review rating user '});
+  // prettier-ignore
+  const searchRes = await User.find({name: { $regex: new RegExp(req.body.query, 'i') } });
+  res.status(200).json({ status: 'success', data: { searchRes } });
 });
 
 exports.friendRequest = catchAsync(async (req, res, next) => {

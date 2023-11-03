@@ -18,7 +18,7 @@ exports.index = catchAsync(async (req, res) => {
   if (req.params.userId) ({ userId } = req.params);
   else userId = visitorId;
 
-  const owner = await User.findById(userId);
+  const owner = await User.findById(userId).populate({ path: 'friends' });
   if (userId !== visitorId) visitor = await User.findById(visitorId);
   else visitor = owner;
 
@@ -37,17 +37,20 @@ exports.login = (req, res) => {
   });
 };
 
-exports.myProfile = (req, res) => {
+exports.myProfile = async (req, res) => {
   res.status(200).render('userProfile', {
     title: 'My profile',
     user: res.locals.user,
   });
 };
 
-exports.myFriends = (req, res) => {
+exports.myFriends = async (req, res) => {
+  // prettier-ignore
+  let user = await User.findById(res.locals.user.id).populate({ path: 'friends' });
+  user = await user.populate({ path: 'friendRequests' });
   res.status(200).render('friendsPage', {
     title: 'My friends',
-    user: res.locals.user,
+    user,
   });
 };
 
