@@ -125,8 +125,10 @@ if (addFriendBtn)
 if (friendRequests)
   friendRequests.addEventListener('click', (e) => {
     const userId = e.target.dataset.userid;
-    console.log('userid is ', userId);
-    users.friendRequest({ userId, action: 'accept' });
+    users.friendRequest(
+      { userId, action: 'accept' },
+      e.target.closest('.friendsPage__friendContainer'),
+    );
   });
 
 const addTraveler = (event) => {

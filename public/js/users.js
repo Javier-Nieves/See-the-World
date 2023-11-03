@@ -15,15 +15,16 @@ export const friendSearch = async (data) => {
   }
 };
 
-export const friendRequest = async (data) => {
+export const friendRequest = async (data, element) => {
   const res = await axios({
     method: 'POST',
     url: 'http://127.0.0.1:3000/api/v1/users/friends',
     data,
   });
   if (res.data.status === 'success') {
-    console.log('Results: ');
-    // Views.loadSearchResults(res.data.data.searchRes);
+    // todo - message
+    // move friend from 'requests' field to 'friends' field
+    Views.createFriend(element);
   }
 };
 
@@ -35,7 +36,8 @@ export const changeUserInfo = async (data) => {
     data,
   });
   if (res.data.status === 'success') {
-    console.log('Results: ');
+    console.log('success!');
+    location.reload(true);
     // Views.loadSearchResults(res.data.data.searchRes);
   }
 };

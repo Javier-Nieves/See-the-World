@@ -6544,7 +6544,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removePopup = exports.loadSearchResults = exports.displayLocationInfo = exports.add_marker = exports.activateGeocoder = void 0;
+exports.removePopup = exports.loadSearchResults = exports.displayLocationInfo = exports.createFriend = exports.add_marker = exports.activateGeocoder = void 0;
 
 var _mapboxController = require("./mapboxController");
 
@@ -6642,6 +6642,12 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
     container.insertAdjacentHTML('beforeend', markup);
   });
 };
+
+var createFriend = exports.createFriend = function createFriend(element) {
+  element.querySelector('button').remove();
+  var parent = document.querySelector('.friendsPage__friendsContainer');
+  parent.insertAdjacentElement('beforeend', element);
+};
 },{"./mapboxController":"mapboxController.js"}],"users.js":[function(require,module,exports) {
 "use strict";
 
@@ -6710,7 +6716,7 @@ var friendRequest = exports.friendRequest =
 function () {
   var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee2(data) {
+  _regeneratorRuntime().mark(function _callee2(data, element) {
     var res;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -6726,7 +6732,9 @@ function () {
           res = _context2.sent;
 
           if (res.data.status === 'success') {
-            console.log('Results: '); // Views.loadSearchResults(res.data.data.searchRes);
+            // todo - message
+            // move friend from 'requests' field to 'friends' field
+            Views.createFriend(element);
           }
 
         case 4:
@@ -6736,7 +6744,7 @@ function () {
     }, _callee2);
   }));
 
-  return function friendRequest(_x2) {
+  return function friendRequest(_x2, _x3) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -6763,7 +6771,8 @@ function () {
           res = _context3.sent;
 
           if (res.data.status === 'success') {
-            console.log('Results: '); // Views.loadSearchResults(res.data.data.searchRes);
+            console.log('success!');
+            location.reload(true); // Views.loadSearchResults(res.data.data.searchRes);
           }
 
         case 5:
@@ -6773,7 +6782,7 @@ function () {
     }, _callee3);
   }));
 
-  return function changeUserInfo(_x3) {
+  return function changeUserInfo(_x4) {
     return _ref3.apply(this, arguments);
   };
 }();
@@ -7085,11 +7094,10 @@ if (addFriendBtn) addFriendBtn.addEventListener('click', function () {
 });
 if (friendRequests) friendRequests.addEventListener('click', function (e) {
   var userId = e.target.dataset.userid;
-  console.log('userid is ', userId);
   users.friendRequest({
     userId: userId,
     action: 'accept'
-  });
+  }, e.target.closest('.friendsPage__friendContainer'));
 });
 
 var addTraveler = function addTraveler(event) {

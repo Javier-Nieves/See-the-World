@@ -141,3 +141,9 @@ export const loadSearchResults = (data) => {
     container.insertAdjacentHTML('beforeend', markup);
   });
 };
+
+export const createFriend = (element) => {
+  element.querySelector('button').remove();
+  const parent = document.querySelector('.friendsPage__friendsContainer');
+  parent.insertAdjacentElement('beforeend', element);
+};

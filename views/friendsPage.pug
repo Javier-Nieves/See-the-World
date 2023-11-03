@@ -3,7 +3,7 @@ extends base
 block content
   h1= user.name
   .flex-container
-    .flex-column
+    .flex-column.friendsPage__friendsContainer
       h2 Friends:
       each person of user.friends
         .friendsPage__friendContainer.flex-container
