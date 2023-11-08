@@ -18,12 +18,21 @@ exports.index = catchAsync(async (req, res) => {
   if (req.params.userId) ({ userId } = req.params);
   else userId = visitorId;
 
-  const owner = await User.findById(userId).populate({ path: 'friends' });
-  if (userId !== visitorId) visitor = await User.findById(visitorId);
-  else visitor = owner;
+  const owner = await User.findById(userId); //.populate({ path: 'friends' });
+  if (userId !== visitorId) {
+    // find visitor user
+    visitor = await User.findById(visitorId);
+    // if it's a friend of the owner - show private tours
+    // owner.friends.includes(visitorId) &&
+  } else visitor = owner;
+  // owner
 
   // todo - change createdBy to 'in the travelers array'
-  const trips = await Trip.find({ createdBy: userId });
+  const trips = await Trip.find({
+    createdBy: userId,
+    private: false,
+  });
+  console.log(owner);
   res.status(200).render('index', {
     owner,
     visitor,
@@ -57,16 +66,19 @@ exports.myFriends = async (req, res) => {
 exports.getTrip = catchAsync(async (req, res) => {
   const { tripId } = req.params;
   const trip = await Trip.findById(tripId);
+  // sending visitorId to decide if they could change trip info
+  const visitorId = res.locals?.user?.id;
   res.status(200).render('trip', {
     title: `${trip.name}`,
     trip,
+    visitorId,
   });
 });
 
 exports.fillTripInfo = catchAsync(async (req, res) => {
   let title;
   let trip = '';
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).populate({ path: 'friends' });
   if (req.url.includes('edit')) {
     title = 'Edit trip info';
     const { tripId } = req.params;

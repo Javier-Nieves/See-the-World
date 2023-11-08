@@ -6,9 +6,10 @@ block content
     .flex-column.friendsPage__friendsContainer
       h2 Friends:
       each person of user.friends
-        .friendsPage__friendContainer.flex-container
-          img(src=`/img/users/${person.photo}` class='friendsPage__picSmall')
-          .friendsPage__text= person.name
+        a(href=`/users/${person.id}`)
+          .friendsPage__friendContainer.flex-container
+            img(src=`/img/users/${person.photo}` class='friendsPage__picSmall')
+            .friendsPage__text= person.name
     .vertical-line
 
     .flex-column.friendsPage__friendRequests

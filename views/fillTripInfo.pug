@@ -17,6 +17,7 @@ block content
     h1= title
     form.flex-column.newTrip__form(id=`${trip ? 'editTripForm' : 'newTripForm'}` data-tripid=`${trip.id}`)
       .newTrip__container
+        //- edit existing trip:
         if trip
           - const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
           - const formattedDate = trip.date.toLocaleDateString('en-CA', options);
@@ -27,6 +28,7 @@ block content
           +inputBlock('With:', 'text', "Type your friend's name", false, '')(class='newTrip__input-with')
           +inputBlock('Description:', 'textarea', 'Trip details, your impressions', false, `${trip.description ? trip.description : '-'}`)(class='newTrip__input-description')
           +inputBlock('Show only to your friends:', 'checkbox', '', false, `${trip.private}`)(class='newTrip__checkbox')
+        //- create new trip:
         else
           +inputBlock('Name of the trip:', 'text', 'Awesome summer Europe trip', true, '')(class='newTrip__input-name')
           +inputBlock('Starting date:', 'date', '', true, '')(class='newTrip__input-date')
@@ -35,7 +37,6 @@ block content
           .flex-column.newTrip__with-container
             .flex-container.newTrip__textLine
               .newTrip__text With:
-              //- +inputBlock('With:', 'text', "Type your friend's name", false, '')(class='newTrip__input-with')
               input(type="text" class="newTrip__input-with" list="travelersList" placeholder="Friend's name")
               datalist(id="travelersList")
                 each friend of user.friends
