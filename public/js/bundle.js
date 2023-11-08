@@ -6638,7 +6638,7 @@ var loadSearchResults = exports.loadSearchResults = function loadSearchResults(d
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
   data.forEach(function (result) {
-    var markup = "<tr class='data-holder' data-userid=".concat(result.id, ">\n          <td>\n            <img src='/img/users/").concat(result.photo, "' class='friendsPage__pic'></img>\n          </td>\n          <td>").concat(result.name, "</td>\n          <td>Trips of this person</td>\n          </tr>");
+    var markup = "<tr class='data-holder' data-userid=".concat(result._id, ">\n          <td>\n            <img src='/img/users/").concat(result.photo, "' class='friendsPage__pic'></img>\n          </td>\n          <td>").concat(result.name, "</td>\n          <td>Trips of this person</td>\n          </tr>");
     container.insertAdjacentHTML('beforeend', markup);
   });
 };

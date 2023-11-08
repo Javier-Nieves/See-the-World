@@ -62,16 +62,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.set('toJSON', {
-  transform: function (doc, ret) {
-    // Define what fields to include when the document is transformed to JSON
-    return {
-      name: ret.name,
-      photo: ret.photo,
-      id: ret._id,
-    };
-  },
-});
+// userSchema.set('toJSON', {
+//   transform: function (doc, ret) {
+//     // Define what fields to include when the document is transformed to JSON
+//     return {
+//       name: ret.name,
+//       photo: ret.photo,
+//       id: ret._id,
+//     };
+//   },
+// });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

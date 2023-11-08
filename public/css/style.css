@@ -47,6 +47,14 @@ h1 {
     font-size: 18px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+.indexPage_friendLogo {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    margin-left: 15px;
+    font-size: 20px;
+    background-color: aquamarine;
+}
 .main-container {
     width: 100vw;
     padding: 0;
