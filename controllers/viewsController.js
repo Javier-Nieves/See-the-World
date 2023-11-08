@@ -7,6 +7,7 @@ exports.index = catchAsync(async (req, res) => {
   const visitorId = res.locals?.user?.id;
   let userId;
   let visitor;
+  let trips;
   // if user is not authentificated
   if (!res.locals.user)
     res.status(200).render('startPage', {
@@ -18,21 +19,24 @@ exports.index = catchAsync(async (req, res) => {
   if (req.params.userId) ({ userId } = req.params);
   else userId = visitorId;
 
-  const owner = await User.findById(userId); //.populate({ path: 'friends' });
+  const owner = await User.findById(userId);
+
+  //? visiting user's page:
   if (userId !== visitorId) {
     // find visitor user
     visitor = await User.findById(visitorId);
-    // if it's a friend of the owner - show private tours
-    // owner.friends.includes(visitorId) &&
-  } else visitor = owner;
-  // owner
+    // if it's a friend of the owner - show private tours also
+    // todo - change createdBy to 'in the travelers array'
+    if (owner.friends.includes(visitorId))
+      trips = await Trip.find({ createdBy: userId });
+    else trips = await Trip.find({ createdBy: userId, private: false });
 
-  // todo - change createdBy to 'in the travelers array'
-  const trips = await Trip.find({
-    createdBy: userId,
-    private: false,
-  });
-  console.log(owner);
+    //? my own page:
+  } else {
+    visitor = owner;
+    trips = await Trip.find({ createdBy: userId });
+  }
+
   res.status(200).render('index', {
     owner,
     visitor,
