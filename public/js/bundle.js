@@ -7063,7 +7063,7 @@ if (newTripForm || editTripForm) {
       highlight: document.querySelector('.newTrip__input-highlight').value,
       description: document.querySelector('.newTrip__input-description').value,
       friendsOnly: document.querySelector('.newTrip__checkbox').checked,
-      travelers: travelers
+      travelers: Array.from(travelers)
     };
     filledForm === newTripForm && trips.changeTrip(data); // prettier-ignore
 
@@ -7115,6 +7115,7 @@ var addTraveler = function addTraveler(event) {
     withSelector.value = '';
     if (travelers.has(friendId)) return;
     travelers.add(friendId);
+    console.log('adding friend', friendId);
   } // adding user block to the page
 
 
