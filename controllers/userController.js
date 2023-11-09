@@ -28,6 +28,7 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
   next();
 });
 
+// todo - make a separate file, use to filter all bodies
 const filterBody = (obj, ...allowedFields) => {
   // clear all unwanted fields from an object. For security
   const newObj = {};

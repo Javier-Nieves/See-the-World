@@ -6759,15 +6759,14 @@ function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          console.log('before send', data);
-          _context3.next = 3;
+          _context3.next = 2;
           return (0, _axios.default)({
             method: 'PATCH',
             url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
             data: data
           });
 
-        case 3:
+        case 2:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
@@ -6775,7 +6774,7 @@ function () {
             location.reload(true); // Views.loadSearchResults(res.data.data.searchRes);
           }
 
-        case 5:
+        case 4:
         case "end":
           return _context3.stop();
       }
@@ -6820,15 +6819,17 @@ function () {
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
             url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
-            // todo - simplify. Just 'data'
+            // method: 'POST',
+            // url: 'http://127.0.0.1:3000/api/v1/trips',
             data: {
-              name: data.name,
-              date: data.date,
-              duration: data.duration,
-              description: data.description,
-              highlight: data.highlight,
-              travelers: data.travelers,
-              private: data.friendsOnly
+              name: data.get('name'),
+              date: data.get('date'),
+              duration: data.get('duration'),
+              description: data.get('description'),
+              highlight: data.get('highlight'),
+              travelers: data.get('travelers'),
+              private: data.get('private'),
+              coverImage: data.get('coverImage')
             }
           });
 
@@ -7056,18 +7057,24 @@ if (newTripForm || editTripForm) {
   var filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var data = {
-      name: document.querySelector('.newTrip__input-name').value,
-      date: document.querySelector('.newTrip__input-date').value,
-      duration: document.querySelector('.newTrip__input-duration').value,
-      highlight: document.querySelector('.newTrip__input-highlight').value,
-      description: document.querySelector('.newTrip__input-description').value,
-      friendsOnly: document.querySelector('.newTrip__checkbox').checked,
-      travelers: Array.from(travelers)
-    };
-    filledForm === newTripForm && trips.changeTrip(data); // prettier-ignore
+    var form = new FormData();
+    form.append('name', document.querySelector('.newTrip__input-name').value);
+    form.append('date', document.querySelector('.newTrip__input-date').value);
+    form.append('travelers', Array.from(travelers)); // prettier-ignore
 
-    filledForm === editTripForm && trips.changeTrip(data, filledForm.dataset.tripid);
+    form.append('duration', document.querySelector('.newTrip__input-duration').value); // prettier-ignore
+
+    form.append('highlight', document.querySelector('.newTrip__input-highlight').value); // prettier-ignore
+
+    form.append('description', document.querySelector('.newTrip__input-description').value); // prettier-ignore
+
+    form.append('private', document.querySelector('.newTrip__checkbox').checked); // prettier-ignore
+
+    form.append('coverImage', document.querySelector('.newTrip__tripPhotoBtn').files[0]); // form.forEach((el) => console.log('before: ', el));
+
+    filledForm === newTripForm && trips.changeTrip(form); // prettier-ignore
+
+    filledForm === editTripForm && trips.changeTrip(form, filledForm.dataset.tripid);
   });
 }
 
@@ -7144,7 +7151,6 @@ if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
   form.append('email', document.querySelector('.userProfile__changeEmail').value); // prettier-ignore
 
   form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
-  console.log('go change');
   users.changeUserInfo(form);
 });
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {

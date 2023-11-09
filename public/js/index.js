@@ -84,18 +84,24 @@ if (newTripForm || editTripForm) {
   const filledForm = newTripForm || editTripForm;
   filledForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const data = {
-      name: document.querySelector('.newTrip__input-name').value,
-      date: document.querySelector('.newTrip__input-date').value,
-      duration: document.querySelector('.newTrip__input-duration').value,
-      highlight: document.querySelector('.newTrip__input-highlight').value,
-      description: document.querySelector('.newTrip__input-description').value,
-      friendsOnly: document.querySelector('.newTrip__checkbox').checked,
-      travelers: Array.from(travelers),
-    };
-    filledForm === newTripForm && trips.changeTrip(data);
+    const form = new FormData();
+    form.append('name', document.querySelector('.newTrip__input-name').value);
+    form.append('date', document.querySelector('.newTrip__input-date').value);
+    form.append('travelers', Array.from(travelers));
     // prettier-ignore
-    filledForm === editTripForm && trips.changeTrip(data, filledForm.dataset.tripid);
+    form.append('duration', document.querySelector('.newTrip__input-duration').value);
+    // prettier-ignore
+    form.append('highlight', document.querySelector('.newTrip__input-highlight').value);
+    // prettier-ignore
+    form.append('description', document.querySelector('.newTrip__input-description').value);
+    // prettier-ignore
+    form.append('private', document.querySelector('.newTrip__checkbox').checked);
+    // prettier-ignore
+    form.append('coverImage', document.querySelector('.newTrip__tripPhotoBtn').files[0]);
+    // form.forEach((el) => console.log('before: ', el));
+    filledForm === newTripForm && trips.changeTrip(form);
+    // prettier-ignore
+    filledForm === editTripForm && trips.changeTrip(form, filledForm.dataset.tripid);
   });
 }
 
@@ -175,6 +181,5 @@ if (userInfoForm)
     form.append('email', document.querySelector('.userProfile__changeEmail').value);
     // prettier-ignore
     form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
-    console.log('go change');
     users.changeUserInfo(form);
   });

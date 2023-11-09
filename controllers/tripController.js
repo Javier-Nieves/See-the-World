@@ -3,6 +3,16 @@ const AppError = require('../utils/appError');
 const Trip = require('../models/tripModel');
 const Location = require('../models/locationModel');
 
+// todo - will be separate
+const filterBody = (obj, ...allowedFields) => {
+  // clear all unwanted fields from an object. For security
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
 exports.getAllTrips = catchAsync(async (req, res, next) => {
   const trips = await Trip.find();
   res
@@ -11,10 +21,25 @@ exports.getAllTrips = catchAsync(async (req, res, next) => {
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
-  if (!req.body.travelers) req.body.travelers = [];
-  req.body.travelers.push(req.user.id);
-  req.body.createdBy = req.user.id;
-  const newTrip = await Trip.create(req.body);
+  const filteredBody = filterBody(
+    req.body,
+    'name',
+    'date',
+    'travelers',
+    'duration',
+    'highlight',
+    'description',
+    'private',
+    'coverImage',
+  );
+  filteredBody.travelers = filteredBody.travelers.split(',');
+  filteredBody.travelers.push(req.user.id);
+  filteredBody.createdBy = req.user.id;
+
+  if (filteredBody.coverImage === 'undefined')
+    filteredBody.coverImage = undefined;
+
+  const newTrip = await Trip.create(filteredBody);
   res.status(201).json({ status: 'success', data: { newTrip } });
 });
 

@@ -47,6 +47,9 @@ h1 {
     font-size: 18px;
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+.nav__user-img {
+    width: 3vw;
+}
 .indexPage_friendLogo {
     border: 1px solid black;
     border-radius: 3px;
@@ -253,7 +256,8 @@ tbody tr:hover {
 .trip-info__buttons-container {
     gap: 5vw;
 }
-.newTrip__nextBtn, .index__add-btn, .locations__center-btn, .userProfile__saveBtn, .userProfile__deleteBtn {
+.newTrip__nextBtn, .index__add-btn, .locations__center-btn, .userProfile__saveBtn, 
+.userProfile__deleteBtn, .newTrip__tripPhotoBtn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
@@ -304,6 +308,7 @@ tbody tr:hover {
 /*! New Trip page */
 .newTrip__container {
     padding: 8px;
+    margin-left: 10vw;
     background-color: rgba(255, 200, 0, 0.32);
     border: 2px solid grey;
     border-radius: 10px;
@@ -350,11 +355,13 @@ tbody tr:hover {
 .newTrip__deleteTraveler {
     font-size: 15px;
     font-weight: 600;
-  }
+}
 .newTrip__deleteTraveler:hover {
     cursor: pointer;
-  }
-
+}
+.newTrip__tripImage {
+    width: 20vw;
+}
 /* new locations page */
 .locationsMap {
     height: 90vh;

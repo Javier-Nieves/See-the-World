@@ -7,18 +7,19 @@ export const changeTrip = async (data, tripId) => {
     url: tripId
       ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
       : 'http://127.0.0.1:3000/api/v1/trips',
-    // todo - simplify. Just 'data'
+    // method: 'POST',
+    // url: 'http://127.0.0.1:3000/api/v1/trips',
     data: {
-      name: data.name,
-      date: data.date,
-      duration: data.duration,
-      description: data.description,
-      highlight: data.highlight,
-      travelers: data.travelers,
-      private: data.friendsOnly,
+      name: data.get('name'),
+      date: data.get('date'),
+      duration: data.get('duration'),
+      description: data.get('description'),
+      highlight: data.get('highlight'),
+      travelers: data.get('travelers'),
+      private: data.get('private'),
+      coverImage: data.get('coverImage'),
     },
   });
-
   if (res.data.status === 'success') {
     tripId
       ? console.log('Trip is modified')
