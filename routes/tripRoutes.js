@@ -7,10 +7,12 @@ const router = express.Router();
 
 router.use('/:tripId/locations', locationRouter);
 
-router
-  .route('/')
-  .get(tripController.getAllTrips)
-  .post(authController.protect, tripController.createTrip);
+router.route('/').get(tripController.getAllTrips).post(
+  authController.protect,
+  // tripController.uploadImages,
+  // tripController.resizeImages,
+  tripController.createTrip,
+);
 
 router
   .route('/:tripId')

@@ -7,8 +7,6 @@ export const changeTrip = async (data, tripId) => {
     url: tripId
       ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
       : 'http://127.0.0.1:3000/api/v1/trips',
-    // method: 'POST',
-    // url: 'http://127.0.0.1:3000/api/v1/trips',
     data: {
       name: data.get('name'),
       date: data.get('date'),
