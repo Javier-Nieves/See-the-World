@@ -6,7 +6,7 @@ block content
     form.flex-column.userProfile__infoTable
       .flex-column
         img(src=`/img/users/${user.photo}` class='userProfile__userPhoto').userProfile__parameter
-        input(type='file' class='userProfile__changePhoto' id='photo', name='photo' accept='image/*')
+        input(type='file' class='userProfile__changePhoto' accept='image/*')
       .flex-container.userProfile__parameter-container
         .userProfile__simple-text Name:
         input(class='userProfile__changeName' type='text' value= user.name)

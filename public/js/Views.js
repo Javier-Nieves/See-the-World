@@ -20,10 +20,10 @@ export const add_marker = (event, handler) => {
     .setLngLat(coordinates)
     .setHTML(
       `<form class='newLocation__popup-form'>
-        <input type='text' class='newLocation__popup-name' placeholder='Name' name='name'>
-        <input type='text' class='newLocation__popup-address' placeholder='Address' name='address'>
-        <input type='text' class='newLocation__popup-desc' placeholder='Description' name='desc'>
-        <input type='file' accept='image/*' id='images' multiple name='images'>
+        <input type='text' class='newLocation__popup-name' placeholder='Name'>
+        <input type='text' class='newLocation__popup-address' placeholder='Address'>
+        <input type='text' class='newLocation__popup-desc' placeholder='Description'>
+        <input type='file' accept='image/*' id='images' multiple>
         <input type='submit' value='Add location'>
       </form>`,
     )

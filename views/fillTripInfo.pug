@@ -20,7 +20,7 @@ block content
         .flex-container
           .flex-column.newTrip__tripPicture-container
             img(src=`/img/trips/default-trip.jpeg` class='newTrip__tripImage')
-            input(type='file' class='newTrip__tripPhotoBtn')
+            input(type='file' class='newTrip__tripPhotoBtn' accept='image/*')
           .flex-column
             //- edit existing trip:
             if trip

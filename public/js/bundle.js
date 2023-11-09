@@ -6566,7 +6566,7 @@ var add_marker = exports.add_marker = function add_marker(event, handler) {
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
     closeOnClick: false
-  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name' name='name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address' name='address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description' name='desc'>\n        <input type='file' accept='image/*' id='images' multiple name='images'>\n        <input type='submit' value='Add location'>\n      </form>").addTo(_mapboxController.map);
+  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='file' accept='image/*' id='images' multiple>\n        <input type='submit' value='Add location'>\n      </form>").addTo(_mapboxController.map);
   addHandler(popup, handler);
 };
 
@@ -6819,16 +6819,7 @@ function () {
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
             url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
-            data: {
-              name: data.get('name'),
-              date: data.get('date'),
-              duration: data.get('duration'),
-              description: data.get('description'),
-              highlight: data.get('highlight'),
-              travelers: data.get('travelers'),
-              private: data.get('private'),
-              coverImage: data.get('coverImage')
-            }
+            data: data
           });
 
         case 2:

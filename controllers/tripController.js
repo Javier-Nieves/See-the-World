@@ -21,23 +21,14 @@ exports.getAllTrips = catchAsync(async (req, res, next) => {
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
-  const filteredBody = filterBody(
-    req.body,
-    'name',
-    'date',
-    'travelers',
-    'duration',
-    'highlight',
-    'description',
-    'private',
-    'coverImage',
-  );
-  filteredBody.travelers = filteredBody.travelers.split(',');
+  // prettier-ignore
+  const filteredBody = filterBody(req.body, 'name', 'date', 'travelers', 'duration',
+                                            'highlight', 'description', 'private' );
+  if (req.file) filteredBody.coverImage = req.file.filename;
+  // prettier-ignore
+  filteredBody.travelers = filteredBody.travelers ? filteredBody.travelers.split(',') : [];
   filteredBody.travelers.push(req.user.id);
   filteredBody.createdBy = req.user.id;
-
-  if (filteredBody.coverImage === 'undefined')
-    filteredBody.coverImage = undefined;
 
   const newTrip = await Trip.create(filteredBody);
   res.status(201).json({ status: 'success', data: { newTrip } });

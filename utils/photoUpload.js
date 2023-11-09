@@ -12,19 +12,24 @@ const multerFilter = (req, file, cb) => {
 };
 const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
+// when uploading - FormData should be send to the server and
+// 'photo' is the name in the FormData. NOT in the HTML
 exports.uploadOneImage = upload.single('photo');
+exports.uploadCoverImage = upload.single('coverImage');
 
 exports.uploadImages = upload.array('images', 10);
 
 exports.resizeOneImage = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
+  //   const saveTo = 'users';
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
   await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+    // .toFile(`public/img/users/${req.file.filename}`);
+    .toFile(`public/img/trips/${req.file.filename}`);
 
   next();
 });
