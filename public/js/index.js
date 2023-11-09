@@ -98,7 +98,6 @@ if (newTripForm || editTripForm) {
     form.append('private', document.querySelector('.newTrip__checkbox').checked);
     // prettier-ignore
     form.append('coverImage', document.querySelector('.newTrip__tripPhotoBtn').files[0]);
-    // form.forEach((el) => console.log('before: ', el));
     filledForm === newTripForm && trips.changeTrip(form);
     // prettier-ignore
     filledForm === editTripForm && trips.changeTrip(form, filledForm.dataset.tripid);
@@ -149,7 +148,6 @@ const addTraveler = (event) => {
     withSelector.value = '';
     if (travelers.has(friendId)) return;
     travelers.add(friendId);
-    console.log('adding friend', friendId);
   }
   // adding user block to the page
   const markup = `<div class='flex-container newTrip__friendIcon' data-friendid=${friendId}>
