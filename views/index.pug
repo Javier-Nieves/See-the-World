@@ -16,8 +16,14 @@ block content
   .cardContainer
     each trip in trips
       a(class='cardLink' href=`/trips/${trip.id}`)
-        article(class='tripCard' data-tripId=`${trip.id}`)
+        article(class='tripCard flex-column' data-tripId=`${trip.id}`)
           img.tripCard__picture(src=`/img/trips/${trip.coverImage}`, alt=`${trip.name}`)
-          h2= trip.name
-          .tripCard__date= `Trip date: ${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}`
+          .tripCard__date= `${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}`
+          .tripCard__date= trip.duration
+          .tripCard__name= trip.name
           .tripCard__highlight= trip.highlight
+          .tripCard__with-cardContainer.flex-container
+            each traveler in trip.travelers
+              .tooltip
+                img(src=`/img/users/${traveler.photo}` class='tripCard__user-photo')
+                span.tooltiptext= traveler.name
