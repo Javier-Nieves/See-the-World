@@ -24,8 +24,8 @@ router
   .patch(
     authController.protect,
     // authController.restrictTo('admin', 'lead-guide'),
-    // tripController.uploadTripImages,
-    // tripController.resizeTripImages,
+    photoUpload.uploadCoverImage,
+    photoUpload.resizeOneImage,
     tripController.updateTrip,
   )
   .delete(authController.protect, tripController.deleteTrip);

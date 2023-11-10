@@ -40,7 +40,13 @@ exports.getTrip = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTrip = catchAsync(async (req, res, next) => {
-  const trip = await Trip.findByIdAndUpdate(req.params.tripId, req.body, {
+  // prettier-ignore
+  const filteredBody = filterBody(req.body, 'name', 'date', 'travelers', 'duration',
+                                            'highlight', 'description', 'private' );
+  filteredBody.travelers = filteredBody.travelers.split(',');
+  if (req.file) filteredBody.coverImage = req.file.filename;
+
+  const trip = await Trip.findByIdAndUpdate(req.params.tripId, filteredBody, {
     new: true,
     runValidators: true,
   });

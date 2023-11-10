@@ -7044,6 +7044,7 @@ if (newTripForm || editTripForm) {
     return addTraveler(e);
   });
   var filledForm = newTripForm || editTripForm;
+  if (filledForm === editTripForm) findExistingTravelers();
   filledForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var form = new FormData();
@@ -7140,6 +7141,12 @@ if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
   form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
   users.changeUserInfo(form);
 });
+
+function findExistingTravelers() {
+  document.querySelectorAll('.newTrip__friendIcon').forEach(function (container) {
+    travelers.add(container.dataset.friendid);
+  });
+}
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

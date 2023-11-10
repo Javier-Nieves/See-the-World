@@ -82,6 +82,7 @@ if (deleteLocationBtn)
 if (newTripForm || editTripForm) {
   withSelector.addEventListener('change', (e) => addTraveler(e));
   const filledForm = newTripForm || editTripForm;
+  if (filledForm === editTripForm) findExistingTravelers();
   filledForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const form = new FormData();
@@ -181,3 +182,9 @@ if (userInfoForm)
     form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
     users.changeUserInfo(form);
   });
+
+function findExistingTravelers() {
+  document.querySelectorAll('.newTrip__friendIcon').forEach((container) => {
+    travelers.add(container.dataset.friendid);
+  });
+}

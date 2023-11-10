@@ -18,25 +18,24 @@ exports.index = catchAsync(async (req, res) => {
   // otherwise logged in user's trips will be shown
   if (req.params.userId) ({ userId } = req.params);
   else userId = visitorId;
-
   const owner = await User.findById(userId);
 
-  //? visiting user's page:
+  //! visiting user's page:
   if (userId !== visitorId) {
     // find visitor user
     visitor = await User.findById(visitorId);
     // if it's a friend of the owner - show private tours also
-    // todo - change createdBy to 'in the travelers array'
     if (owner.friends.includes(visitorId))
-      trips = await Trip.find({ createdBy: userId });
-    else trips = await Trip.find({ createdBy: userId, private: false });
-
-    //? my own page:
+      // todo - change createdBy to 'in the travelers array'
+      // trips = await Trip.find({ createdBy: userId });
+      trips = await Trip.find({ travelers: { $in: [userId] } });
+    else
+      trips = await Trip.find({ travelers: { $in: [userId] }, private: false });
+    //! my own page:
   } else {
     visitor = owner;
-    trips = await Trip.find({ createdBy: userId });
+    trips = await Trip.find({ travelers: { $in: [userId] } });
   }
-
   res.status(200).render('index', {
     owner,
     visitor,
