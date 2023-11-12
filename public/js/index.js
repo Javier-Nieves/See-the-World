@@ -184,7 +184,7 @@ if (userInfoForm)
   });
 
 function findExistingTravelers() {
-  document.querySelectorAll('.newTrip__friendIcon').forEach((container) => {
-    travelers.add(container.dataset.friendid);
-  });
+  document
+    .querySelectorAll('.newTrip__friendIcon')
+    .forEach((container) => travelers.add(container.dataset.friendid));
 }

@@ -7144,7 +7144,7 @@ if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
 
 function findExistingTravelers() {
   document.querySelectorAll('.newTrip__friendIcon').forEach(function (container) {
-    travelers.add(container.dataset.friendid);
+    return travelers.add(container.dataset.friendid);
   });
 }
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
