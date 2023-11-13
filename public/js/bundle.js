@@ -6109,7 +6109,7 @@ function () {
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            tripId ? location.assign("http://127.0.0.1:3000/api/v1/trips/".concat(tripId)) //console.log('Trip is modified')
+            tripId ? location.assign("http://127.0.0.1:3000/trips/".concat(tripId)) //console.log('Trip is modified')
             : location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
           }
 
@@ -7038,7 +7038,7 @@ if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
 });
 
 if (newTripForm || editTripForm) {
-  withSelector.addEventListener('change', function (e) {
+  withSelector && withSelector.addEventListener('change', function (e) {
     return addTraveler(e);
   });
   var filledForm = newTripForm || editTripForm;
@@ -7130,6 +7130,7 @@ if (removeTravelerBtn) removeTravelerBtn.forEach(function (btn) {
 var removeTraveler = function removeTraveler(event) {
   var userElement = event.target.closest('.newTrip__friendIcon');
   var travelerId = userElement.dataset.friendid;
+  console.log('removing', travelerId);
   userElement.remove();
   travelers.delete(travelerId);
 };

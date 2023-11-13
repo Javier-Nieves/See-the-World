@@ -42,7 +42,7 @@ block content
                   each traveler of trip.travelers
                     .flex-container.newTrip__friendIcon(data-friendid=`${traveler._id}`)
                       span= traveler.name
-                      - if (user._id == trip.createdBy || user.name == traveler.name)
+                      - if ((user._id == trip.createdBy || user.name == traveler.name) && trip.travelers.length > 1)
                         span.newTrip__deleteTraveler &times
               +inputBlock('', 'textarea', 'Trip details, your impressions', false, `${trip.description ? trip.description : '-'}`)(class='newTrip__input-description')
               +inputBlock('Show only to your friends:', 'checkbox', '', false, `${trip.private}`)(class='newTrip__checkbox')

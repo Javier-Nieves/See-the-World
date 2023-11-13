@@ -86,7 +86,8 @@ if (deleteLocationBtn)
   });
 
 if (newTripForm || editTripForm) {
-  withSelector.addEventListener('change', (e) => addTraveler(e));
+  withSelector &&
+    withSelector.addEventListener('change', (e) => addTraveler(e));
   const filledForm = newTripForm || editTripForm;
   if (filledForm === editTripForm) findExistingTravelers();
   filledForm.addEventListener('submit', (e) => {
@@ -178,6 +179,7 @@ if (removeTravelerBtn)
 const removeTraveler = (event) => {
   const userElement = event.target.closest('.newTrip__friendIcon');
   const travelerId = userElement.dataset.friendid;
+  console.log('removing', travelerId);
   userElement.remove();
   travelers.delete(travelerId);
 };
