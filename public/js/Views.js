@@ -84,6 +84,7 @@ const generateMarkup = (info) => {
     gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
 
   if (window.location.href.includes('locations')) {
+    // clicking on the location on the "Add locations page"
     markup = `
     <h2 class='location-data-holder' data-locationid=${info.id}>Change location info</h2>
     <div class='flex-container'>
@@ -112,6 +113,7 @@ const generateMarkup = (info) => {
     </div>
     `;
   } else {
+    // clicking on the location on the trip's page:
     markup = `
     <h1>${info.name}</h1>
     <h2>${info.address}</h2>

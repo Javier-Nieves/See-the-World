@@ -298,9 +298,9 @@ tbody tr:hover {
     display: none;
     background-color: rgba(250, 235, 215, 0.94);
     width: 30vw;
-    height: 78vh;
+    height: 80vh;
     position: absolute;
-    top: 1vh;
+    top: 10vh;
     right: 1vh;
     border: 1px solid grey;
     border-radius: 10px;
@@ -327,6 +327,15 @@ tbody tr:hover {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+.marker {
+    background-image: url('/img/pin.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 120;
+  }
 
 /*! New Trip page */
 .newTrip__container {
@@ -385,9 +394,9 @@ tbody tr:hover {
 .newTrip__tripImage {
     width: 20vw;
 }
-/* new locations page */
+/*! new locations page */
 .locationsMap {
-    height: 90vh;
+    height: 100vh;
 }
 .locations__center-form > * {
     margin: 5px;
@@ -399,9 +408,10 @@ tbody tr:hover {
 }
 .locations__lower-block {
     margin-top: 80vh;
+    z-index: 10;
 }
 
-/* Footer */
+/*! Footer */
 .footer {
     background-color: #f7f7f7;
     font-size: 1.4rem;

@@ -19,10 +19,11 @@ export const displayMap = async (locations) => {
     // center: [-74.07, 4.64],
     // zoom: 11,
   });
-  // adding zoom buttons
-  map.addControl(new mapboxgl.NavigationControl());
   // adding scale
   map.addControl(new mapboxgl.ScaleControl());
+  // adding zoom buttons
+  const zoom = new mapboxgl.NavigationControl({ showCompass: false });
+  map.addControl(zoom, 'bottom-left');
   // change cursor
   map.getCanvas().style.cursor = 'crosshair';
 
@@ -120,6 +121,16 @@ const createLocationsLayer = () => {
   }
   // center map on clicked location (with padding to the right)
   map.on('click', 'locations', (e) => {
+    // console.log('removing ', document.querySelector('.marker'));
+    document.querySelector('.marker') &&
+      document.querySelector('.marker').remove();
+    // add marker to clicked location
+    const el = document.createElement('div');
+    el.className = 'marker';
+    new mapboxgl.Marker(el)
+      .setLngLat(e.features[0].geometry.coordinates)
+      .addTo(map);
+
     map.easeTo({
       center: e.features[0].geometry.coordinates,
       padding: { right: window.innerWidth * 0.2 },

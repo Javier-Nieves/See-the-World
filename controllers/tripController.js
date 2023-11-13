@@ -12,9 +12,11 @@ exports.getAllTrips = catchAsync(async (req, res, next) => {
 });
 
 exports.createTrip = catchAsync(async (req, res, next) => {
+  // only save fields are allowed:
   // prettier-ignore
   const filteredBody = filterBody(req.body, 'name', 'date', 'travelers', 'duration',
                                             'highlight', 'description', 'private' );
+  // add information about cover image
   if (req.file) filteredBody.coverImage = req.file.filename;
   // prettier-ignore
   filteredBody.travelers = filteredBody.travelers ? filteredBody.travelers.split(',') : [];
@@ -49,6 +51,7 @@ exports.deleteTrip = catchAsync(async (req, res, next) => {
   if (!trip) return next(new AppError('No document found with that ID', 404));
 
   await Location.deleteMany({ trip: req.params.tripId });
+  // todo - delete all photos (trip + all locations) at this point
 
   res.status(204).json({ status: 'success', data: null });
 });

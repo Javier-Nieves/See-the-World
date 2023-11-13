@@ -6393,6 +6393,7 @@ function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   _regeneratorRuntime().mark(function _callee2(locations) {
+    var zoom;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -6407,11 +6408,14 @@ function () {
             scrollZoom: window.location.href.includes('locations') // center: [-74.07, 4.64],
             // zoom: 11,
 
-          }); // adding zoom buttons
+          }); // adding scale
 
-          map.addControl(new mapboxgl.NavigationControl()); // adding scale
+          map.addControl(new mapboxgl.ScaleControl()); // adding zoom buttons
 
-          map.addControl(new mapboxgl.ScaleControl()); // change cursor
+          zoom = new mapboxgl.NavigationControl({
+            showCompass: false
+          });
+          map.addControl(zoom, 'bottom-left'); // change cursor
 
           map.getCanvas().style.cursor = 'crosshair';
           map.on('load',
@@ -6470,7 +6474,7 @@ function () {
             }, _callee);
           })));
 
-        case 8:
+        case 9:
         case "end":
           return _context2.stop();
       }
@@ -6571,6 +6575,12 @@ var createLocationsLayer = function createLocationsLayer() {
 
 
   map.on('click', 'locations', function (e) {
+    // console.log('removing ', document.querySelector('.marker'));
+    document.querySelector('.marker') && document.querySelector('.marker').remove(); // add marker to clicked location
+
+    var el = document.createElement('div');
+    el.className = 'marker';
+    new mapboxgl.Marker(el).setLngLat(e.features[0].geometry.coordinates).addTo(map);
     map.easeTo({
       center: e.features[0].geometry.coordinates,
       padding: {
@@ -6774,8 +6784,10 @@ var generateMarkup = function generateMarkup(info) {
   for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
 
   if (window.location.href.includes('locations')) {
+    // clicking on the location on the "Add locations page"
     markup = "\n    <h2 class='location-data-holder' data-locationid=".concat(info.id, ">Change location info</h2>\n    <div class='flex-container'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value=").concat(info.name, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Adress: </div>\n      <input type='text' class='location-info__editAddress' value=").concat(info.address, ">\n    </div>\n    <div class='flex-container'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <form class='flex-column location-info__newCoordForm'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' class='location-info__editCoord' value=").concat(info.coordinates, ">\n        </div>\n        <button> Choose new coordinates </button>\n      </form>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
   } else {
+    // clicking on the location on the trip's page:
     markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
   }
 
