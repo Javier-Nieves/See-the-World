@@ -2,12 +2,16 @@ const Location = require('../models/locationModel');
 const Trip = require('../models/tripModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const filterBody = require('../utils/filterBody');
 
 exports.addLocation = catchAsync(async (req, res, next) => {
-  req.body.trip = req.params.tripId;
-  req.body.coordinates = req.body.coordinates.split(',');
+  // prettier-ignore
+  const filteredBody = filterBody(req.body, 'name', 'address', 
+                                  'description', 'coordinates', 'images');
+  filteredBody.trip = req.params.tripId;
+  filteredBody.coordinates = filteredBody.coordinates.split(',');
 
-  const newLocation = await Location.create(req.body);
+  const newLocation = await Location.create(filteredBody);
   await Trip.findByIdAndUpdate(
     req.params.tripId,
     { $push: { locations: newLocation.id } },
@@ -17,9 +21,12 @@ exports.addLocation = catchAsync(async (req, res, next) => {
 });
 
 exports.editLocation = catchAsync(async (req, res, next) => {
+  // prettier-ignore
+  const filteredBody = filterBody(req.body, 'name', 'address', 
+                                  'description', 'coordinates', 'images');
   const modifiedLocation = await Location.findByIdAndUpdate(
     req.params.locationId,
-    req.body,
+    filteredBody,
     { new: true, runValidators: true },
   );
   res.status(200).json({ status: 'success', data: { modifiedLocation } });

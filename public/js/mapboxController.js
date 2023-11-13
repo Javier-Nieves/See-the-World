@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as mapboxViews from './Views.js';
-import * as mapboxModel from './mapboxModel.js';
+import * as trips from './trips.js';
 
 export let map;
 // waypoints - array for GeoJson creation => routes
@@ -10,8 +10,8 @@ let features = [];
 
 export const displayMap = async (locations) => {
   // main map configuration
-  await mapboxModel.getKeys();
-  mapboxgl.accessToken = mapboxModel.TOKEN;
+  await trips.getKeys();
+  mapboxgl.accessToken = trips.TOKEN;
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
@@ -54,7 +54,7 @@ export const displayMap = async (locations) => {
     });
 
     // getting GeoJSON data for location points
-    const routeData = await mapboxModel.createGeoJSON(waypoints);
+    const routeData = await trips.createGeoJSON(waypoints);
     drawRoute(routeData);
   });
 };
@@ -67,7 +67,7 @@ export const removeLocation = async (locationId) => {
   createLocationsLayer();
   // redraw all routes
   waypoints.splice(index, 1);
-  const routeData = await mapboxModel.createGeoJSON(waypoints);
+  const routeData = await trips.createGeoJSON(waypoints);
   drawRoute(routeData);
 };
 
@@ -200,7 +200,7 @@ const createFeature = (loc) => {
 };
 
 const locationPopupHandler = async (form, coordArray) => {
-  mapboxModel.persistLocation(form);
+  trips.persistLocation(form);
   createFeature({
     name: form.get('name'),
     address: form.get('address'),
@@ -211,7 +211,7 @@ const locationPopupHandler = async (form, coordArray) => {
   createLocationsLayer();
   waypoints.push(coordArray);
   if (waypoints.length > 1) {
-    const geoData = await mapboxModel.createGeoJSON(waypoints);
+    const geoData = await trips.createGeoJSON(waypoints);
     drawRoute(geoData);
   }
 };

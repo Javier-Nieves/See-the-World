@@ -1,17 +1,8 @@
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const filterBody = require('../utils/filterBody');
 const Trip = require('../models/tripModel');
 const Location = require('../models/locationModel');
-
-// todo - will be separate
-const filterBody = (obj, ...allowedFields) => {
-  // clear all unwanted fields from an object. For security
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
 
 exports.getAllTrips = catchAsync(async (req, res, next) => {
   const trips = await Trip.find();

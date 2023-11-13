@@ -1,15 +1,6 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
-
-// todo - make a separate file, use to filter all bodies
-const filterBody = (obj, ...allowedFields) => {
-  // clear all unwanted fields from an object. For security
-  const newObj = {};
-  Object.keys(obj).forEach((el) => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
+const filterBody = require('../utils/filterBody');
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterBody(req.body, 'name', 'email');
