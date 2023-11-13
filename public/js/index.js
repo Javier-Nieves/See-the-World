@@ -21,13 +21,19 @@ const userInfoForm = document.querySelector('.userProfile__infoTable');
 
 const newTripForm = document.querySelector('#newTripForm');
 const editTripForm = document.querySelector('#editTripForm');
+
 const editLocationForm = document.querySelector('.locations__editForm');
-const friendSearchForm = document.querySelector('.friendsPage__searchForm');
 const deleteLocationBtn = document.querySelector('.locations__deleteBtn');
+
+const friendSearchForm = document.querySelector('.friendsPage__searchForm');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
+const detailsWindow = document.querySelector('.trip-info__details-window');
+const closeDetailsBtn = document.querySelector('.trip-info__closeDatails');
 const datalist = document.querySelector('#travelersList');
+
 const withSelector = document.querySelector('.newTrip__input-with');
 const travelersList = document.querySelector('.newTrip__travelersList');
+const removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
 
 // handlers
 if (mapBox) {
@@ -107,6 +113,8 @@ if (newTripForm || editTripForm) {
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 
+if (closeDetailsBtn) closeDetailsBtn.addEventListener('click', closeDetails);
+
 if (friendSearchForm)
   friendSearchForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -162,6 +170,11 @@ const addTraveler = (event) => {
     .addEventListener('click', (e) => removeTraveler(e));
 };
 
+if (removeTravelerBtn)
+  removeTravelerBtn.forEach((btn) =>
+    btn.addEventListener('click', (e) => removeTraveler(e)),
+  );
+
 const removeTraveler = (event) => {
   const userElement = event.target.closest('.newTrip__friendIcon');
   const travelerId = userElement.dataset.friendid;
@@ -187,4 +200,8 @@ function findExistingTravelers() {
   document
     .querySelectorAll('.newTrip__friendIcon')
     .forEach((container) => travelers.add(container.dataset.friendid));
+}
+
+function closeDetails() {
+  detailsWindow.classList.add('hidden');
 }

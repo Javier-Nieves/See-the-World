@@ -6109,7 +6109,8 @@ function () {
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            tripId ? console.log('Trip is modified') : location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
+            tripId ? location.assign("http://127.0.0.1:3000/api/v1/trips/".concat(tripId)) //console.log('Trip is modified')
+            : location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
           }
 
         case 4:
@@ -6452,10 +6453,10 @@ function () {
 
                   map.fitBounds(bounds, {
                     padding: {
-                      top: 50,
-                      bottom: 50,
-                      left: 50,
-                      right: 50
+                      top: 80,
+                      bottom: 80,
+                      left: 80,
+                      right: 80
                     },
                     duration: 3000
                   }); // getting GeoJSON data for location points
@@ -6575,12 +6576,12 @@ var createLocationsLayer = function createLocationsLayer() {
 
 
   map.on('click', 'locations', function (e) {
-    // console.log('removing ', document.querySelector('.marker'));
-    document.querySelector('.marker') && document.querySelector('.marker').remove(); // add marker to clicked location
-
+    // add marker to clicked location
+    document.querySelector('.marker') && document.querySelector('.marker').remove();
     var el = document.createElement('div');
     el.className = 'marker';
-    new mapboxgl.Marker(el).setLngLat(e.features[0].geometry.coordinates).addTo(map);
+    new mapboxgl.Marker(el).setLngLat(e.features[0].geometry.coordinates).addTo(map); // centering to the location
+
     map.easeTo({
       center: e.features[0].geometry.coordinates,
       padding: {
@@ -6769,6 +6770,7 @@ var displayLocationInfo = exports.displayLocationInfo = function displayLocation
   }); // show and fill location info block
 
   var infoContainer = document.querySelector('.trip-info__details-window');
+  infoContainer.classList.remove('hidden');
   var infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
@@ -6796,7 +6798,6 @@ var generateMarkup = function generateMarkup(info) {
 
 
 var loadSearchResults = exports.loadSearchResults = function loadSearchResults(data) {
-  console.log('search data: ', data);
   var container = document.querySelector('.friendsPage__search-results');
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';
@@ -6978,12 +6979,15 @@ var userInfoForm = document.querySelector('.userProfile__infoTable');
 var newTripForm = document.querySelector('#newTripForm');
 var editTripForm = document.querySelector('#editTripForm');
 var editLocationForm = document.querySelector('.locations__editForm');
-var friendSearchForm = document.querySelector('.friendsPage__searchForm');
 var deleteLocationBtn = document.querySelector('.locations__deleteBtn');
+var friendSearchForm = document.querySelector('.friendsPage__searchForm');
 var deleteBtn = document.querySelector('.trip-info__delete-btn');
+var detailsWindow = document.querySelector('.trip-info__details-window');
+var closeDetailsBtn = document.querySelector('.trip-info__closeDatails');
 var datalist = document.querySelector('#travelersList');
 var withSelector = document.querySelector('.newTrip__input-with');
-var travelersList = document.querySelector('.newTrip__travelersList'); // handlers
+var travelersList = document.querySelector('.newTrip__travelersList');
+var removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler'); // handlers
 
 if (mapBox) {
   var locations;
@@ -7062,6 +7066,7 @@ if (newTripForm || editTripForm) {
 }
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
+if (closeDetailsBtn) closeDetailsBtn.addEventListener('click', closeDetails);
 if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var query = document.querySelector('.friendsPage__input-name').value;
@@ -7116,6 +7121,12 @@ var addTraveler = function addTraveler(event) {
   });
 };
 
+if (removeTravelerBtn) removeTravelerBtn.forEach(function (btn) {
+  return btn.addEventListener('click', function (e) {
+    return removeTraveler(e);
+  });
+});
+
 var removeTraveler = function removeTraveler(event) {
   var userElement = event.target.closest('.newTrip__friendIcon');
   var travelerId = userElement.dataset.friendid;
@@ -7140,6 +7151,10 @@ function findExistingTravelers() {
   document.querySelectorAll('.newTrip__friendIcon').forEach(function (container) {
     return travelers.add(container.dataset.friendid);
   });
+}
+
+function closeDetails() {
+  detailsWindow.classList.add('hidden');
 }
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

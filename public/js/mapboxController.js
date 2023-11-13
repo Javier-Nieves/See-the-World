@@ -46,10 +46,10 @@ export const displayMap = async (locations) => {
     // adding padding to the map
     map.fitBounds(bounds, {
       padding: {
-        top: 50,
-        bottom: 50,
-        left: 50,
-        right: 50,
+        top: 80,
+        bottom: 80,
+        left: 80,
+        right: 80,
       },
       duration: 3000,
     });
@@ -121,16 +121,15 @@ const createLocationsLayer = () => {
   }
   // center map on clicked location (with padding to the right)
   map.on('click', 'locations', (e) => {
-    // console.log('removing ', document.querySelector('.marker'));
+    // add marker to clicked location
     document.querySelector('.marker') &&
       document.querySelector('.marker').remove();
-    // add marker to clicked location
     const el = document.createElement('div');
     el.className = 'marker';
     new mapboxgl.Marker(el)
       .setLngLat(e.features[0].geometry.coordinates)
       .addTo(map);
-
+    // centering to the location
     map.easeTo({
       center: e.features[0].geometry.coordinates,
       padding: { right: window.innerWidth * 0.2 },

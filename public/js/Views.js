@@ -69,6 +69,7 @@ export const displayLocationInfo = (info) => {
     .forEach((popup) => popup.remove());
   // show and fill location info block
   const infoContainer = document.querySelector('.trip-info__details-window');
+  infoContainer.classList.remove('hidden');
   const infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
@@ -128,7 +129,6 @@ const generateMarkup = (info) => {
 
 // Search:
 export const loadSearchResults = (data) => {
-  console.log('search data: ', data);
   const container = document.querySelector('.friendsPage__search-results');
   container.innerHTML = '';
   document.querySelector('.friendsPage__table').style.display = 'flex';

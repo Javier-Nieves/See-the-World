@@ -16,7 +16,7 @@ export const changeTrip = async (data, tripId) => {
   });
   if (res.data.status === 'success') {
     tripId
-      ? console.log('Trip is modified')
+      ? location.assign(`http://127.0.0.1:3000/api/v1/trips/${tripId}`) //console.log('Trip is modified')
       : location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
   }
 };

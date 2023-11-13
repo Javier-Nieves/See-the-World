@@ -330,12 +330,21 @@ tbody tr:hover {
 .marker {
     background-image: url('/img/pin.png');
     background-size: cover;
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    cursor: pointer;
     z-index: 120;
-  }
+}
+.trip-info__closeDatails {
+    position: absolute;
+    right: 1vw;
+    top: 1vh;
+    font-size: 30px;
+    font-weight: 600;
+}
+.trip-info__closeDatails:hover {
+    cursor: pointer;
+}
 
 /*! New Trip page */
 .newTrip__container {
