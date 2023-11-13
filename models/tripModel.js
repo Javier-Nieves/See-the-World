@@ -7,8 +7,8 @@ const tripSchema = new mongoose.Schema({
     required: [true, 'A trip must have a name'],
     unique: true,
     trim: true,
-    maxlength: [40, 'A trip name must have less or equal then 40 characters'],
-    minlength: [8, 'A trip name must have more or equal then 8 characters'],
+    maxlength: [20, 'A trip name must have less or equal then 20 characters'],
+    minlength: [4, 'A trip name must have more or equal then 4 characters'],
   },
   travelers: [
     {

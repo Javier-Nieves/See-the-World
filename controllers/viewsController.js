@@ -26,15 +26,19 @@ exports.index = catchAsync(async (req, res) => {
     visitor = await User.findById(visitorId);
     // if it's a friend of the owner - show private tours also
     if (owner.friends.includes(visitorId))
-      // todo - change createdBy to 'in the travelers array'
-      // trips = await Trip.find({ createdBy: userId });
-      trips = await Trip.find({ travelers: { $in: [userId] } });
+      trips = await Trip.find({ travelers: { $in: [userId] } }).sort([
+        ['date', -1],
+      ]);
     else
-      trips = await Trip.find({ travelers: { $in: [userId] }, private: false });
+      trips = await Trip.find({
+        travelers: { $in: [userId] },
+        private: false,
+      }).sort([['date', -1]]);
     //! my own page:
   } else {
     visitor = owner;
-    trips = await Trip.find({ travelers: { $in: [userId] } });
+    // prettier-ignore
+    trips = await Trip.find({ travelers: { $in: [userId] } }).sort([['date', -1]]);
   }
   res.status(200).render('index', {
     owner,

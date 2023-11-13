@@ -32,4 +32,5 @@ block content
       .flex-container.trip-info__buttons-container
         a(class='trip-info__edit-info-btn' href=`${trip.id}/edit`) Edit Trip Info
         a(class='trip-info__edit-locations-btn' href=`${trip.id}/locations`) Edit Locations
-        button(class='trip-info__delete-btn') Delete Trip
+        if visitorId == trip.createdBy
+          button(class='trip-info__delete-btn') Delete Trip
