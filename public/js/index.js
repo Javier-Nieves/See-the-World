@@ -35,6 +35,8 @@ const withSelector = document.querySelector('.newTrip__input-with');
 const travelersList = document.querySelector('.newTrip__travelersList');
 const removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
 
+const dialogBtn = document.querySelector('.trip-info__dialogBtn');
+
 // handlers
 if (mapBox) {
   let locations;
@@ -198,6 +200,8 @@ if (userInfoForm)
     users.changeUserInfo(form);
   });
 
+if (dialogBtn) dialogBtn.addEventListener('click', showDialog);
+
 function findExistingTravelers() {
   document
     .querySelectorAll('.newTrip__friendIcon')
@@ -206,4 +210,12 @@ function findExistingTravelers() {
 
 function closeDetails() {
   detailsWindow.classList.add('hidden');
+}
+
+function showDialog() {
+  const dialog = document.querySelector('.trip-info__lower-info');
+  dialog.showModal();
+  dialog.addEventListener('click', () => {
+    dialog.close();
+  });
 }

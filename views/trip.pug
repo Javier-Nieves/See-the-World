@@ -7,7 +7,7 @@ block append head
 block content
   .flex-column.trip-info__top-info
     .trip-info__name
-      h1= trip.name
+      h1.trip-info__bigName= trip.name
       .trip-info__date= `${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})} ${trip.duration ? '- ' + trip.duration : ''}`
     .map(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
 
@@ -15,22 +15,26 @@ block content
     span.trip-info__closeDatails &times
     .flex-column.trip-info__location-info.hidden
 
-  .flex-container.trip-info__lower-info
-    .flex-column
-      h2.trip-info__highlight= trip.highlight
-      .flex-container.trip-info__travelers-container
-        p With:
-        each traveler in trip.travelers
-          .tooltip
-            a(href=`/users/${traveler._id}`)
-              img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
-              span.tooltiptext= traveler.name
-    .trip-info__description= trip.description
+  - const btnText = trip.highlight || 'Trip details'
+  button.trip-info__dialogBtn= btnText
 
-  each traveler in trip.travelers
-    if traveler._id == visitorId
-      .flex-container.trip-info__buttons-container
-        a(class='trip-info__edit-info-btn' href=`${trip.id}/edit`) Edit Trip Info
-        a(class='trip-info__edit-locations-btn' href=`${trip.id}/locations`) Edit Locations
-        if visitorId == trip.createdBy
-          button(class='trip-info__delete-btn') Delete Trip
+  dialog.flex-container.trip-info__lower-info
+    .flex-column
+      .flex-column
+        h2.trip-info__highlight= trip.highlight
+        .flex-container.trip-info__travelers-container
+          p.trip-info__smallText With:
+          each traveler in trip.travelers
+            .tooltip
+              a(href=`/users/${traveler._id}`)
+                img(src=`/img/users/${traveler.photo}` class='trip-desc__user-photo')
+                span.tooltiptext= traveler.name
+      .trip-info__description= trip.description
+
+      each traveler in trip.travelers
+        if traveler._id == visitorId
+          .flex-container.trip-info__buttons-container
+            a(class='trip-info__edit-info-btn' href=`${trip.id}/edit`) Edit Trip Info
+            a(class='trip-info__edit-locations-btn' href=`${trip.id}/locations`) Edit Locations
+            if visitorId == trip.createdBy
+              button(class='trip-info__delete-btn') Delete Trip

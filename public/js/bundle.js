@@ -6405,8 +6405,9 @@ function () {
           mapboxgl.accessToken = trips.TOKEN;
           exports.map = map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            scrollZoom: window.location.href.includes('locations') // center: [-74.07, 4.64],
+            style: 'mapbox://styles/mapbox/streets-v12' // style: 'mapbox://styles/mapbox/navigation-night-v1',
+            // scrollZoom: window.location.href.includes('locations'),
+            // center: [-74.07, 4.64],
             // zoom: 11,
 
           }); // adding scale
@@ -6987,7 +6988,8 @@ var closeDetailsBtn = document.querySelector('.trip-info__closeDatails');
 var datalist = document.querySelector('#travelersList');
 var withSelector = document.querySelector('.newTrip__input-with');
 var travelersList = document.querySelector('.newTrip__travelersList');
-var removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler'); // handlers
+var removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
+var dialogBtn = document.querySelector('.trip-info__dialogBtn'); // handlers
 
 if (mapBox) {
   var locations;
@@ -7147,6 +7149,7 @@ if (userInfoForm) userInfoForm.addEventListener('submit', function (e) {
   form.append('photo', document.querySelector('.userProfile__changePhoto').files[0]);
   users.changeUserInfo(form);
 });
+if (dialogBtn) dialogBtn.addEventListener('click', showDialog);
 
 function findExistingTravelers() {
   document.querySelectorAll('.newTrip__friendIcon').forEach(function (container) {
@@ -7156,6 +7159,14 @@ function findExistingTravelers() {
 
 function closeDetails() {
   detailsWindow.classList.add('hidden');
+}
+
+function showDialog() {
+  var dialog = document.querySelector('.trip-info__lower-info');
+  dialog.showModal();
+  dialog.addEventListener('click', function () {
+    dialog.close();
+  });
 }
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];

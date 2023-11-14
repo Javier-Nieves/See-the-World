@@ -254,11 +254,39 @@ tbody tr:hover {
     padding: 15px;
     gap: 2vw;
 }
+.trip-info__bigName {
+    color: rgb(0, 28, 91);
+    font-size: 6vh;
+}
 .trip-info__top-info {
     gap: 0;
 }
+.trip-info__dialogBtn {
+    position: absolute;
+    bottom: 3vh;
+    font-size: 5vh;
+    /* z-index: 140; */
+}
+dialog {
+    position: fixed;
+    opacity: 0;
+    scale: 0;
+    transition: all 0.5s;
+}
+dialog[open] {
+    opacity: 1;
+    scale: 1;
+}
+    dialog::backdrop {
+    background-color: #30210a6f;
+}
 .trip-info__lower-info {
-    margin-top: 80vh;
+    padding: 15px;
+    width: 50vw;
+    background-color: rgba(49, 47, 40, 0.9);
+    border: 1px solid grey;
+    border-radius: 15px;
+    /* margin-top: 80vh; */
     align-items: baseline;
     gap: 5vw;
 }
@@ -270,9 +298,15 @@ tbody tr:hover {
 }
 .trip-info__highlight {
     margin: 0;
+    color: whitesmoke;
+    font-size: 5vh;
 }
 .trip-info__description {
-    background-color: rgba(255, 200, 0, 0.2);;
+    background-color: rgba(255, 200, 0, 0.748);
+    font-size: 17px;
+}
+.trip-info__smallText {
+    color: whitesmoke;
 }
 .trip-info__travelers-container, .trip-info__description {
     padding: 8px;
@@ -281,6 +315,7 @@ tbody tr:hover {
 }
 .trip-desc__user-photo {
     width: 7vw;
+    margin: 10px;
 }
 .trip-desc__user-photo:hover {
     cursor: pointer;
@@ -293,23 +328,29 @@ tbody tr:hover {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 80vh;
+    height: 100vh;
 }
 .trip-info__buttons-container {
     gap: 5vw;
 }
 .newTrip__nextBtn, .index__add-btn, .locations__center-btn, .userProfile__saveBtn, 
-.userProfile__deleteBtn, .newTrip__tripPhotoBtn {
+.userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, 
+.trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn {
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
     background-color: rgba(255, 200, 0, 0.72);
     font-size: 18px;
 }
-.userProfile__deleteBtn {
+.userProfile__deleteBtn, .trip-info__delete-btn {
     background-color: rgba(255, 21, 0, 0.72);
 }
-.newTrip__nextBtn:hover, .userProfile__saveBtn {
+.userProfile__deleteBtn:hover, .trip-info__delete-btn:hover {
+    cursor: pointer;
+    background-color: rgb(148, 13, 1);
+}
+.newTrip__nextBtn:hover, .userProfile__saveBtn, .trip-info__dialogBtn:hover, 
+.trip-info__edit-info-btn:hover, .trip-info__edit-locations-btn:hover {
     cursor: pointer;
     background-color: rgba(255, 200, 0, 0.9);
 }

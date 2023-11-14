@@ -14,8 +14,9 @@ export const displayMap = async (locations) => {
   mapboxgl.accessToken = trips.TOKEN;
   map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
-    scrollZoom: window.location.href.includes('locations'),
+    style: 'mapbox://styles/mapbox/streets-v12',
+    // style: 'mapbox://styles/mapbox/navigation-night-v1',
+    // scrollZoom: window.location.href.includes('locations'),
     // center: [-74.07, 4.64],
     // zoom: 11,
   });
