@@ -14,11 +14,12 @@ block append head
 block content
   .flex-column.main-right-column
     .flex-container.locations__upper-block
-      h1 Add locations
+      h1.trip-info__bigName Add locations
       <div id="geocoder" class="geocoder"></div>
     .locationsMap(id='map' data-locations=`${JSON.stringify(trip.locations)}` style='position: absolute')
 
     .flex-column.trip-info__details-window
+      span.trip-info__closeDatails &times
       form.flex-column.locations__editForm
         .trip-info__location-info.hidden
         .flex-container.locations__buttons-container

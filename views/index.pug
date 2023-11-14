@@ -4,11 +4,11 @@ block nav
   include _nav
 
 block content
-  .flex-container
+  .indexPage__topLine
     if owner.id == visitor.id
-      h1= `All my trips`
+      h1.indexPage__title= `All my trips`
     else
-      h1= `All trips of ${owner.name}`
+      h1.indexPage__title= `All trips of ${owner.name}`
       - if (!owner.friends.includes(visitor.id))
         button(class='addFriendBtn' data-hostid=`${owner.id}`) Send Friend Request
       - else
@@ -18,9 +18,9 @@ block content
       a(class='cardLink' href=`/trips/${trip.id}`)
         article(class='flex-column tripCard' data-tripId=`${trip.id}`)
           img.tripCard__picture(src=`/img/trips/${trip.coverImage}`, alt=`${trip.name}`)
+          .tripCard__name= trip.name
           .tripCard__date= `${trip.date.toLocaleString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}`
           //- .tripCard__date= trip.duration
-          .tripCard__name= trip.name
           //- .tripCard__highlight= trip.highlight
           .flex-container.tripCard__with-cardContainer
             each traveler in trip.travelers

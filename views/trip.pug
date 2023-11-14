@@ -15,7 +15,7 @@ block content
     span.trip-info__closeDatails &times
     .flex-column.trip-info__location-info.hidden
 
-  - const btnText = trip.highlight || 'Trip details'
+  - const btnText = trip.highlight !== '-' ? trip.highlight : 'Trip details';
   button.trip-info__dialogBtn= btnText
 
   dialog.flex-container.trip-info__lower-info
