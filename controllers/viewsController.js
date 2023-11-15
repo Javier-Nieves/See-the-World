@@ -70,6 +70,23 @@ exports.myFriends = async (req, res) => {
   });
 };
 
+exports.friendsTrips = async (req, res) => {
+  const user = await User.findById(res.locals.user.id);
+  // create array of friends' IDs and add user's ID to display own trips as well
+  const idArray = user.friends;
+  idArray.push(user._id);
+
+  const trips = await Trip.find({
+    travelers: { $in: idArray },
+  }).sort([['createdAt', -1]]);
+
+  res.status(200).render('friendsTrips', {
+    title: 'New trips of my friends',
+    trips,
+    user,
+  });
+};
+
 exports.getTrip = catchAsync(async (req, res) => {
   const { tripId } = req.params;
   const trip = await Trip.findById(tripId);

@@ -1,0 +1,21 @@
+extends base
+
+block nav
+  include _nav
+
+block content
+  .flex-column.friendsTrips__outerBox
+    each trip in trips
+      a.flex-container.friendsTrips__trip-container(href=`/trips/${trip.id}`)
+        img.friendsTrips__cover(src=`/img/trips/${trip.coverImage}`)
+        - const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        - let formattedDate
+        - formattedDate = trip.createdAt.toLocaleDateString('en-GB', options);
+        - if (trip.createdAt.getTime() > new Date() - 86400000*2) formattedDate = 'Yesterday';
+        - if (trip.createdAt.getTime() > new Date() - 86400000) formattedDate = 'Today';
+        .flex-container.friendsTrips__info
+          .friendsTrips__dateColumn.flex-container
+            .friendsTrips__date= formattedDate
+            .friendsTrips__verticalLine
+          .friendsTrips__infoColumn
+            .friendsTrips__name= trip.name

@@ -1,6 +1,11 @@
-body {
+html, body {
     padding: 0;
     margin: 0;
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
 }
 .background-image {
     /* background-image: url("/img/back11.jpg"); */
@@ -43,6 +48,7 @@ h1 {
     flex-direction: column;
     align-items: center;
     gap: 2vh;
+    flex: 1;
 }
 .hidden {
     transform: translate(32vw);
@@ -68,7 +74,7 @@ h1 {
     padding: 5px;
     margin: 1vh 0 0 2vw;
     font-size: 3vh;
-    background-color: rgb(200, 255, 127);
+    background-color: rgba(255, 200, 0, 0.7);
 }
 .index-brand-container {
     margin-top: 3vh;
@@ -100,12 +106,13 @@ h1 {
     z-index: 1000;
 }
 .nav__search {
-    margin-top: 2vh;
-    padding: 15px;
+    width: 13vw;
+    background-color: rgba(255, 200, 0, 0.7);
+    margin-top: 3vh;
+    padding: 10px;
     border: 1px solid black;
     border-radius: 8px;
 }
-
 /*! Overview page */
 .cardContainer {
     width: 80vw;
@@ -146,9 +153,10 @@ h1 {
     background-color: rgba(255, 228, 196, 0.6);
     width: 24vw;
     text-align: center;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
     z-index: 10;
-    font-size: 5vh;
+    font-size: 4.5vh;
 }
 .tripCard__date, .tripCard__highlight {
     /* padding: 8px; */
@@ -259,6 +267,7 @@ tbody tr:hover {
     width: 5vw;
 }
 .friendsPage__friendContainer {
+    background-color: rgba(255, 200, 0, 0.7);
     width: 18vw;
     padding: 10px;
     border: 1px solid black;
@@ -353,8 +362,8 @@ dialog[open] {
 .trip-info__buttons-container {
     gap: 5vw;
 }
-.newTrip__nextBtn, .index__add-btn, .locations__center-btn, .userProfile__saveBtn, 
-.userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, 
+.newTrip__nextBtn, .index__nav-btn, .locations__center-btn, .userProfile__saveBtn, 
+.userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, .nav__search-btn,
 .trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn {
     border: 1px solid grey;
     border-radius: 5px;
@@ -370,9 +379,10 @@ dialog[open] {
     background-color: rgb(148, 13, 1);
 }
 .newTrip__nextBtn:hover, .userProfile__saveBtn, .trip-info__dialogBtn:hover, 
-.trip-info__edit-info-btn:hover, .trip-info__edit-locations-btn:hover {
+.trip-info__edit-info-btn:hover, .trip-info__edit-locations-btn:hover, 
+.nav__search-btn:hover, .index__nav-btn:hover {
     cursor: pointer;
-    background-color: rgba(255, 200, 0, 0.9);
+    background-color: rgba(156, 122, 1, 0.9);
 }
 .trip-info__details-window {
     display: none;
@@ -452,13 +462,13 @@ dialog[open] {
     width: 30vw;
     height: 6vh;
 }
+.nav__search-input {
+    margin: 0;
+    width: 13vw;
+}
 .newTrip__input-description {
     height: 20vh;
     width: 50vw;
-}
-.nav__search-input {
-    margin: 0;
-    width: 10vw;
 }
 .newTrip__with-container {
     border: 1px solid black;
@@ -500,8 +510,74 @@ dialog[open] {
     z-index: 10;
 }
 
+/*! Trips of my friends */
+.friendsTrips__outerBox {
+    background-color: rgba(255, 200, 0, 0.3);
+    margin: 15px;
+    margin-left: 17vw;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    gap: 2vh;
+}
+.friendsTrips__trip-container {
+    position: relative;
+    width: 60vw;
+    height: 20vh;
+    /* padding: 10px; */
+    background-color: #f7f7f7d0;
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+.friendsTrips__verticalLine {
+    position: absolute;
+    right: 0;
+    margin: 10px;
+    padding: 5px;
+    border-left: 2px solid rgb(3, 2, 2);
+    height: 80%;
+}
+.friendsTrips__trip-container:hover {
+    transform: scale(1.02);
+}
+.friendsTrips__cover {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 33%;
+    object-fit: cover;
+    border-radius: 0 10px 10px 0;
+    -webkit-clip-path: polygon(10% 0, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(10% 0, 100% 0%, 100% 100%, 0% 100%);
+}
+.friendsTrips__date, .friendsTrips__name {
+    color: rgb(2, 2, 2);
+    font-size: 20px;
+}
+.friendsTrips__info {
+    position: absolute;
+    left: 0;
+    width: 70%;
+    height: 100%;
+}
+.friendsTrips__dateColumn {
+    position: relative;
+    height: 100%;
+    width: 30%;
+    text-align: center;
+}
+.friendsTrips__infoColumn {
+    flex: 1;
+}
+.friendsTrips__name {
+    font-size: 4.5vh;
+}
+
 /*! Footer */
 .footer {
+    flex-shrink: 0;
+    /* bottom: 0; */
+    width: 100%;
     background-color: #f7f7f7;
     font-size: 1.4rem;
     display: flex;

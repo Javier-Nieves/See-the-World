@@ -10,6 +10,11 @@ router.get('/', viewsController.index);
 router.get('/users/:userId', viewsController.index);
 router.get('/me', authController.protect, viewsController.myProfile);
 router.get('/friends', authController.protect, viewsController.myFriends);
+router.get(
+  '/friendsTrips',
+  authController.protect,
+  viewsController.friendsTrips,
+);
 router.get('/login', viewsController.login);
 router.get('/trips/:tripId', viewsController.getTrip);
 router.get('/trips/:tripId/locations', viewsController.newLocations);
