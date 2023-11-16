@@ -29,7 +29,9 @@ h1 {
     font-size: 6vh;
     color: rgb(221, 239, 252);
 }
-
+textarea:focus, input:focus{
+    outline: 1px solid yellow;
+}
 .flex-container {
     display: flex;
     justify-content: center;
@@ -107,7 +109,7 @@ h1 {
 }
 .nav__search {
     width: 13vw;
-    background-color: rgba(255, 200, 0, 0.7);
+    background-color: #fff9ebc6;
     margin-top: 3vh;
     padding: 10px;
     border: 1px solid black;
@@ -117,6 +119,7 @@ h1 {
 .cardContainer {
     width: 80vw;
     margin-left: 15vw;
+    margin-bottom: 2vh;
     display: grid;
     grid-template-columns: auto auto auto;
     grid-gap: 15px 15px;
@@ -170,6 +173,9 @@ h1 {
     width: 3vw;
     margin: 3px;
     filter:sepia(0.6);
+}
+.smaller-photo {
+    width: 2.5vw;
 }
 .tripCard__with-cardContainer {
     border: 1px solid black;
@@ -365,11 +371,13 @@ dialog[open] {
 .newTrip__nextBtn, .index__nav-btn, .locations__center-btn, .userProfile__saveBtn, 
 .userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, .nav__search-btn,
 .trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn {
+    width: 10vw;
     border: 1px solid grey;
     border-radius: 5px;
     padding: 10px;
     background-color: rgba(255, 200, 0, 0.72);
     font-size: 18px;
+    text-align: center;
 }
 .userProfile__deleteBtn, .trip-info__delete-btn {
     background-color: rgba(255, 21, 0, 0.72);
@@ -408,9 +416,7 @@ dialog[open] {
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-
     position: absolute;
-
     margin-left: -100px;
     z-index: 1;
 }
@@ -463,8 +469,10 @@ dialog[open] {
     height: 6vh;
 }
 .nav__search-input {
+    font-weight: 400;
     margin: 0;
     width: 13vw;
+    z-index: 10;
 }
 .newTrip__input-description {
     height: 20vh;
@@ -515,7 +523,7 @@ dialog[open] {
     background-color: rgba(255, 200, 0, 0.3);
     margin: 15px;
     margin-left: 17vw;
-    padding: 10px;
+    padding: 15px;
     border: 1px solid black;
     border-radius: 10px;
     gap: 2vh;
@@ -571,6 +579,10 @@ dialog[open] {
 }
 .friendsTrips__name {
     font-size: 4.5vh;
+}
+.friendsTrips__travelersContainer {
+    justify-content: flex-start;
+    margin-top: 2vh;
 }
 
 /*! Footer */

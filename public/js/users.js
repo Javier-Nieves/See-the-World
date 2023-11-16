@@ -10,7 +10,7 @@ export const friendSearch = async (data) => {
     data,
   });
   if (res.data.status === 'success') {
-    // console.log('Results: ', res.data.data.searchRes);
+    console.log('Results: ', res.data.data.searchRes);
     Views.loadSearchResults(res.data.data.searchRes);
   }
 };

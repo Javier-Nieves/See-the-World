@@ -37,6 +37,8 @@ const removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
 
 const dialogBtn = document.querySelector('.trip-info__dialogBtn');
 
+const tripSearchForm = document.querySelector('.nav__search');
+
 // handlers
 if (mapBox) {
   let locations;
@@ -118,12 +120,27 @@ if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 
 if (closeDetailsBtn) closeDetailsBtn.addEventListener('click', closeDetails);
 
-if (friendSearchForm)
-  friendSearchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const query = document.querySelector('.friendsPage__input-name').value;
-    users.friendSearch({ query });
+if (tripSearchForm || friendSearchForm) {
+  const forms = [tripSearchForm, friendSearchForm];
+  forms.forEach((filledForm) => {
+    // add listener to each form (if it exists)
+    if (!filledForm) return;
+    filledForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // look at a right form's query
+      const query = document.querySelector(
+        `${
+          filledForm === tripSearchForm
+            ? '.nav__search-input'
+            : '.friendsPage__input-name'
+        }`,
+      ).value;
+      // send search request
+      filledForm === tripSearchForm && trips.tripSearch({ query });
+      filledForm === friendSearchForm && users.friendSearch({ query });
+    });
   });
+}
 
 if (friendsTable)
   // open user's profile at click

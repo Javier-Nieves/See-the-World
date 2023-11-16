@@ -18,7 +18,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.search = catchAsync(async (req, res, next) => {
-  //   .populate({path: 'reviews',fields: 'review rating user '});
   // prettier-ignore
   const searchRes = await User.find({name: { $regex: new RegExp(req.body.query, 'i') } });
   res.status(200).json({ status: 'success', data: { searchRes } });

@@ -19,3 +19,8 @@ block content
             .friendsTrips__verticalLine
           .friendsTrips__infoColumn
             .friendsTrips__name= trip.name
+            .flex-container.friendsTrips__travelersContainer
+              each traveler in trip.travelers
+                //- .tooltip
+                img(src=`/img/users/${traveler.photo}` class='tripCard__user-photo smaller-photo')
+                //-   span.tooltiptext= traveler.name

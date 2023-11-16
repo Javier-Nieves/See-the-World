@@ -55,3 +55,9 @@ exports.deleteTrip = catchAsync(async (req, res, next) => {
 
   res.status(204).json({ status: 'success', data: null });
 });
+
+exports.search = catchAsync(async (req, res, next) => {
+  // prettier-ignore
+  const searchRes = await Trip.find({name: { $regex: new RegExp(req.body.query, 'i') } });
+  res.status(200).json({ status: 'success', data: { searchRes } });
+});

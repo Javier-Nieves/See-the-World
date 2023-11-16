@@ -110,3 +110,15 @@ export const createGeoJSON = async (waypoints) => {
 
   return routeData;
 };
+
+export const tripSearch = async (data) => {
+  const res = await axios({
+    method: 'POST',
+    url: 'http://127.0.0.1:3000/api/v1/trips/search',
+    data,
+  });
+  if (res.data.status === 'success') {
+    console.log('Results: ', res.data.data.searchRes);
+    // Views.loadTripSearchResults(res.data.data.searchRes);
+  }
+};

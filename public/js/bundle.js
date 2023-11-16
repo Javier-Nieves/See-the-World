@@ -6069,7 +6069,7 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.tripsOfUser = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
+exports.tripsOfUser = exports.tripSearch = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6356,6 +6356,42 @@ function () {
 
   return function createGeoJSON(_x7) {
     return _ref7.apply(this, arguments);
+  };
+}();
+
+var tripSearch = exports.tripSearch =
+/*#__PURE__*/
+function () {
+  var _ref8 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee8(data) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
+        case 0:
+          _context8.next = 2;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: 'http://127.0.0.1:3000/api/v1/trips/search',
+            data: data
+          });
+
+        case 2:
+          res = _context8.sent;
+
+          if (res.data.status === 'success') {
+            console.log('Results: ', res.data.data.searchRes); // Views.loadTripSearchResults(res.data.data.searchRes);
+          }
+
+        case 4:
+        case "end":
+          return _context8.stop();
+      }
+    }, _callee8);
+  }));
+
+  return function tripSearch(_x8) {
+    return _ref8.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js"}],"mapboxController.js":[function(require,module,exports) {
@@ -6860,7 +6896,7 @@ function () {
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            // console.log('Results: ', res.data.data.searchRes);
+            console.log('Results: ', res.data.data.searchRes);
             Views.loadSearchResults(res.data.data.searchRes);
           }
 
@@ -6989,7 +7025,8 @@ var datalist = document.querySelector('#travelersList');
 var withSelector = document.querySelector('.newTrip__input-with');
 var travelersList = document.querySelector('.newTrip__travelersList');
 var removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
-var dialogBtn = document.querySelector('.trip-info__dialogBtn'); // handlers
+var dialogBtn = document.querySelector('.trip-info__dialogBtn');
+var tripSearchForm = document.querySelector('.nav__search'); // handlers
 
 if (mapBox) {
   var locations;
@@ -7069,13 +7106,27 @@ if (newTripForm || editTripForm) {
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 if (closeDetailsBtn) closeDetailsBtn.addEventListener('click', closeDetails);
-if (friendSearchForm) friendSearchForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-  var query = document.querySelector('.friendsPage__input-name').value;
-  users.friendSearch({
-    query: query
+
+if (tripSearchForm || friendSearchForm) {
+  var forms = [tripSearchForm, friendSearchForm];
+  forms.forEach(function (filledForm) {
+    // add listener to each form (if it exists)
+    if (!filledForm) return;
+    filledForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // look at a right form's query
+
+      var query = document.querySelector("".concat(filledForm === tripSearchForm ? '.nav__search-input' : '.friendsPage__input-name')).value; // send search request
+
+      filledForm === tripSearchForm && trips.tripSearch({
+        query: query
+      });
+      filledForm === friendSearchForm && users.friendSearch({
+        query: query
+      });
+    });
   });
-});
+}
+
 if (friendsTable) // open user's profile at click
   friendsTable.addEventListener('click', function (e) {
     var userId = e.target.closest('.data-holder').dataset.userid;

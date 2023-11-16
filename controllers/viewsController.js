@@ -80,7 +80,7 @@ exports.friendsTrips = async (req, res) => {
     travelers: { $in: idArray },
   }).sort([['createdAt', -1]]);
 
-  res.status(200).render('friendsTrips', {
+  res.status(200).render('searchTrips', {
     title: 'New trips of my friends',
     trips,
     user,
