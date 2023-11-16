@@ -6069,11 +6069,17 @@ function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.tripsOfUser = exports.tripSearch = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
+exports.tripsOfUser = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
 var _mapboxController = require("./mapboxController");
+
+var Views = _interopRequireWildcard(require("./Views.js"));
+
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
+
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6358,43 +6364,7 @@ function () {
     return _ref7.apply(this, arguments);
   };
 }();
-
-var tripSearch = exports.tripSearch =
-/*#__PURE__*/
-function () {
-  var _ref8 = _asyncToGenerator(
-  /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee8(data) {
-    var res;
-    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-      while (1) switch (_context8.prev = _context8.next) {
-        case 0:
-          _context8.next = 2;
-          return (0, _axios.default)({
-            method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/trips/search',
-            data: data
-          });
-
-        case 2:
-          res = _context8.sent;
-
-          if (res.data.status === 'success') {
-            console.log('Results: ', res.data.data.searchRes); // Views.loadTripSearchResults(res.data.data.searchRes);
-          }
-
-        case 4:
-        case "end":
-          return _context8.stop();
-      }
-    }, _callee8);
-  }));
-
-  return function tripSearch(_x8) {
-    return _ref8.apply(this, arguments);
-  };
-}();
-},{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js"}],"mapboxController.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js","./Views.js":"Views.js"}],"mapboxController.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6831,7 +6801,7 @@ var generateMarkup = function generateMarkup(info) {
   }
 
   return markup;
-}; // Search:
+}; // Friends search:
 
 
 var loadSearchResults = exports.loadSearchResults = function loadSearchResults(data) {
@@ -7117,9 +7087,8 @@ if (tripSearchForm || friendSearchForm) {
 
       var query = document.querySelector("".concat(filledForm === tripSearchForm ? '.nav__search-input' : '.friendsPage__input-name')).value; // send search request
 
-      filledForm === tripSearchForm && trips.tripSearch({
-        query: query
-      });
+      filledForm === location.assign("http://127.0.0.1:3000/searchTrips/".concat(query)); //tripSearchForm && trips.tripSearch({ query });
+
       filledForm === friendSearchForm && users.friendSearch({
         query: query
       });

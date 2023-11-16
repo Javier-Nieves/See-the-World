@@ -30,6 +30,4 @@ router
   )
   .delete(authController.protect, tripController.deleteTrip);
 
-router.post('/search', tripController.search);
-
 module.exports = router;

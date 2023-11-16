@@ -127,7 +127,7 @@ const generateMarkup = (info) => {
   return markup;
 };
 
-// Search:
+// Friends search:
 export const loadSearchResults = (data) => {
   const container = document.querySelector('.friendsPage__search-results');
   container.innerHTML = '';

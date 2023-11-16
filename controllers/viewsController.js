@@ -87,6 +87,20 @@ exports.friendsTrips = async (req, res) => {
   });
 };
 
+exports.searchTrips = catchAsync(async (req, res, next) => {
+  // 'i' - for case-insensitive search
+  const trips = await Trip.find({
+    $or: [
+      { name: { $regex: new RegExp(req.params.query, 'i') } },
+      { highlight: { $regex: new RegExp(req.params.query, 'i') } },
+    ],
+  });
+  res.status(200).render('searchTrips', {
+    title: 'Search results',
+    trips,
+  });
+});
+
 exports.getTrip = catchAsync(async (req, res) => {
   const { tripId } = req.params;
   const trip = await Trip.findById(tripId);

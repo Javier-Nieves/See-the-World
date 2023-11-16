@@ -15,6 +15,7 @@ router.get(
   authController.protect,
   viewsController.friendsTrips,
 );
+router.get('/searchTrips/:query', viewsController.searchTrips);
 router.get('/login', viewsController.login);
 router.get('/trips/:tripId', viewsController.getTrip);
 router.get('/trips/:tripId/locations', viewsController.newLocations);
