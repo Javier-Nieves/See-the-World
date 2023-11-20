@@ -149,3 +149,14 @@ export const createFriend = (element) => {
   const parent = document.querySelector('.friendsPage__friendsContainer');
   parent.insertAdjacentElement('beforeend', element);
 };
+
+export const showAlert = (type, text) => {
+  const alert = document.querySelector('.alert-container');
+  const alertText = document.querySelector('.alert-text');
+  alertText.innerHTML = text;
+  alert.classList.remove('hidden-alert');
+  alert.classList.add(type);
+  setTimeout(() => {
+    alert.classList.add('hidden-alert');
+  }, 1000);
+};

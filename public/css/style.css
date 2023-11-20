@@ -8,7 +8,6 @@ body {
     flex-direction: column;
 }
 .background-image {
-    /* background-image: url("/img/back11.jpg"); */
     background-image: url("/img/highway.jpg");
     background-size: cover;
     width: 100vw;
@@ -55,6 +54,27 @@ textarea:focus, input:focus{
 .hidden {
     transform: translate(32vw);
 }
+.alert-container {
+    position: absolute;
+    top: 0;
+    left: 45%;
+    border: 1px solid black;
+    border-radius: 7px;
+    transition: all 0.5s;
+    /* width: 15vw; */
+    padding: 10px;
+    text-align: center;
+}
+.bad { background-color: rgba(220, 20, 60, 0.81); }
+.good { background-color: rgba(67, 220, 20, 0.81); }
+.alert-text {
+    font-size: 3vh;
+    color: whitesmoke;
+}
+.hidden-alert {
+    top: -100px;
+}
+
 /*! Main */
 .index-logo {
     width: 5vw;
