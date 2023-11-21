@@ -64,6 +64,7 @@ textarea:focus, input:focus{
     /* width: 15vw; */
     padding: 10px;
     text-align: center;
+    z-index: 300;
 }
 .bad { background-color: rgba(220, 20, 60, 0.81); }
 .good { background-color: rgba(67, 220, 20, 0.81); }

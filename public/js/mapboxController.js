@@ -71,6 +71,9 @@ export const removeLocation = async (locationId) => {
   waypoints.splice(index, 1);
   const routeData = await trips.createGeoJSON(waypoints);
   drawRoute(routeData);
+  // delete marker from the location:
+  document.querySelector('.marker') &&
+    document.querySelector('.marker').remove();
 };
 
 const fillGeoArrays = (locations, bounds) => {

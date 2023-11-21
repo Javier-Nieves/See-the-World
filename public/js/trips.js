@@ -9,17 +9,29 @@ let API_KEY;
 
 export const changeTrip = async (data, tripId) => {
   // creating or editing trip document
-  const res = await axios({
-    method: tripId ? 'PATCH' : 'POST',
-    url: tripId
-      ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
-      : 'http://127.0.0.1:3000/api/v1/trips',
-    data,
-  });
-  if (res.data.status === 'success') {
-    tripId
-      ? location.assign(`http://127.0.0.1:3000/trips/${tripId}`) //console.log('Trip is modified')
-      : location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
+  try {
+    const res = await axios({
+      method: tripId ? 'PATCH' : 'POST',
+      url: tripId
+        ? `http://127.0.0.1:3000/api/v1/trips/${tripId}`
+        : 'http://127.0.0.1:3000/api/v1/trips',
+      data,
+    });
+    if (res.data.status === 'success') {
+      if (tripId) {
+        Views.showAlert('good', 'Trip is modified');
+        setTimeout(() => {
+          location.assign(`http://127.0.0.1:3000/trips/${tripId}`);
+        }, 1500);
+      } else {
+        Views.showAlert('good', 'Trip is created');
+        setTimeout(() => {
+          location.assign(`/trips/${res.data.data.newTrip._id}/locations`);
+        }, 1500);
+      }
+    }
+  } catch (err) {
+    Views.showAlert('bad', 'Something went wrong');
   }
 };
 
@@ -33,7 +45,7 @@ export const deleteTrip = async () => {
   });
 
   if (res.status === 204) {
-    // todo - message
+    Views.showAlert('good', 'Trip is deleted');
     setTimeout(() => {
       location.assign(`/`);
     }, 1500);
@@ -41,24 +53,30 @@ export const deleteTrip = async () => {
 };
 
 export const editLocation = async (data, locationId) => {
-  const res = await axios({
-    method: 'PATCH',
-    url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,
-    data,
-  });
-  if (res.data.status === 'success') {
-    console.log('Location is modified');
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,
+      data,
+    });
+    if (res.data.status === 'success') {
+      // console.log('Location is modified');
+      Views.showAlert('good', 'Location is modified');
+    }
+  } catch (err) {
+    Views.showAlert('bad', 'Location was not modified');
   }
 };
 
 export const deleteLocation = async (locationId) => {
-  const res = await axios({
-    method: 'DELETE',
-    url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,
-  });
-
-  if (res.data.status === 'success') {
-    console.log('Location is deleted');
+  try {
+    const res = await axios({
+      method: 'DELETE',
+      url: `http://127.0.0.1:3000/api/v1/locations/${locationId}`,
+    });
+    Views.showAlert('good', 'Location is deleted');
+  } catch (err) {
+    Views.showAlert('bad', 'Location was not deleted');
   }
 };
 
@@ -67,20 +85,21 @@ export const tripsOfUser = (userId) =>
 
 export const persistLocation = async (data) => {
   // create location in the DB
-  const link = window.location.href;
-  // prettier-ignore
-  const url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-  const res = await axios({
-    method: 'POST',
-    url,
-    data,
-  });
-  if (res.data.status === 'success') {
-    console.log('location added');
-    // showAlert('success', 'Logged in ok');
-    // window.setTimeout(() => {
-    //   location.assign('/');
-    // }, 1500);
+  try {
+    const link = window.location.href;
+    // prettier-ignore
+    const url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
+    const res = await axios({
+      method: 'POST',
+      url,
+      data,
+    });
+    if (res.data.status === 'success') {
+      // console.log('location added');
+      Views.showAlert('good', 'Location is added');
+    }
+  } catch (err) {
+    Views.showAlert('bad', 'Can not write location data');
   }
 };
 

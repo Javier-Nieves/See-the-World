@@ -72,7 +72,9 @@ export const displayLocationInfo = (info) => {
   infoContainer.classList.remove('hidden');
   const infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
+  console.log('generating markup');
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  console.log('after markup');
   infoBlock.classList.remove('hidden');
   infoContainer.style.display = 'flex';
 };
@@ -80,10 +82,11 @@ export const displayLocationInfo = (info) => {
 const generateMarkup = (info) => {
   let markup;
   let gallery = '';
-  const imagesArray = JSON.parse(info.images);
-  for (let i = 0; i < imagesArray.length; i++)
-    gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
-
+  if (info.images) {
+    const imagesArray = JSON.parse(info.images) || [];
+    for (let i = 0; i < imagesArray.length; i++)
+      gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
+  }
   if (window.location.href.includes('locations')) {
     // clicking on the location on the "Add locations page"
     markup = `

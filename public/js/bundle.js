@@ -5964,26 +5964,44 @@ function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          _context.prev = 0;
+          _context.next = 3;
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
             url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            tripId ? location.assign("http://127.0.0.1:3000/trips/".concat(tripId)) //console.log('Trip is modified')
-            : location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
+            if (tripId) {
+              Views.showAlert('good', 'Trip is modified');
+              setTimeout(function () {
+                location.assign("http://127.0.0.1:3000/trips/".concat(tripId));
+              }, 1500);
+            } else {
+              Views.showAlert('good', 'Trip is created');
+              setTimeout(function () {
+                location.assign("/trips/".concat(res.data.data.newTrip._id, "/locations"));
+              }, 1500);
+            }
           }
 
-        case 4:
+          _context.next = 10;
+          break;
+
+        case 7:
+          _context.prev = 7;
+          _context.t0 = _context["catch"](0);
+          Views.showAlert('bad', 'Something went wrong');
+
+        case 10:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[0, 7]]);
   }));
 
   return function changeTrip(_x, _x2) {
@@ -6012,7 +6030,7 @@ function () {
           res = _context2.sent;
 
           if (res.status === 204) {
-            // todo - message
+            Views.showAlert('good', 'Trip is deleted');
             setTimeout(function () {
               location.assign("/");
             }, 1500);
@@ -6040,25 +6058,35 @@ function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          _context3.next = 2;
+          _context3.prev = 0;
+          _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
             url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId),
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
-            console.log('Location is modified');
+            // console.log('Location is modified');
+            Views.showAlert('good', 'Location is modified');
           }
 
-        case 4:
+          _context3.next = 10;
+          break;
+
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          Views.showAlert('bad', 'Location was not modified');
+
+        case 10:
         case "end":
           return _context3.stop();
       }
-    }, _callee3);
+    }, _callee3, null, [[0, 7]]);
   }));
 
   return function editLocation(_x3, _x4) {
@@ -6076,24 +6104,29 @@ function () {
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
-          _context4.next = 2;
+          _context4.prev = 0;
+          _context4.next = 3;
           return (0, _axios.default)({
             method: 'DELETE',
             url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId)
           });
 
-        case 2:
+        case 3:
           res = _context4.sent;
+          Views.showAlert('good', 'Location is deleted');
+          _context4.next = 10;
+          break;
 
-          if (res.data.status === 'success') {
-            console.log('Location is deleted');
-          }
+        case 7:
+          _context4.prev = 7;
+          _context4.t0 = _context4["catch"](0);
+          Views.showAlert('bad', 'Location was not deleted');
 
-        case 4:
+        case 10:
         case "end":
           return _context4.stop();
       }
-    }, _callee4);
+    }, _callee4, null, [[0, 7]]);
   }));
 
   return function deleteLocation(_x5) {
@@ -6115,32 +6148,38 @@ function () {
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
-          // create location in the DB
+          _context5.prev = 0;
           link = window.location.href; // prettier-ignore
 
           url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-          _context5.next = 4;
+          _context5.next = 5;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
             data: data
           });
 
-        case 4:
+        case 5:
           res = _context5.sent;
 
           if (res.data.status === 'success') {
-            console.log('location added'); // showAlert('success', 'Logged in ok');
-            // window.setTimeout(() => {
-            //   location.assign('/');
-            // }, 1500);
+            // console.log('location added');
+            Views.showAlert('good', 'Location is added');
           }
 
-        case 6:
+          _context5.next = 12;
+          break;
+
+        case 9:
+          _context5.prev = 9;
+          _context5.t0 = _context5["catch"](0);
+          Views.showAlert('bad', 'Can not write location data');
+
+        case 12:
         case "end":
           return _context5.stop();
       }
-    }, _callee5);
+    }, _callee5, null, [[0, 9]]);
   }));
 
   return function persistLocation(_x6) {
@@ -6378,9 +6417,11 @@ function () {
 
         case 7:
           routeData = _context3.sent;
-          drawRoute(routeData);
+          drawRoute(routeData); // delete marker from the location:
 
-        case 9:
+          document.querySelector('.marker') && document.querySelector('.marker').remove();
+
+        case 10:
         case "end":
           return _context3.stop();
       }
@@ -6640,7 +6681,9 @@ var displayLocationInfo = exports.displayLocationInfo = function displayLocation
   infoContainer.classList.remove('hidden');
   var infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
+  console.log('generating markup');
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
+  console.log('after markup');
   infoBlock.classList.remove('hidden');
   infoContainer.style.display = 'flex';
 };
@@ -6648,9 +6691,12 @@ var displayLocationInfo = exports.displayLocationInfo = function displayLocation
 var generateMarkup = function generateMarkup(info) {
   var markup;
   var gallery = '';
-  var imagesArray = JSON.parse(info.images);
 
-  for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
+  if (info.images) {
+    var imagesArray = JSON.parse(info.images) || [];
+
+    for (var i = 0; i < imagesArray.length; i++) gallery += "<img class='trip-info__loc-image' src='/img/locations/".concat(imagesArray[i], "'>");
+  }
 
   if (window.location.href.includes('locations')) {
     // clicking on the location on the "Add locations page"
@@ -6897,26 +6943,34 @@ function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
+          _context.prev = 0;
+          _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
             url: 'http://127.0.0.1:3000/api/v1/users/search',
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context.sent;
 
           if (res.data.status === 'success') {
-            console.log('Results: ', res.data.data.searchRes);
-            Views.loadSearchResults(res.data.data.searchRes);
+            if (res.data.data.searchRes.length !== 0) Views.loadSearchResults(res.data.data.searchRes);else Views.showAlert('bad', 'No users found');
           }
 
-        case 4:
+          _context.next = 10;
+          break;
+
+        case 7:
+          _context.prev = 7;
+          _context.t0 = _context["catch"](0);
+          Views.showAlert('bad', 'No users found');
+
+        case 10:
         case "end":
           return _context.stop();
       }
-    }, _callee);
+    }, _callee, null, [[0, 7]]);
   }));
 
   return function friendSearch(_x) {
@@ -6934,27 +6988,36 @@ function () {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          _context2.next = 2;
+          _context2.prev = 0;
+          _context2.next = 3;
           return (0, _axios.default)({
             method: 'POST',
             url: 'http://127.0.0.1:3000/api/v1/users/friends',
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context2.sent;
 
           if (res.data.status === 'success') {
-            // todo - message
-            // move friend from 'requests' field to 'friends' field
+            Views.showAlert('good', 'Friend request sent'); // move friend from 'requests' field to 'friends' field
+
             Views.createFriend(element);
           }
 
-        case 4:
+          _context2.next = 10;
+          break;
+
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          Views.showAlert('bad', 'Can not send friend request');
+
+        case 10:
         case "end":
           return _context2.stop();
       }
-    }, _callee2);
+    }, _callee2, null, [[0, 7]]);
   }));
 
   return function friendRequest(_x2, _x3) {
@@ -6972,26 +7035,37 @@ function () {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          _context3.next = 2;
+          _context3.prev = 0;
+          _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
             url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
             data: data
           });
 
-        case 2:
+        case 3:
           res = _context3.sent;
 
           if (res.data.status === 'success') {
-            console.log('success!');
-            location.reload(true); // Views.loadSearchResults(res.data.data.searchRes);
+            Views.showAlert('good', "User's info is changed");
+            setTimeout(function () {
+              location.reload(true);
+            }, 1500);
           }
 
-        case 4:
+          _context3.next = 10;
+          break;
+
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          Views.showAlert('bad', "Can not change user's info");
+
+        case 10:
         case "end":
           return _context3.stop();
       }
-    }, _callee3);
+    }, _callee3, null, [[0, 7]]);
   }));
 
   return function changeUserInfo(_x4) {
@@ -7086,6 +7160,7 @@ if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
   var locationId = document.querySelector('.location-data-holder').dataset.locationid;
   trips.deleteLocation(locationId);
   mapController.removeLocation(locationId);
+  closeDetails();
 });
 
 if (newTripForm || editTripForm) {
@@ -7129,7 +7204,7 @@ if (tripSearchForm || friendSearchForm) {
 
       var query = document.querySelector("".concat(filledForm === tripSearchForm ? '.nav__search-input' : '.friendsPage__input-name')).value; // send search request
 
-      filledForm === location.assign("http://127.0.0.1:3000/searchTrips/".concat(query)); //tripSearchForm && trips.tripSearch({ query });
+      filledForm === tripSearchForm && location.assign("http://127.0.0.1:3000/searchTrips/".concat(query)); //tripSearchForm && trips.tripSearch({ query });
 
       filledForm === friendSearchForm && users.friendSearch({
         query: query

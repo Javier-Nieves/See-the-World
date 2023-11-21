@@ -87,6 +87,7 @@ if (deleteLocationBtn)
       .locationid;
     trips.deleteLocation(locationId);
     mapController.removeLocation(locationId);
+    closeDetails();
   });
 
 if (newTripForm || editTripForm) {
@@ -136,7 +137,7 @@ if (tripSearchForm || friendSearchForm) {
         }`,
       ).value;
       // send search request
-      filledForm ===
+      filledForm === tripSearchForm &&
         location.assign(`http://127.0.0.1:3000/searchTrips/${query}`); //tripSearchForm && trips.tripSearch({ query });
       filledForm === friendSearchForm && users.friendSearch({ query });
     });
