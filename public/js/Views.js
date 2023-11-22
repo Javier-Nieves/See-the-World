@@ -69,13 +69,11 @@ export const displayLocationInfo = (info) => {
     .forEach((popup) => popup.remove());
   // show and fill location info block
   const infoContainer = document.querySelector('.trip-info__details-window');
-  infoContainer.classList.remove('hidden');
+  infoContainer.classList.add('active-info-window');
   const infoBlock = document.querySelector('.trip-info__location-info');
   infoBlock.innerHTML = '';
-  console.log('generating markup');
   infoBlock.insertAdjacentHTML('afterBegin', generateMarkup(info));
-  console.log('after markup');
-  infoBlock.classList.remove('hidden');
+  // infoBlock.classList.remove('hidden');
   infoContainer.style.display = 'flex';
 };
 
@@ -91,15 +89,15 @@ const generateMarkup = (info) => {
     // clicking on the location on the "Add locations page"
     markup = `
     <h2 class='location-data-holder' data-locationid=${info.id}>Change location info</h2>
-    <div class='flex-container'>
+    <div class='flex-container location-info__infoLine'>
       <div class='location-info__text'> Name: </div>
       <input type='text' class='location-info__editName' value=${info.name}>
     </div>
-    <div class='flex-container'>
-      <div class='location-info__text'> Adress: </div>
+    <div class='flex-container location-info__infoLine'>
+      <div class='location-info__text'> Address: </div>
       <input type='text' class='location-info__editAddress' value=${info.address}>
     </div>
-    <div class='flex-container'>
+    <div class='flex-container location-info__infoLine'>
       <div class='location-info__text'> Description: </div>
       <textarea class='location-info__editDesc'> ${info.desc} </textarea>
     </div>  
@@ -162,4 +160,14 @@ export const showAlert = (type, text) => {
   setTimeout(() => {
     alert.classList.add('hidden-alert');
   }, 1000);
+};
+
+export const closeDetails = () => {
+  // close location info window
+  document
+    .querySelector('.trip-info__details-window')
+    .classList.remove('active-info-window');
+  // delete marker from the location
+  document.querySelector('.marker') &&
+    document.querySelector('.marker').remove();
 };

@@ -51,8 +51,11 @@ textarea:focus, input:focus{
     gap: 2vh;
     flex: 1;
 }
-.hidden {
-    transform: translate(32vw);
+/* .hidden {
+    right: -200px;
+} */
+.active-info-window {
+    right: 1vw !important;
 }
 .alert-container {
     position: absolute;
@@ -391,7 +394,8 @@ dialog[open] {
 }
 .newTrip__nextBtn, .index__nav-btn, .locations__center-btn, .userProfile__saveBtn, 
 .userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, .nav__search-btn,
-.trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn {
+.trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn, 
+.locations__submitBtn, .locations__deleteBtn {
     width: 10vw;
     border: 1px solid grey;
     border-radius: 5px;
@@ -400,7 +404,7 @@ dialog[open] {
     font-size: 18px;
     text-align: center;
 }
-.userProfile__deleteBtn, .trip-info__delete-btn {
+.userProfile__deleteBtn, .trip-info__delete-btn, .locations__deleteBtn {
     background-color: rgba(255, 21, 0, 0.72);
 }
 .userProfile__deleteBtn:hover, .trip-info__delete-btn:hover {
@@ -414,17 +418,18 @@ dialog[open] {
     background-color: rgba(156, 122, 1, 0.9);
 }
 .trip-info__details-window {
-    display: none;
+    /* display: none; */
     background-color: rgba(250, 235, 215, 0.94);
     width: 30vw;
     height: 80vh;
     position: absolute;
     top: 10vh;
-    right: 1vh;
+    right: -32vw;
     border: 1px solid grey;
     border-radius: 10px;
     z-index: 100;
-    transition: transform 0.7s ease-in-out;
+    transition: all 0.7s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.626);
 }
 .trip-info__loc-image {
     width: 8vw;
@@ -451,6 +456,28 @@ dialog[open] {
     height: 20px;
     border-radius: 50%;
     z-index: 120;
+}
+.locations__editForm, .trip-info__location-info, .location-info__infoLine {
+    width: 100%;
+}
+.location-info__infoLine {
+    text-align: center;
+    padding: 10px;
+}
+.location-info__text{
+    width: 30%;
+    font-size: 20px;
+}
+.location-info__editName, .location-info__editAddress, .location-info__editDesc {
+    flex: 1;
+    padding: 8px;
+    margin-right: 20px;
+    background-color: rgba(255, 200, 0, 0.3);
+    border-radius: 5px;
+    font-size: 17px;
+}
+.location-info__editDesc {
+    height: 20vh;
 }
 .trip-info__closeDatails {
     position: absolute;

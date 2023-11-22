@@ -2,6 +2,7 @@
 import { login, logout, registerUser } from './login.js';
 import * as users from './users.js';
 import * as trips from './trips.js';
+import * as Views from './Views.js';
 import * as mapController from './mapboxController.js';
 
 // variables
@@ -27,7 +28,6 @@ const deleteLocationBtn = document.querySelector('.locations__deleteBtn');
 
 const friendSearchForm = document.querySelector('.friendsPage__searchForm');
 const deleteBtn = document.querySelector('.trip-info__delete-btn');
-const detailsWindow = document.querySelector('.trip-info__details-window');
 const closeDetailsBtn = document.querySelector('.trip-info__closeDatails');
 const datalist = document.querySelector('#travelersList');
 
@@ -119,7 +119,8 @@ if (newTripForm || editTripForm) {
 
 if (deleteBtn) deleteBtn.addEventListener('click', trips.deleteTrip);
 
-if (closeDetailsBtn) closeDetailsBtn.addEventListener('click', closeDetails);
+if (closeDetailsBtn)
+  closeDetailsBtn.addEventListener('click', Views.closeDetails);
 
 if (tripSearchForm || friendSearchForm) {
   const forms = [tripSearchForm, friendSearchForm];
@@ -225,10 +226,6 @@ function findExistingTravelers() {
   document
     .querySelectorAll('.newTrip__friendIcon')
     .forEach((container) => travelers.add(container.dataset.friendid));
-}
-
-function closeDetails() {
-  detailsWindow.classList.add('hidden');
 }
 
 function showDialog() {
