@@ -51,9 +51,6 @@ textarea:focus, input:focus{
     gap: 2vh;
     flex: 1;
 }
-/* .hidden {
-    right: -200px;
-} */
 .active-info-window {
     right: 1vw !important;
 }
@@ -77,6 +74,11 @@ textarea:focus, input:focus{
 }
 .hidden-alert {
     top: -100px;
+}
+.nav__nav-container {
+    position: absolute;
+    left: 0.5vw;
+    top: 15vw;
 }
 
 /*! Main */
@@ -413,7 +415,8 @@ dialog[open] {
 }
 .newTrip__nextBtn:hover, .userProfile__saveBtn, .trip-info__dialogBtn:hover, 
 .trip-info__edit-info-btn:hover, .trip-info__edit-locations-btn:hover, 
-.nav__search-btn:hover, .index__nav-btn:hover {
+.nav__search-btn:hover, .index__nav-btn:hover, .locations__submitBtn:hover, 
+.locations__deleteBtn:hover {
     cursor: pointer;
     background-color: rgba(156, 122, 1, 0.9);
 }

@@ -10,7 +10,7 @@ exports.index = catchAsync(async (req, res) => {
   let trips;
   // if user is not authentificated
   if (!res.locals.user)
-    res.status(200).render('startPage', {
+    return res.status(200).render('startPage', {
       title: `Welcome`,
     });
 

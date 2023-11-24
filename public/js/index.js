@@ -79,6 +79,7 @@ if (editLocationForm)
     const locationId = document.querySelector('.location-data-holder').dataset
       .locationid;
     trips.editLocation({ name, address, description, coord }, locationId);
+    Views.closeDetails();
   });
 
 if (deleteLocationBtn)
@@ -87,7 +88,7 @@ if (deleteLocationBtn)
       .locationid;
     trips.deleteLocation(locationId);
     mapController.removeLocation(locationId);
-    closeDetails();
+    Views.closeDetails();
   });
 
 if (newTripForm || editTripForm) {

@@ -10,9 +10,12 @@ export const activateGeocoder = () => {
 };
 
 export const add_marker = (event, handler) => {
+  // add marker and form when map is clicked. Add handler to the form
   // clear all popups opened earlier
   const oldPopups = document.querySelectorAll('.mapboxgl-popup');
   oldPopups.forEach((popup) => popup.remove());
+  // close info window if opened
+  closeDetails();
 
   const coordinates = event.lngLat;
 
@@ -88,14 +91,14 @@ const generateMarkup = (info) => {
   if (window.location.href.includes('locations')) {
     // clicking on the location on the "Add locations page"
     markup = `
-    <h2 class='location-data-holder' data-locationid=${info.id}>Change location info</h2>
+    <h2 class='location-data-holder' data-locationid='${info.id}'>Change location info</h2>
     <div class='flex-container location-info__infoLine'>
       <div class='location-info__text'> Name: </div>
-      <input type='text' class='location-info__editName' value=${info.name}>
+      <input type='text' class='location-info__editName' value='${info.name}'>
     </div>
     <div class='flex-container location-info__infoLine'>
       <div class='location-info__text'> Address: </div>
-      <input type='text' class='location-info__editAddress' value=${info.address}>
+      <input type='text' class='location-info__editAddress' value='${info.address}'>
     </div>
     <div class='flex-container location-info__infoLine'>
       <div class='location-info__text'> Description: </div>
@@ -105,7 +108,7 @@ const generateMarkup = (info) => {
       <form class='flex-column location-info__newCoordForm'>
         <div>
           <div class='location-info__text'> Location: </div>
-          <input type='text' class='location-info__editCoord' value=${info.coordinates}>
+          <input type='text' class='location-info__editCoord' value='${info.coordinates}'>
         </div>
         <button> Choose new coordinates </button>
       </form>

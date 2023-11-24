@@ -6628,11 +6628,14 @@ var activateGeocoder = exports.activateGeocoder = function activateGeocoder() {
 };
 
 var add_marker = exports.add_marker = function add_marker(event, handler) {
+  // add marker and form when map is clicked. Add handler to the form
   // clear all popups opened earlier
   var oldPopups = document.querySelectorAll('.mapboxgl-popup');
   oldPopups.forEach(function (popup) {
     return popup.remove();
-  });
+  }); // close info window if opened
+
+  closeDetails();
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
     closeOnClick: false
@@ -6698,7 +6701,7 @@ var generateMarkup = function generateMarkup(info) {
 
   if (window.location.href.includes('locations')) {
     // clicking on the location on the "Add locations page"
-    markup = "\n    <h2 class='location-data-holder' data-locationid=".concat(info.id, ">Change location info</h2>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value=").concat(info.name, ">\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Address: </div>\n      <input type='text' class='location-info__editAddress' value=").concat(info.address, ">\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <form class='flex-column location-info__newCoordForm'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' class='location-info__editCoord' value=").concat(info.coordinates, ">\n        </div>\n        <button> Choose new coordinates </button>\n      </form>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
+    markup = "\n    <h2 class='location-data-holder' data-locationid='".concat(info.id, "'>Change location info</h2>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value='").concat(info.name, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Address: </div>\n      <input type='text' class='location-info__editAddress' value='").concat(info.address, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <form class='flex-column location-info__newCoordForm'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' class='location-info__editCoord' value='").concat(info.coordinates, "'>\n        </div>\n        <button> Choose new coordinates </button>\n      </form>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
   } else {
     // clicking on the location on the trip's page:
     markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
@@ -7161,12 +7164,13 @@ if (editLocationForm) editLocationForm.addEventListener('submit', function (e) {
     description: description,
     coord: coord
   }, locationId);
+  Views.closeDetails();
 });
 if (deleteLocationBtn) deleteLocationBtn.addEventListener('click', function () {
   var locationId = document.querySelector('.location-data-holder').dataset.locationid;
   trips.deleteLocation(locationId);
   mapController.removeLocation(locationId);
-  closeDetails();
+  Views.closeDetails();
 });
 
 if (newTripForm || editTripForm) {

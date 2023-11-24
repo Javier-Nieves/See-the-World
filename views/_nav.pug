@@ -1,9 +1,11 @@
-form.nav__search.flex-column
-  //- svg use(xlink:href='/img/icons.svg#icon-search')
-  input.nav__search-input(type='text', placeholder='Search for trips')
-  button.nav__search-btn Go!
-//- const loggedIn = owner?.id ? true : false;
-//- if loggedIn
-a(href='/createTrip' class='index__nav-btn') Add new trip
-a(href='/friends' class='index__nav-btn') My friends
-a(href='/friendsTrips' class='index__nav-btn') Trips of my friends
+.flex-column.nav__nav-container
+  form.nav__search.flex-column
+    //- svg use(xlink:href='/img/icons.svg#icon-search')
+    input.nav__search-input(type='text', placeholder='Search for trips')
+    button.nav__search-btn Go!
+  .flex-column.nav__links
+    - const loggedIn = owner?.id ? true : false;
+    if loggedIn
+      a(href='/createTrip' class='index__nav-btn') Add new trip
+      a(href='/friends' class='index__nav-btn') My friends
+      a(href='/friendsTrips' class='index__nav-btn') Trips of my friends
