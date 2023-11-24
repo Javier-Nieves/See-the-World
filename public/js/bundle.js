@@ -5929,7 +5929,7 @@ exports.Axios = Axios;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.tripsOfUser = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
+exports.tripsOfUser = exports.tripSearch = exports.persistLocation = exports.getKeys = exports.editLocation = exports.deleteTrip = exports.deleteLocation = exports.createGeoJSON = exports.changeTrip = exports.TOKEN = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -6134,6 +6134,37 @@ function () {
   };
 }();
 
+var tripSearch = exports.tripSearch =
+/*#__PURE__*/
+function () {
+  var _ref5 = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime().mark(function _callee5(query) {
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          // try {
+          // const res = await axios({
+          //   // method: 'GET',
+          //   url: `http://127.0.0.1:3000/searchTrips/${query}`,
+          // });
+          // console.log(res);
+          window.location = "http://127.0.0.1:3000/searchTrips/".concat(query); // } catch (err) {
+          //   Views.showAlert('bad', 'No such trips');
+          // }
+
+        case 1:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+
+  return function tripSearch(_x6) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
 var tripsOfUser = exports.tripsOfUser = function tripsOfUser(userId) {
   return window.location = "http://127.0.0.1:3000/users/".concat(userId);
 };
@@ -6141,18 +6172,18 @@ var tripsOfUser = exports.tripsOfUser = function tripsOfUser(userId) {
 var persistLocation = exports.persistLocation =
 /*#__PURE__*/
 function () {
-  var _ref5 = _asyncToGenerator(
+  var _ref6 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee5(data) {
+  _regeneratorRuntime().mark(function _callee6(data) {
     var link, url, res;
-    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) switch (_context5.prev = _context5.next) {
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
         case 0:
-          _context5.prev = 0;
+          _context6.prev = 0;
           link = window.location.href; // prettier-ignore
 
           url = link.slice(0, link.indexOf('/trips')) + '/api/v1' + link.slice(link.indexOf('/trips'));
-          _context5.next = 5;
+          _context6.next = 5;
           return (0, _axios.default)({
             method: 'POST',
             url: url,
@@ -6160,75 +6191,75 @@ function () {
           });
 
         case 5:
-          res = _context5.sent;
+          res = _context6.sent;
 
           if (res.data.status === 'success') {
             // console.log('location added');
             Views.showAlert('good', 'Location is added');
           }
 
-          _context5.next = 12;
+          _context6.next = 12;
           break;
 
         case 9:
-          _context5.prev = 9;
-          _context5.t0 = _context5["catch"](0);
+          _context6.prev = 9;
+          _context6.t0 = _context6["catch"](0);
           Views.showAlert('bad', 'Can not write location data');
 
         case 12:
         case "end":
-          return _context5.stop();
+          return _context6.stop();
       }
-    }, _callee5, null, [[0, 9]]);
+    }, _callee6, null, [[0, 9]]);
   }));
 
-  return function persistLocation(_x6) {
-    return _ref5.apply(this, arguments);
+  return function persistLocation(_x7) {
+    return _ref6.apply(this, arguments);
   };
 }();
 
 var getKeys = exports.getKeys =
 /*#__PURE__*/
 function () {
-  var _ref6 = _asyncToGenerator(
+  var _ref7 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee6() {
+  _regeneratorRuntime().mark(function _callee7() {
     var res;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
         case 0:
-          _context6.next = 2;
+          _context7.next = 2;
           return (0, _axios.default)({
             method: 'GET',
             url: 'http://127.0.0.1:3000/getKeys'
           });
 
         case 2:
-          res = _context6.sent;
+          res = _context7.sent;
           exports.TOKEN = TOKEN = res.data.data.TOKEN;
           API_KEY = res.data.data.API_KEY;
 
         case 5:
         case "end":
-          return _context6.stop();
+          return _context7.stop();
       }
-    }, _callee6);
+    }, _callee7);
   }));
 
   return function getKeys() {
-    return _ref6.apply(this, arguments);
+    return _ref7.apply(this, arguments);
   };
 }();
 
 var createGeoJSON = exports.createGeoJSON =
 /*#__PURE__*/
 function () {
-  var _ref7 = _asyncToGenerator(
+  var _ref8 = _asyncToGenerator(
   /*#__PURE__*/
-  _regeneratorRuntime().mark(function _callee7(waypoints) {
+  _regeneratorRuntime().mark(function _callee8(waypoints) {
     var wayPointsString, res, routeData;
-    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-      while (1) switch (_context7.prev = _context7.next) {
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
         case 0:
           wayPointsString = '';
           waypoints.forEach(function (place) {
@@ -6236,31 +6267,31 @@ function () {
           });
           wayPointsString = wayPointsString.slice(0, -1); // prettier-ignore
 
-          _context7.next = 5;
+          _context8.next = 5;
           return fetch("https://api.geoapify.com/v1/routing?waypoints=".concat(wayPointsString, "&mode=hike&apiKey=").concat(API_KEY));
 
         case 5:
-          res = _context7.sent;
-          _context7.next = 8;
+          res = _context8.sent;
+          _context8.next = 8;
           return res.json();
 
         case 8:
-          routeData = _context7.sent;
+          routeData = _context8.sent;
           if (!_mapboxController.map.getSource('route')) _mapboxController.map.addSource('route', {
             type: 'geojson',
             data: routeData
           });else _mapboxController.map.getSource('route').setData(routeData);
-          return _context7.abrupt("return", routeData);
+          return _context8.abrupt("return", routeData);
 
         case 11:
         case "end":
-          return _context7.stop();
+          return _context8.stop();
       }
-    }, _callee7);
+    }, _callee8);
   }));
 
-  return function createGeoJSON(_x7) {
-    return _ref7.apply(this, arguments);
+  return function createGeoJSON(_x8) {
+    return _ref8.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js","./Views.js":"Views.js"}],"mapboxController.js":[function(require,module,exports) {
@@ -7214,8 +7245,8 @@ if (tripSearchForm || friendSearchForm) {
 
       var query = document.querySelector("".concat(filledForm === tripSearchForm ? '.nav__search-input' : '.friendsPage__input-name')).value; // send search request
 
-      filledForm === tripSearchForm && location.assign("http://127.0.0.1:3000/searchTrips/".concat(query)); //tripSearchForm && trips.tripSearch({ query });
-
+      filledForm === tripSearchForm && //location.assign(`http://127.0.0.1:3000/searchTrips/${query}`); //tripSearchForm && trips.tripSearch({ query });
+      trips.tripSearch(query);
       filledForm === friendSearchForm && users.friendSearch({
         query: query
       });

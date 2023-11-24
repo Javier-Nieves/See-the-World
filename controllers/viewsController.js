@@ -1,6 +1,5 @@
 const Trip = require('../models/tripModel');
 const User = require('../models/userModel');
-// const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.index = catchAsync(async (req, res) => {
@@ -95,10 +94,15 @@ exports.searchTrips = catchAsync(async (req, res, next) => {
       { highlight: { $regex: new RegExp(req.params.query, 'i') } },
     ],
   });
-  res.status(200).render('searchTrips', {
-    title: 'Search results',
-    trips,
-  });
+  if (trips.length !== 0) {
+    return res.status(200).render('searchTrips', {
+      title: 'Search results',
+      trips,
+    });
+  }
+  res.status(404).redirect(req.get('Referer'));
+  // throw new Error();
+  // res.status(404).json({ message: 'No such trips BACK' });
 });
 
 exports.getTrip = catchAsync(async (req, res) => {

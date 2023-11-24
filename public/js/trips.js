@@ -80,6 +80,19 @@ export const deleteLocation = async (locationId) => {
   }
 };
 
+export const tripSearch = async (query) => {
+  // try {
+  // const res = await axios({
+  //   // method: 'GET',
+  //   url: `http://127.0.0.1:3000/searchTrips/${query}`,
+  // });
+  // console.log(res);
+  window.location = `http://127.0.0.1:3000/searchTrips/${query}`;
+  // } catch (err) {
+  //   Views.showAlert('bad', 'No such trips');
+  // }
+};
+
 export const tripsOfUser = (userId) =>
   (window.location = `http://127.0.0.1:3000/users/${userId}`);
 

@@ -140,7 +140,8 @@ if (tripSearchForm || friendSearchForm) {
       ).value;
       // send search request
       filledForm === tripSearchForm &&
-        location.assign(`http://127.0.0.1:3000/searchTrips/${query}`); //tripSearchForm && trips.tripSearch({ query });
+        //location.assign(`http://127.0.0.1:3000/searchTrips/${query}`); //tripSearchForm && trips.tripSearch({ query });
+        trips.tripSearch(query);
       filledForm === friendSearchForm && users.friendSearch({ query });
     });
   });
