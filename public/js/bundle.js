@@ -7310,7 +7310,6 @@ if (removeTravelerBtn) removeTravelerBtn.forEach(function (btn) {
 var removeTraveler = function removeTraveler(event) {
   var userElement = event.target.closest('.newTrip__friendIcon');
   var travelerId = userElement.dataset.friendid;
-  console.log('removing', travelerId);
   userElement.remove();
   travelers.delete(travelerId);
 };

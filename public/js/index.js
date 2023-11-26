@@ -203,7 +203,6 @@ if (removeTravelerBtn)
 const removeTraveler = (event) => {
   const userElement = event.target.closest('.newTrip__friendIcon');
   const travelerId = userElement.dataset.friendid;
-  console.log('removing', travelerId);
   userElement.remove();
   travelers.delete(travelerId);
 };
