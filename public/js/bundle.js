@@ -7341,6 +7341,19 @@ function showDialog() {
     dialog.close();
   });
 }
+
+window.addEventListener('DOMContentLoaded', function () {
+  var titles = document.querySelectorAll('.tripCard__name');
+  titles.forEach(function (title) {
+    var containerWidth = title.parentElement.clientWidth;
+    var titleWidth = title.scrollWidth;
+
+    if (titleWidth > containerWidth) {
+      var fontSize = containerWidth / titleWidth * parseFloat(window.getComputedStyle(title).fontSize) - 2;
+      title.style.fontSize = fontSize + 'px';
+    }
+  });
+});
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./Views.js":"Views.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

@@ -236,3 +236,20 @@ function showDialog() {
     dialog.close();
   });
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const titles = document.querySelectorAll('.tripCard__name');
+
+  titles.forEach((title) => {
+    const containerWidth = title.parentElement.clientWidth;
+    const titleWidth = title.scrollWidth;
+
+    if (titleWidth > containerWidth) {
+      const fontSize =
+        (containerWidth / titleWidth) *
+          parseFloat(window.getComputedStyle(title).fontSize) -
+        2;
+      title.style.fontSize = fontSize + 'px';
+    }
+  });
+});
