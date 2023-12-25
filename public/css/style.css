@@ -135,7 +135,7 @@ textarea:focus, input:focus{
 }
 .nav__search {
     width: 13vw;
-    background-color: #fff9ebc6;
+    background-color: rgba(247, 244, 227, 0.85);
     margin-top: 3vh;
     padding: 10px;
     border: 1px solid black;
@@ -152,7 +152,7 @@ textarea:focus, input:focus{
 }
 .tripCard {
     position: relative;
-    background-color: rgba(255, 228, 196, 0.9);
+    background-color: rgba(247, 244, 227, 0.85);
     border-radius: 8px;
     justify-content: flex-end;
     width: 24vw;
@@ -205,8 +205,8 @@ textarea:focus, input:focus{
     width: 2.5vw;
 }
 .tripCard__with-cardContainer {
-    border: 1px solid black;
-    background-color: rgba(255, 228, 196, 0.5);
+    /* border: 1px solid black; */
+    /* background-color: rgba(255, 228, 196, 0.5); */
     margin-bottom: 5px;
     border-radius: 5px;
     padding: 3px;
@@ -398,7 +398,7 @@ dialog[open] {
 .newTrip__nextBtn, .index__nav-btn, .locations__center-btn, .userProfile__saveBtn, 
 .userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, .nav__search-btn,
 .trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn, 
-.locations__submitBtn, .locations__deleteBtn {
+.locations__submitBtn, .locations__deleteBtn, .location-info__coordBtn { 
     width: 10vw;
     border: 1px solid grey;
     border-radius: 5px;
@@ -409,6 +409,10 @@ dialog[open] {
 }
 .userProfile__deleteBtn, .trip-info__delete-btn, .locations__deleteBtn {
     background-color: rgba(255, 21, 0, 0.72);
+}
+.location-info__coordBtn {
+    width: 100%;
+    margin: 0;
 }
 .userProfile__deleteBtn:hover, .trip-info__delete-btn:hover {
     cursor: pointer;
@@ -461,8 +465,11 @@ dialog[open] {
     border-radius: 50%;
     z-index: 120;
 }
-.locations__editForm, .trip-info__location-info, .location-info__infoLine {
+.locations__editForm, .trip-info__location-info, .location-info__infoLine, .location-info__editCoord {
     width: 100%;
+}
+.trip-info__location-info {
+    gap: 0px;
 }
 .location-info__infoLine {
     text-align: center;
@@ -479,9 +486,29 @@ dialog[open] {
     background-color: rgba(255, 200, 0, 0.3);
     border-radius: 5px;
     font-size: 17px;
+    text-align: center;
+}
+.location-info__newCoordForm {
+    position: relative;
+    flex: 1;
+    margin-right: 20px;
+}
+.location-info__editCoord {
+    width: 100%;
+    padding: 8px 0 8px 0;
+    background-color: rgba(255, 200, 0, 0.3);
+    border-radius: 5px;
+    font-size: 17px;
+    text-align: center;
 }
 .location-info__editDesc {
     height: 20vh;
+}
+.location-info__coordBlock {
+    gap: 0;
+}
+.location-info__newCoordForm {
+    gap: 0;
 }
 .trip-info__closeDatails {
     position: absolute;

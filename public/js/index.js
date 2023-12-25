@@ -36,7 +36,7 @@ const travelersList = document.querySelector('.newTrip__travelersList');
 const removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
 
 const dialogBtn = document.querySelector('.trip-info__dialogBtn');
-
+const titles = document.querySelectorAll('.tripCard__name');
 const tripSearchForm = document.querySelector('.nav__search');
 
 // handlers
@@ -237,19 +237,17 @@ function showDialog() {
   });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  const titles = document.querySelectorAll('.tripCard__name');
+// font size change for long trip names on the cards
+titles.forEach((title) => {
+  const containerWidth = title.parentElement.clientWidth;
+  const titleWidth = title.scrollWidth;
 
-  titles.forEach((title) => {
-    const containerWidth = title.parentElement.clientWidth;
-    const titleWidth = title.scrollWidth;
-
-    if (titleWidth > containerWidth) {
-      const fontSize =
-        (containerWidth / titleWidth) *
-          parseFloat(window.getComputedStyle(title).fontSize) -
-        2;
-      title.style.fontSize = fontSize + 'px';
-    }
-  });
+  if (titleWidth > containerWidth) {
+    const fontSize =
+      (containerWidth / titleWidth) *
+        parseFloat(window.getComputedStyle(title).fontSize) -
+      2;
+    title.style.fontSize = fontSize + 'px';
+  }
 });
+// todo - change With photos width also

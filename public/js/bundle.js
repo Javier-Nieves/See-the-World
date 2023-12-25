@@ -6731,8 +6731,11 @@ var generateMarkup = function generateMarkup(info) {
   }
 
   if (window.location.href.includes('locations')) {
-    // clicking on the location on the "Add locations page"
-    markup = "\n    <h2 class='location-data-holder' data-locationid='".concat(info.id, "'>Change location info</h2>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value='").concat(info.name, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Address: </div>\n      <input type='text' class='location-info__editAddress' value='").concat(info.address, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container'>\n      <form class='flex-column location-info__newCoordForm'>\n        <div>\n          <div class='location-info__text'> Location: </div>\n          <input type='text' class='location-info__editCoord' value='").concat(info.coordinates, "'>\n        </div>\n        <button> Choose new coordinates </button>\n      </form>\n    </div> \n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
+    // clicking on the location marker on the "Add locations page"
+    var remadeCoord = info.coordinates.slice(1, -1).split(',').map(Number).map(function (num) {
+      return num.toFixed(3);
+    }).join(', ');
+    markup = "\n    <h2 class='location-data-holder' data-locationid='".concat(info.id, "'>Change location info</h2>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Name: </div>\n      <input type='text' class='location-info__editName' value='").concat(info.name, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Address: </div>\n      <input type='text' class='location-info__editAddress' value='").concat(info.address, "'>\n    </div>\n    <div class='flex-container location-info__infoLine'>\n      <div class='location-info__text'> Description: </div>\n      <textarea class='location-info__editDesc'> ").concat(info.desc, " </textarea>\n    </div>  \n    <div class='flex-container location-info__infoLine location-info__coordBlock'>\n      <div class='location-info__text'> Location: </div>\n      <div class='flex-column location-info__newCoordForm'>\n        <input type='text' class='location-info__editCoord' value='").concat(remadeCoord, "'>\n        <button class='location-info__coordBtn'> Choose new coordinates </button>\n      </div>\n    </div>\n    <div class='flex-container'>\n      ").concat(gallery, "\n    </div>\n    ");
   } else {
     // clicking on the location on the trip's page:
     markup = "\n    <h1>".concat(info.name, "</h1>\n    <h2>").concat(info.address, "</h2>\n    <h3>").concat(info.desc, "</h3>\n    <div class='flex-container'>\n        ").concat(gallery, "\n    </div>\n  ");
@@ -7152,6 +7155,7 @@ var withSelector = document.querySelector('.newTrip__input-with');
 var travelersList = document.querySelector('.newTrip__travelersList');
 var removeTravelerBtn = document.querySelectorAll('.newTrip__deleteTraveler');
 var dialogBtn = document.querySelector('.trip-info__dialogBtn');
+var titles = document.querySelectorAll('.tripCard__name');
 var tripSearchForm = document.querySelector('.nav__search'); // handlers
 
 if (mapBox) {
@@ -7340,20 +7344,18 @@ function showDialog() {
   dialog.addEventListener('click', function () {
     dialog.close();
   });
-}
+} // font size change for long trip names on the cards
 
-window.addEventListener('DOMContentLoaded', function () {
-  var titles = document.querySelectorAll('.tripCard__name');
-  titles.forEach(function (title) {
-    var containerWidth = title.parentElement.clientWidth;
-    var titleWidth = title.scrollWidth;
 
-    if (titleWidth > containerWidth) {
-      var fontSize = containerWidth / titleWidth * parseFloat(window.getComputedStyle(title).fontSize) - 2;
-      title.style.fontSize = fontSize + 'px';
-    }
-  });
-});
+titles.forEach(function (title) {
+  var containerWidth = title.parentElement.clientWidth;
+  var titleWidth = title.scrollWidth;
+
+  if (titleWidth > containerWidth) {
+    var fontSize = containerWidth / titleWidth * parseFloat(window.getComputedStyle(title).fontSize) - 2;
+    title.style.fontSize = fontSize + 'px';
+  }
+}); // todo - change With photos width also
 },{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./Views.js":"Views.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -7382,7 +7384,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49655" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63514" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

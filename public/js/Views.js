@@ -89,7 +89,13 @@ const generateMarkup = (info) => {
       gallery += `<img class='trip-info__loc-image' src='/img/locations/${imagesArray[i]}'>`;
   }
   if (window.location.href.includes('locations')) {
-    // clicking on the location on the "Add locations page"
+    // clicking on the location marker on the "Add locations page"
+    const remadeCoord = info.coordinates
+      .slice(1, -1)
+      .split(',')
+      .map(Number)
+      .map((num) => num.toFixed(3))
+      .join(', ');
     markup = `
     <h2 class='location-data-holder' data-locationid='${info.id}'>Change location info</h2>
     <div class='flex-container location-info__infoLine'>
@@ -104,15 +110,13 @@ const generateMarkup = (info) => {
       <div class='location-info__text'> Description: </div>
       <textarea class='location-info__editDesc'> ${info.desc} </textarea>
     </div>  
-    <div class='flex-container'>
-      <form class='flex-column location-info__newCoordForm'>
-        <div>
-          <div class='location-info__text'> Location: </div>
-          <input type='text' class='location-info__editCoord' value='${info.coordinates}'>
-        </div>
-        <button> Choose new coordinates </button>
-      </form>
-    </div> 
+    <div class='flex-container location-info__infoLine location-info__coordBlock'>
+      <div class='location-info__text'> Location: </div>
+      <div class='flex-column location-info__newCoordForm'>
+        <input type='text' class='location-info__editCoord' value='${remadeCoord}'>
+        <button class='location-info__coordBtn'> Choose new coordinates </button>
+      </div>
+    </div>
     <div class='flex-container'>
       ${gallery}
     </div>
