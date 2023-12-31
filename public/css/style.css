@@ -398,7 +398,7 @@ dialog[open] {
 .newTrip__nextBtn, .index__nav-btn, .locations__center-btn, .userProfile__saveBtn, 
 .userProfile__deleteBtn, .newTrip__tripPhotoBtn, .trip-info__dialogBtn, .nav__search-btn,
 .trip-info__edit-info-btn, .trip-info__edit-locations-btn, .trip-info__delete-btn, 
-.locations__submitBtn, .locations__deleteBtn, .location-info__coordBtn { 
+.locations__submitBtn, .locations__deleteBtn, .location-info__coordBtn, .newLocation__add-btn { 
     width: 10vw;
     border: 1px solid grey;
     border-radius: 5px;
@@ -421,7 +421,7 @@ dialog[open] {
 .newTrip__nextBtn:hover, .userProfile__saveBtn, .trip-info__dialogBtn:hover, 
 .trip-info__edit-info-btn:hover, .trip-info__edit-locations-btn:hover, 
 .nav__search-btn:hover, .index__nav-btn:hover, .locations__submitBtn:hover, 
-.locations__deleteBtn:hover {
+.locations__deleteBtn:hover, .newLocation__add-btn:hover {
     cursor: pointer;
     background-color: rgba(156, 122, 1, 0.9);
 }
@@ -595,6 +595,26 @@ dialog[open] {
 .locations__lower-block {
     margin-top: 80vh;
     z-index: 10;
+}
+.mapboxgl-popup-content {
+    background-color: rgba(255, 200, 0, 0.5);
+    border-radius: 8px;
+    /* height: 20vh; */
+    width: 25vw;
+}
+.newLocation__popup-form {
+    background-color: rgba(255, 200, 0, 0.5);
+    padding: 8px;
+}
+.newLocation__popup-name, .newLocation__popup-address, .newLocation__popup-desc {
+    /* margin: 10px; */
+    padding: 5px;
+    width: 22vw;
+    font-size: 15px;
+}
+#images {
+    width: 100%;
+    margin: 1vh 0 1vh 15px;
 }
 
 /*! Trips of my friends */

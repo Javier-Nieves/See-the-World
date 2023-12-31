@@ -6670,7 +6670,7 @@ var add_marker = exports.add_marker = function add_marker(event, handler) {
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
     closeOnClick: false
-  }).setLngLat(coordinates).setHTML("<form class='newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='file' accept='image/*' id='images' multiple>\n        <input type='submit' value='Add location'>\n      </form>").addTo(_mapboxController.map);
+  }).setLngLat(coordinates).setHTML("<form class='flex-column newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='file' accept='image/*' id='images' multiple>\n        <input type='submit' class='newLocation__add-btn' value='Add location'>\n      </form>").addTo(_mapboxController.map);
   addHandler(popup, handler);
 };
 

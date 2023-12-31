@@ -22,12 +22,12 @@ export const add_marker = (event, handler) => {
   const popup = new mapboxgl.Popup({ closeOnClick: false })
     .setLngLat(coordinates)
     .setHTML(
-      `<form class='newLocation__popup-form'>
+      `<form class='flex-column newLocation__popup-form'>
         <input type='text' class='newLocation__popup-name' placeholder='Name'>
         <input type='text' class='newLocation__popup-address' placeholder='Address'>
         <input type='text' class='newLocation__popup-desc' placeholder='Description'>
         <input type='file' accept='image/*' id='images' multiple>
-        <input type='submit' value='Add location'>
+        <input type='submit' class='newLocation__add-btn' value='Add location'>
       </form>`,
     )
     .addTo(map);
