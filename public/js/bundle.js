@@ -1237,14 +1237,14 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],"../../node_modules/node-libs-browser/node_modules/isarray/index.js":[function(require,module,exports) {
+},{}],"../../node_modules/isarray/index.js":[function(require,module,exports) {
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],"../../node_modules/node-libs-browser/node_modules/buffer/index.js":[function(require,module,exports) {
+},{}],"../../node_modules/buffer/index.js":[function(require,module,exports) {
 
 var global = arguments[3];
 /*!
@@ -3037,7 +3037,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":"../../node_modules/base64-js/index.js","ieee754":"../../node_modules/ieee754/index.js","isarray":"../../node_modules/node-libs-browser/node_modules/isarray/index.js","buffer":"../../node_modules/node-libs-browser/node_modules/buffer/index.js"}],"../../node_modules/axios/lib/helpers/toFormData.js":[function(require,module,exports) {
+},{"base64-js":"../../node_modules/base64-js/index.js","ieee754":"../../node_modules/ieee754/index.js","isarray":"../../node_modules/isarray/index.js","buffer":"../../node_modules/buffer/index.js"}],"../../node_modules/axios/lib/helpers/toFormData.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
 'use strict';
 
@@ -3261,7 +3261,7 @@ function toFormData(obj, formData, options) {
 }
 
 var _default = exports.default = toFormData;
-},{"../utils.js":"../../node_modules/axios/lib/utils.js","../core/AxiosError.js":"../../node_modules/axios/lib/core/AxiosError.js","../platform/node/classes/FormData.js":"../../node_modules/axios/lib/helpers/null.js","buffer":"../../node_modules/node-libs-browser/node_modules/buffer/index.js"}],"../../node_modules/axios/lib/helpers/AxiosURLSearchParams.js":[function(require,module,exports) {
+},{"../utils.js":"../../node_modules/axios/lib/utils.js","../core/AxiosError.js":"../../node_modules/axios/lib/core/AxiosError.js","../platform/node/classes/FormData.js":"../../node_modules/axios/lib/helpers/null.js","buffer":"../../node_modules/buffer/index.js"}],"../../node_modules/axios/lib/helpers/AxiosURLSearchParams.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3536,6 +3536,23 @@ var _Blob = _interopRequireDefault(require("./classes/Blob.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var _default = exports.default = {
+  isBrowser: true,
+  classes: {
+    URLSearchParams: _URLSearchParams.default,
+    FormData: _FormData.default,
+    Blob: _Blob.default
+  },
+  protocols: ['http', 'https', 'file', 'blob', 'url', 'data']
+};
+},{"./classes/URLSearchParams.js":"../../node_modules/axios/lib/platform/browser/classes/URLSearchParams.js","./classes/FormData.js":"../../node_modules/axios/lib/platform/browser/classes/FormData.js","./classes/Blob.js":"../../node_modules/axios/lib/platform/browser/classes/Blob.js"}],"../../node_modules/axios/lib/platform/common/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.hasStandardBrowserWebWorkerEnv = exports.hasStandardBrowserEnv = exports.hasBrowserEnv = void 0;
+const hasBrowserEnv = exports.hasBrowserEnv = typeof window !== 'undefined' && typeof document !== 'undefined';
 /**
  * Determine if we're running in a standard browser environment
  *
@@ -3553,15 +3570,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @returns {boolean}
  */
-const isStandardBrowserEnv = (() => {
-  let product;
 
-  if (typeof navigator !== 'undefined' && ((product = navigator.product) === 'ReactNative' || product === 'NativeScript' || product === 'NS')) {
-    return false;
-  }
-
-  return typeof window !== 'undefined' && typeof document !== 'undefined';
-})();
+const hasStandardBrowserEnv = exports.hasStandardBrowserEnv = (product => {
+  return hasBrowserEnv && ['ReactNative', 'NativeScript', 'NS'].indexOf(product) < 0;
+})(typeof navigator !== 'undefined' && navigator.product);
 /**
  * Determine if we're running in a standard browser webWorker environment
  *
@@ -3573,39 +3585,32 @@ const isStandardBrowserEnv = (() => {
  */
 
 
-const isStandardBrowserWebWorkerEnv = (() => {
+const hasStandardBrowserWebWorkerEnv = exports.hasStandardBrowserWebWorkerEnv = (() => {
   return typeof WorkerGlobalScope !== 'undefined' && // eslint-disable-next-line no-undef
   self instanceof WorkerGlobalScope && typeof self.importScripts === 'function';
 })();
-
-var _default = exports.default = {
-  isBrowser: true,
-  classes: {
-    URLSearchParams: _URLSearchParams.default,
-    FormData: _FormData.default,
-    Blob: _Blob.default
-  },
-  isStandardBrowserEnv,
-  isStandardBrowserWebWorkerEnv,
-  protocols: ['http', 'https', 'file', 'blob', 'url', 'data']
-};
-},{"./classes/URLSearchParams.js":"../../node_modules/axios/lib/platform/browser/classes/URLSearchParams.js","./classes/FormData.js":"../../node_modules/axios/lib/platform/browser/classes/FormData.js","./classes/Blob.js":"../../node_modules/axios/lib/platform/browser/classes/Blob.js"}],"../../node_modules/axios/lib/platform/index.js":[function(require,module,exports) {
+},{}],"../../node_modules/axios/lib/platform/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  get: function () {
-    return _index.default;
-  }
-});
+exports.default = void 0;
 
 var _index = _interopRequireDefault(require("./node/index.js"));
 
+var utils = _interopRequireWildcard(require("./common/utils.js"));
+
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
+
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./node/index.js":"../../node_modules/axios/lib/platform/browser/index.js"}],"../../node_modules/axios/lib/helpers/toURLEncodedForm.js":[function(require,module,exports) {
+
+var _default = exports.default = { ...utils,
+  ..._index.default
+};
+},{"./node/index.js":"../../node_modules/axios/lib/platform/browser/index.js","./common/utils.js":"../../node_modules/axios/lib/platform/common/utils.js"}],"../../node_modules/axios/lib/helpers/toURLEncodedForm.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3696,6 +3701,7 @@ function arrayToObject(arr) {
 function formDataToJSON(formData) {
   function buildPath(path, value, target, index) {
     let name = path[index++];
+    if (name === '__proto__') return true;
     const isNumericKey = Number.isFinite(+name);
     const isLast = index >= path.length;
     name = !name && _utils.default.isArray(target) ? target.length : name;
@@ -4379,7 +4385,7 @@ function settle(resolve, reject, response) {
   }
 }
 },{"./AxiosError.js":"../../node_modules/axios/lib/core/AxiosError.js"}],"../../node_modules/axios/lib/helpers/cookies.js":[function(require,module,exports) {
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -4392,49 +4398,37 @@ var _index = _interopRequireDefault(require("../platform/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _default = exports.default = _index.default.isStandardBrowserEnv ? // Standard browser envs support document.cookie
-function standardBrowserEnv() {
-  return {
-    write: function write(name, value, expires, path, domain, secure) {
-      const cookie = [];
-      cookie.push(name + '=' + encodeURIComponent(value));
+var _default = exports.default = _index.default.hasStandardBrowserEnv ? // Standard browser envs support document.cookie
+{
+  write(name, value, expires, path, domain, secure) {
+    const cookie = [name + '=' + encodeURIComponent(value)];
+    _utils.default.isNumber(expires) && cookie.push('expires=' + new Date(expires).toGMTString());
+    _utils.default.isString(path) && cookie.push('path=' + path);
+    _utils.default.isString(domain) && cookie.push('domain=' + domain);
+    secure === true && cookie.push('secure');
+    document.cookie = cookie.join('; ');
+  },
 
-      if (_utils.default.isNumber(expires)) {
-        cookie.push('expires=' + new Date(expires).toGMTString());
-      }
+  read(name) {
+    const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+    return match ? decodeURIComponent(match[3]) : null;
+  },
 
-      if (_utils.default.isString(path)) {
-        cookie.push('path=' + path);
-      }
+  remove(name) {
+    this.write(name, '', Date.now() - 86400000);
+  }
 
-      if (_utils.default.isString(domain)) {
-        cookie.push('domain=' + domain);
-      }
+} : // Non-standard browser env (web workers, react-native) lack needed support.
+{
+  write() {},
 
-      if (secure === true) {
-        cookie.push('secure');
-      }
+  read() {
+    return null;
+  },
 
-      document.cookie = cookie.join('; ');
-    },
-    read: function read(name) {
-      const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-      return match ? decodeURIComponent(match[3]) : null;
-    },
-    remove: function remove(name) {
-      this.write(name, '', Date.now() - 86400000);
-    }
-  };
-}() : // Non standard browser env (web workers, react-native) lack needed support.
-function nonStandardBrowserEnv() {
-  return {
-    write: function write() {},
-    read: function read() {
-      return null;
-    },
-    remove: function remove() {}
-  };
-}();
+  remove() {}
+
+};
 },{"./../utils.js":"../../node_modules/axios/lib/utils.js","../platform/index.js":"../../node_modules/axios/lib/platform/index.js"}],"../../node_modules/axios/lib/helpers/isAbsoluteURL.js":[function(require,module,exports) {
 'use strict';
 /**
@@ -4473,7 +4467,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = combineURLs;
 
 function combineURLs(baseURL, relativeURL) {
-  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL;
+  return relativeURL ? baseURL.replace(/\/?\/$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL;
 }
 },{}],"../../node_modules/axios/lib/core/buildFullPath.js":[function(require,module,exports) {
 'use strict';
@@ -4520,14 +4514,14 @@ var _index = _interopRequireDefault(require("../platform/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _default = exports.default = _index.default.isStandardBrowserEnv ? // Standard browser envs have full support of the APIs needed to test
+var _default = exports.default = _index.default.hasStandardBrowserEnv ? // Standard browser envs have full support of the APIs needed to test
 // whether the request URL is of the same origin as current location.
 function standardBrowserEnv() {
   const msie = /(msie|trident)/i.test(navigator.userAgent);
   const urlParsingNode = document.createElement('a');
   let originURL;
   /**
-  * Parse a URL to discover it's components
+  * Parse a URL to discover its components
   *
   * @param {String} url The URL to be parsed
   * @returns {Object}
@@ -4714,7 +4708,10 @@ var _default = exports.default = isXHRAdapterSupported && function (config) {
 
     const requestHeaders = _AxiosHeaders.default.from(config.headers).normalize();
 
-    const responseType = config.responseType;
+    let {
+      responseType,
+      withXSRFToken
+    } = config;
     let onCanceled;
 
     function done() {
@@ -4730,13 +4727,12 @@ var _default = exports.default = isXHRAdapterSupported && function (config) {
     let contentType;
 
     if (_utils.default.isFormData(requestData)) {
-      if (_index.default.isStandardBrowserEnv || _index.default.isStandardBrowserWebWorkerEnv) {
+      if (_index.default.hasStandardBrowserEnv || _index.default.hasStandardBrowserWebWorkerEnv) {
         requestHeaders.setContentType(false); // Let the browser set it
-      } else if (!requestHeaders.getContentType(/^\s*multipart\/form-data/)) {
-        requestHeaders.setContentType('multipart/form-data'); // mobile/desktop app frameworks
-      } else if (_utils.default.isString(contentType = requestHeaders.getContentType())) {
+      } else if ((contentType = requestHeaders.getContentType()) !== false) {
         // fix semicolon duplication issue for ReactNative FormData implementation
-        requestHeaders.setContentType(contentType.replace(/^\s*(multipart\/form-data);+/, '$1'));
+        const [type, ...tokens] = contentType ? contentType.split(';').map(token => token.trim()).filter(Boolean) : [];
+        requestHeaders.setContentType([type || 'multipart/form-data', ...tokens].join('; '));
       }
     }
 
@@ -4842,12 +4838,16 @@ var _default = exports.default = isXHRAdapterSupported && function (config) {
     // Specifically not if we're in a web worker, or react-native.
 
 
-    if (_index.default.isStandardBrowserEnv) {
-      // Add xsrf header
-      const xsrfValue = (config.withCredentials || (0, _isURLSameOrigin.default)(fullPath)) && config.xsrfCookieName && _cookies.default.read(config.xsrfCookieName);
+    if (_index.default.hasStandardBrowserEnv) {
+      withXSRFToken && _utils.default.isFunction(withXSRFToken) && (withXSRFToken = withXSRFToken(config));
 
-      if (xsrfValue) {
-        requestHeaders.set(config.xsrfHeaderName, xsrfValue);
+      if (withXSRFToken || withXSRFToken !== false && (0, _isURLSameOrigin.default)(fullPath)) {
+        // Add xsrf header
+        const xsrfValue = config.xsrfHeaderName && config.xsrfCookieName && _cookies.default.read(config.xsrfCookieName);
+
+        if (xsrfValue) {
+          requestHeaders.set(config.xsrfHeaderName, xsrfValue);
+        }
       }
     } // Remove Content-Type if data is undefined
 
@@ -5161,6 +5161,7 @@ function mergeConfig(config1, config2) {
     timeout: defaultToConfig2,
     timeoutMessage: defaultToConfig2,
     withCredentials: defaultToConfig2,
+    withXSRFToken: defaultToConfig2,
     adapter: defaultToConfig2,
     responseType: defaultToConfig2,
     xsrfCookieName: defaultToConfig2,
@@ -5196,7 +5197,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.VERSION = void 0;
-const VERSION = exports.VERSION = "1.5.1";
+const VERSION = exports.VERSION = "1.6.4";
 },{}],"../../node_modules/axios/lib/helpers/validator.js":[function(require,module,exports) {
 'use strict';
 
@@ -5968,7 +5969,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
-            url: tripId ? "http://127.0.0.1:3000/api/v1/trips/".concat(tripId) : 'http://127.0.0.1:3000/api/v1/trips',
+            url: tripId ? "http://seetheworld.onrender.com/api/v1/trips/".concat(tripId) : 'http://seetheworld.onrender.com/api/v1/trips',
             data: data
           });
 
@@ -5979,7 +5980,7 @@ function () {
             if (tripId) {
               Views.showAlert('good', 'Trip is modified');
               setTimeout(function () {
-                location.assign("http://127.0.0.1:3000/trips/".concat(tripId));
+                location.assign("http://seetheworld.onrender.com/trips/".concat(tripId));
               }, 1500);
             } else {
               Views.showAlert('good', 'Trip is created');
@@ -6023,7 +6024,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'DELETE',
-            url: "http://127.0.0.1:3000/api/v1/trips/".concat(tripId)
+            url: "http://seetheworld.onrender.com/api/v1/trips/".concat(tripId)
           });
 
         case 3:
@@ -6062,7 +6063,7 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId),
+            url: "http://seetheworld.onrender.com/api/v1/locations/".concat(locationId),
             data: data
           });
 
@@ -6108,7 +6109,7 @@ function () {
           _context4.next = 3;
           return (0, _axios.default)({
             method: 'DELETE',
-            url: "http://127.0.0.1:3000/api/v1/locations/".concat(locationId)
+            url: "http://seetheworld.onrender.com/api/v1/locations/".concat(locationId)
           });
 
         case 3:
@@ -6149,7 +6150,7 @@ function () {
           //   url: `http://127.0.0.1:3000/searchTrips/${query}`,
           // });
           // console.log(res);
-          window.location = "http://127.0.0.1:3000/searchTrips/".concat(query); // } catch (err) {
+          window.location = "http://seetheworld.onrender.com/searchTrips/".concat(query); // } catch (err) {
           //   Views.showAlert('bad', 'No such trips');
           // }
 
@@ -6166,7 +6167,7 @@ function () {
 }();
 
 var tripsOfUser = exports.tripsOfUser = function tripsOfUser(userId) {
-  return window.location = "http://127.0.0.1:3000/users/".concat(userId);
+  return window.location = "http://seetheworld.onrender.com/users/".concat(userId);
 };
 
 var persistLocation = exports.persistLocation =
@@ -6231,7 +6232,7 @@ function () {
           _context7.next = 2;
           return (0, _axios.default)({
             method: 'GET',
-            url: 'http://127.0.0.1:3000/getKeys'
+            url: 'http://seetheworld.onrender.com/getKeys'
           });
 
         case 2:
@@ -6818,7 +6819,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/login',
+            url: 'http://seetheworld.onrender.com/api/v1/users/login',
             data: {
               email: email,
               password: password
@@ -6869,7 +6870,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'GET',
-            url: 'http://127.0.0.1:3000/api/v1/users/logout'
+            url: 'http://seetheworld.onrender.com/api/v1/users/logout'
           });
 
         case 3:
@@ -6914,7 +6915,8 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/signup',
+            // todo - change:
+            url: 'http://seetheworld.onrender.com/api/v1/users/signup',
             data: data
           });
 
@@ -6989,7 +6991,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/search',
+            url: 'http://seetheworld.onrender.com/api/v1/users/search',
             data: data
           });
 
@@ -7034,7 +7036,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/friends',
+            url: 'http://seetheworld.onrender.com/api/v1/users/friends',
             data: data
           });
 
@@ -7081,7 +7083,7 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
+            url: 'http://seetheworld.onrender.com/api/v1/users/updateMe',
             data: data
           });
 
@@ -7384,7 +7386,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63514" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58702" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
