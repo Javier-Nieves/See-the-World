@@ -7,7 +7,7 @@ export const friendSearch = async (data) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:3000/api/v1/users/search',
+      url: 'http://seetheworld.onrender.com/api/v1/users/search',
       data,
     });
     if (res.data.status === 'success') {
@@ -24,7 +24,7 @@ export const friendRequest = async (data, element) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:3000/api/v1/users/friends',
+      url: 'http://seetheworld.onrender.com/api/v1/users/friends',
       data,
     });
     if (res.data.status === 'success') {
@@ -41,7 +41,7 @@ export const changeUserInfo = async (data) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
+      url: 'http://seetheworld.onrender.com/api/v1/users/updateMe',
       data,
     });
     if (res.data.status === 'success') {
