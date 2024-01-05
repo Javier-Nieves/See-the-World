@@ -5969,7 +5969,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: tripId ? 'PATCH' : 'POST',
-            url: tripId ? "http://seetheworld.onrender.com/api/v1/trips/".concat(tripId) : 'http://seetheworld.onrender.com/api/v1/trips',
+            url: tripId ? "https://seetheworld.onrender.com/api/v1/trips/".concat(tripId) : 'https://seetheworld.onrender.com/api/v1/trips',
             data: data
           });
 
@@ -5980,7 +5980,7 @@ function () {
             if (tripId) {
               Views.showAlert('good', 'Trip is modified');
               setTimeout(function () {
-                location.assign("http://seetheworld.onrender.com/trips/".concat(tripId));
+                location.assign("https://seetheworld.onrender.com/trips/".concat(tripId));
               }, 1500);
             } else {
               Views.showAlert('good', 'Trip is created');
@@ -6024,7 +6024,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'DELETE',
-            url: "http://seetheworld.onrender.com/api/v1/trips/".concat(tripId)
+            url: "https://seetheworld.onrender.com/api/v1/trips/".concat(tripId)
           });
 
         case 3:
@@ -6063,7 +6063,7 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: "http://seetheworld.onrender.com/api/v1/locations/".concat(locationId),
+            url: "https://seetheworld.onrender.com/api/v1/locations/".concat(locationId),
             data: data
           });
 
@@ -6109,7 +6109,7 @@ function () {
           _context4.next = 3;
           return (0, _axios.default)({
             method: 'DELETE',
-            url: "http://seetheworld.onrender.com/api/v1/locations/".concat(locationId)
+            url: "https://seetheworld.onrender.com/api/v1/locations/".concat(locationId)
           });
 
         case 3:
@@ -6150,7 +6150,7 @@ function () {
           //   url: `http://127.0.0.1:3000/searchTrips/${query}`,
           // });
           // console.log(res);
-          window.location = "http://seetheworld.onrender.com/searchTrips/".concat(query); // } catch (err) {
+          window.location = "https://seetheworld.onrender.com/searchTrips/".concat(query); // } catch (err) {
           //   Views.showAlert('bad', 'No such trips');
           // }
 
@@ -6167,7 +6167,7 @@ function () {
 }();
 
 var tripsOfUser = exports.tripsOfUser = function tripsOfUser(userId) {
-  return window.location = "http://seetheworld.onrender.com/users/".concat(userId);
+  return window.location = "https://seetheworld.onrender.com/users/".concat(userId);
 };
 
 var persistLocation = exports.persistLocation =
@@ -6232,7 +6232,7 @@ function () {
           _context7.next = 2;
           return (0, _axios.default)({
             method: 'GET',
-            url: 'http://seetheworld.onrender.com/getKeys'
+            url: 'https://seetheworld.onrender.com/getKeys'
           });
 
         case 2:
@@ -6819,7 +6819,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://seetheworld.onrender.com/api/v1/users/login',
+            url: 'https://seetheworld.onrender.com/api/v1/users/login',
             data: {
               email: email,
               password: password
@@ -6870,7 +6870,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'GET',
-            url: 'http://seetheworld.onrender.com/api/v1/users/logout'
+            url: 'https://seetheworld.onrender.com/api/v1/users/logout'
           });
 
         case 3:
@@ -6916,7 +6916,7 @@ function () {
           return (0, _axios.default)({
             method: 'POST',
             // todo - change:
-            url: 'http://seetheworld.onrender.com/api/v1/users/signup',
+            url: 'https://seetheworld.onrender.com/api/v1/users/signup',
             data: data
           });
 
@@ -6991,7 +6991,7 @@ function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://seetheworld.onrender.com/api/v1/users/search',
+            url: 'https://seetheworld.onrender.com/api/v1/users/search',
             data: data
           });
 
@@ -7036,7 +7036,7 @@ function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://seetheworld.onrender.com/api/v1/users/friends',
+            url: 'https://seetheworld.onrender.com/api/v1/users/friends',
             data: data
           });
 
@@ -7083,7 +7083,7 @@ function () {
           _context3.next = 3;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: 'http://seetheworld.onrender.com/api/v1/users/updateMe',
+            url: 'https://seetheworld.onrender.com/api/v1/users/updateMe',
             data: data
           });
 
