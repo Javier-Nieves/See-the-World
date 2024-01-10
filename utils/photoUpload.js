@@ -20,6 +20,7 @@ exports.uploadCoverImage = upload.single('coverImage');
 exports.uploadImages = upload.array('images', 10);
 
 exports.resizeOneImage = catchAsync(async (req, res, next) => {
+  // used for trip thumbnail or user's profile picture
   if (!req.file) return next();
 
   const tripRelated = req.originalUrl.includes('trips');
@@ -37,6 +38,7 @@ exports.resizeOneImage = catchAsync(async (req, res, next) => {
 });
 
 exports.resizeImages = catchAsync(async (req, res, next) => {
+  // used for location photos
   if (!req.files) return next();
 
   req.body.images = [];
