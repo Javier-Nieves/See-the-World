@@ -1,13 +1,13 @@
 /* eslint-disable */
 import axios from 'axios';
-
 import * as Views from './Views.js';
 
 export const friendSearch = async (data) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'https://seetheworld.onrender.com/api/v1/users/search',
+      // url: 'https://seetheworld.onrender.com/api/v1/users/search',
+      url: `${Views.siteUrl}/api/v1/users/search`,
       data,
     });
     if (res.data.status === 'success') {
@@ -24,7 +24,8 @@ export const friendRequest = async (data, element) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'https://seetheworld.onrender.com/api/v1/users/friends',
+      // url: 'https://seetheworld.onrender.com/api/v1/users/friends',
+      url: `${Views.siteUrl}/api/v1/users/friends`,
       data,
     });
     if (res.data.status === 'success') {
@@ -41,7 +42,8 @@ export const changeUserInfo = async (data) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'https://seetheworld.onrender.com/api/v1/users/updateMe',
+      // url: 'https://seetheworld.onrender.com/api/v1/users/updateMe',
+      url: `${Views.siteUrl}/api/v1/users/updateMe`,
       data,
     });
     if (res.data.status === 'success') {

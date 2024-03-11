@@ -1,7 +1,6 @@
 /* eslint-disable */
 import axios from 'axios';
 import { map } from './mapboxController';
-
 import * as Views from './Views.js';
 
 export let TOKEN;
@@ -12,16 +11,20 @@ export const changeTrip = async (data, tripId) => {
   try {
     const res = await axios({
       method: tripId ? 'PATCH' : 'POST',
+      // url: tripId
+      //   ? `https://seetheworld.onrender.com/api/v1/trips/${tripId}`
+      //   : 'https://seetheworld.onrender.com/api/v1/trips',
       url: tripId
-        ? `https://seetheworld.onrender.com/api/v1/trips/${tripId}`
-        : 'https://seetheworld.onrender.com/api/v1/trips',
+        ? `${Views.siteUrl}/api/v1/trips/${tripId}`
+        : `${Views.siteUrl}/api/v1/trips`,
       data,
     });
     if (res.data.status === 'success') {
       if (tripId) {
         Views.showAlert('good', 'Trip is modified');
         setTimeout(() => {
-          location.assign(`https://seetheworld.onrender.com/trips/${tripId}`);
+          // location.assign(`https://seetheworld.onrender.com/trips/${tripId}`);
+          location.assign(`${Views.siteUrl}/trips/${tripId}`);
         }, 1500);
       } else {
         Views.showAlert('good', 'Trip is created');
@@ -41,7 +44,8 @@ export const deleteTrip = async () => {
   );
   const res = await axios({
     method: 'DELETE',
-    url: `https://seetheworld.onrender.com/api/v1/trips/${tripId}`,
+    // url: `https://seetheworld.onrender.com/api/v1/trips/${tripId}`,
+    url: `${Views.siteUrl}/api/v1/trips/${tripId}`,
   });
 
   if (res.status === 204) {
@@ -56,7 +60,8 @@ export const editLocation = async (data, locationId) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: `https://seetheworld.onrender.com/api/v1/locations/${locationId}`,
+      // url: `https://seetheworld.onrender.com/api/v1/locations/${locationId}`,
+      url: `${Views.siteUrl}/api/v1/locations/${locationId}`,
       data,
     });
     if (res.data.status === 'success') {
@@ -72,7 +77,8 @@ export const deleteLocation = async (locationId) => {
   try {
     const res = await axios({
       method: 'DELETE',
-      url: `https://seetheworld.onrender.com/api/v1/locations/${locationId}`,
+      // url: `https://seetheworld.onrender.com/api/v1/locations/${locationId}`,
+      url: `${Views.siteUrl}/api/v1/locations/${locationId}`,
     });
     Views.showAlert('good', 'Location is deleted');
   } catch (err) {
@@ -87,14 +93,16 @@ export const tripSearch = async (query) => {
   //   url: `http://127.0.0.1:3000/searchTrips/${query}`,
   // });
   // console.log(res);
-  window.location = `https://seetheworld.onrender.com/searchTrips/${query}`;
+  // window.location = `https://seetheworld.onrender.com/searchTrips/${query}`;
+  window.location = `${Views.siteUrl}/searchTrips/${query}`;
   // } catch (err) {
   //   Views.showAlert('bad', 'No such trips');
   // }
 };
 
 export const tripsOfUser = (userId) =>
-  (window.location = `https://seetheworld.onrender.com/users/${userId}`);
+  (window.location = `${Views.siteUrl}/users/${userId}`);
+//window.location = `https://seetheworld.onrender.com/users/${userId}`
 
 export const persistLocation = async (data) => {
   // create location in the DB
@@ -119,7 +127,8 @@ export const persistLocation = async (data) => {
 export const getKeys = async () => {
   const res = await axios({
     method: 'GET',
-    url: 'https://seetheworld.onrender.com/getKeys',
+    // url: 'https://seetheworld.onrender.com/getKeys',
+    url: `${Views.siteUrl}/getKeys`,
   });
   TOKEN = res.data.data.TOKEN;
   API_KEY = res.data.data.API_KEY;

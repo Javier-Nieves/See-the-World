@@ -1,6 +1,13 @@
 /* eslint-disable */
 import { map } from './mapboxController';
 
+export let siteUrl;
+
+(function () {
+  const main_url = new URL(location.href);
+  siteUrl = `${main_url.protocol}//${main_url.host}`;
+})();
+
 export const activateGeocoder = () => {
   const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,

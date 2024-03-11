@@ -1,5 +1,9 @@
-node_modules
-public/img
+node_modules/*
+
+# ignore everything in img folder except one image
+public/img/*
+!public/img/highway.jpg
+
 config.env
 *.env
 # Logs
