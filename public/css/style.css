@@ -428,11 +428,11 @@ dialog[open] {
 .trip-info__details-window {
     /* display: none; */
     background-color: rgba(250, 235, 215, 0.94);
-    width: 30vw;
-    height: 80vh;
+    width: 50%;
+    height: 80%;
     position: absolute;
-    top: 10vh;
-    right: -32vw;
+    top: 10%;
+    right: -51%;
     border: 1px solid grey;
     border-radius: 10px;
     z-index: 100;
@@ -463,7 +463,6 @@ dialog[open] {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    z-index: 120;
 }
 .locations__editForm, .trip-info__location-info, .location-info__infoLine, .location-info__editCoord {
     width: 100%;

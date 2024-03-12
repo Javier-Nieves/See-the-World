@@ -5936,7 +5936,7 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _mapboxController = require("./mapboxController");
 
-var Views = _interopRequireWildcard(require("./Views.js"));
+var Views = _interopRequireWildcard(require("./mapboxViews.js"));
 
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 
@@ -6305,7 +6305,7 @@ function () {
     return _ref8.apply(this, arguments);
   };
 }();
-},{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js","./Views.js":"Views.js"}],"mapboxController.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./mapboxController":"mapboxController.js","./mapboxViews.js":"mapboxViews.js"}],"mapboxController.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6313,7 +6313,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeLocation = exports.map = exports.displayMap = void 0;
 
-var mapboxViews = _interopRequireWildcard(require("./Views.js"));
+var mapboxViews = _interopRequireWildcard(require("./mapboxViews.js"));
 
 var trips = _interopRequireWildcard(require("./trips.js"));
 
@@ -6401,10 +6401,10 @@ function () {
 
                   map.fitBounds(bounds, {
                     padding: {
-                      top: 80,
-                      bottom: 80,
-                      left: 80,
-                      right: 80
+                      top: 180,
+                      bottom: 180,
+                      left: 180,
+                      right: 180
                     },
                     duration: 3000
                   }); // getting GeoJSON data for location points
@@ -6535,7 +6535,7 @@ var createLocationsLayer = function createLocationsLayer() {
     map.easeTo({
       center: e.features[0].geometry.coordinates,
       padding: {
-        right: window.innerWidth * 0.2
+        right: window.innerWidth * 0.5
       },
       duration: 1000
     });
@@ -6650,7 +6650,7 @@ function () {
     return _ref4.apply(this, arguments);
   };
 }();
-},{"./Views.js":"Views.js","./trips.js":"trips.js"}],"Views.js":[function(require,module,exports) {
+},{"./mapboxViews.js":"mapboxViews.js","./trips.js":"trips.js"}],"mapboxViews.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6688,7 +6688,7 @@ var add_marker = exports.add_marker = function add_marker(event, handler) {
   var coordinates = event.lngLat;
   var popup = new mapboxgl.Popup({
     closeOnClick: false
-  }).setLngLat(coordinates).setHTML("<form class='flex-column newLocation__popup-form'>\n        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n        <input type='file' accept='image/*' id='images' multiple>\n        <input type='submit' class='newLocation__add-btn' value='Add location'>\n      </form>").addTo(_mapboxController.map);
+  }).setLngLat(coordinates).setHTML(markerMarkup).addTo(_mapboxController.map);
   addHandler(popup, handler);
 };
 
@@ -6794,8 +6794,12 @@ var closeDetails = exports.closeDetails = function closeDetails() {
   // close location info window
   document.querySelector('.trip-info__details-window').classList.remove('active-info-window'); // delete marker from the location
 
-  document.querySelector('.marker') && document.querySelector('.marker').remove();
+  document.querySelector('.marker') && document.querySelector('.marker').remove(); // move map to the right
+
+  _mapboxController.map.panBy([-150, 0]);
 };
+
+var markerMarkup = "<form class='flex-column newLocation__popup-form'>\n                        <input type='text' class='newLocation__popup-name' placeholder='Name'>\n                        <input type='text' class='newLocation__popup-address' placeholder='Address'>\n                        <input type='text' class='newLocation__popup-desc' placeholder='Description'>\n                        <input type='file' accept='image/*' id='images' multiple>\n                        <input type='submit' class='newLocation__add-btn' value='Add location'>\n                      </form>";
 },{"./mapboxController":"mapboxController.js"}],"login.js":[function(require,module,exports) {
 "use strict";
 
@@ -6806,7 +6810,7 @@ exports.registerUser = exports.logout = exports.login = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var Views = _interopRequireWildcard(require("./Views.js"));
+var Views = _interopRequireWildcard(require("./mapboxViews.js"));
 
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 
@@ -6973,7 +6977,7 @@ function () {
     return _ref3.apply(this, arguments);
   };
 }();
-},{"axios":"../../node_modules/axios/index.js","./Views.js":"Views.js"}],"users.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./mapboxViews.js":"mapboxViews.js"}],"users.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6983,7 +6987,7 @@ exports.friendSearch = exports.friendRequest = exports.changeUserInfo = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var Views = _interopRequireWildcard(require("./Views.js"));
+var Views = _interopRequireWildcard(require("./mapboxViews.js"));
 
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 
@@ -7141,7 +7145,7 @@ function () {
     return _ref3.apply(this, arguments);
   };
 }();
-},{"axios":"../../node_modules/axios/index.js","./Views.js":"Views.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./mapboxViews.js":"mapboxViews.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _login = require("./login.js");
@@ -7150,7 +7154,7 @@ var users = _interopRequireWildcard(require("./users.js"));
 
 var trips = _interopRequireWildcard(require("./trips.js"));
 
-var Views = _interopRequireWildcard(require("./Views.js"));
+var Views = _interopRequireWildcard(require("./mapboxViews.js"));
 
 var mapController = _interopRequireWildcard(require("./mapboxController.js"));
 
@@ -7383,7 +7387,7 @@ titles.forEach(function (title) {
     title.style.fontSize = fontSize + 'px';
   }
 }); // todo - change With photos width also
-},{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./Views.js":"Views.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./login.js":"login.js","./users.js":"users.js","./trips.js":"trips.js","./mapboxViews.js":"mapboxViews.js","./mapboxController.js":"mapboxController.js"}],"../../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -7411,7 +7415,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57736" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58278" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as mapboxViews from './Views.js';
+import * as mapboxViews from './mapboxViews.js';
 import * as trips from './trips.js';
 
 export let map;
@@ -43,18 +43,16 @@ export const displayMap = async (locations) => {
     fillGeoArrays(locations, bounds);
     createLocationsLayer();
     populatePopups();
-
     // adding padding to the map
     map.fitBounds(bounds, {
       padding: {
-        top: 80,
-        bottom: 80,
-        left: 80,
-        right: 80,
+        top: 180,
+        bottom: 180,
+        left: 180,
+        right: 180,
       },
       duration: 3000,
     });
-
     // getting GeoJSON data for location points
     const routeData = await trips.createGeoJSON(waypoints);
     drawRoute(routeData);
@@ -136,7 +134,7 @@ const createLocationsLayer = () => {
     // centering to the location
     map.easeTo({
       center: e.features[0].geometry.coordinates,
-      padding: { right: window.innerWidth * 0.2 },
+      padding: { right: window.innerWidth * 0.5 },
       duration: 1000,
     });
   });

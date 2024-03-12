@@ -2,7 +2,7 @@
 import { login, logout, registerUser } from './login.js';
 import * as users from './users.js';
 import * as trips from './trips.js';
-import * as Views from './Views.js';
+import * as Views from './mapboxViews.js';
 import * as mapController from './mapboxController.js';
 
 // variables

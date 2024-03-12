@@ -23,20 +23,10 @@ export const add_marker = (event, handler) => {
   oldPopups.forEach((popup) => popup.remove());
   // close info window if opened
   closeDetails();
-
   const coordinates = event.lngLat;
-
   const popup = new mapboxgl.Popup({ closeOnClick: false })
     .setLngLat(coordinates)
-    .setHTML(
-      `<form class='flex-column newLocation__popup-form'>
-        <input type='text' class='newLocation__popup-name' placeholder='Name'>
-        <input type='text' class='newLocation__popup-address' placeholder='Address'>
-        <input type='text' class='newLocation__popup-desc' placeholder='Description'>
-        <input type='file' accept='image/*' id='images' multiple>
-        <input type='submit' class='newLocation__add-btn' value='Add location'>
-      </form>`,
-    )
+    .setHTML(markerMarkup)
     .addTo(map);
 
   addHandler(popup, handler);
@@ -184,4 +174,14 @@ export const closeDetails = () => {
   // delete marker from the location
   document.querySelector('.marker') &&
     document.querySelector('.marker').remove();
+  // move map to the right
+  map.panBy([-150, 0]);
 };
+
+const markerMarkup = `<form class='flex-column newLocation__popup-form'>
+                        <input type='text' class='newLocation__popup-name' placeholder='Name'>
+                        <input type='text' class='newLocation__popup-address' placeholder='Address'>
+                        <input type='text' class='newLocation__popup-desc' placeholder='Description'>
+                        <input type='file' accept='image/*' id='images' multiple>
+                        <input type='submit' class='newLocation__add-btn' value='Add location'>
+                      </form>`;

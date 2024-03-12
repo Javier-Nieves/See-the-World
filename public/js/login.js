@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from 'axios';
-import * as Views from './Views.js';
+import * as Views from './mapboxViews.js';
 
 // const url = Views.getUrl();
 // console.log('URL is: ', url);

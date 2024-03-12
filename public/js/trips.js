@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios';
 import { map } from './mapboxController';
-import * as Views from './Views.js';
+import * as Views from './mapboxViews.js';
 
 export let TOKEN;
 let API_KEY;
